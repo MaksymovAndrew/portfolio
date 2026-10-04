@@ -1,0 +1,31 @@
+{
+    "name": "portfolio",
+    "version": "0.1.0",
+    "description": "Personal portfolio site that doubles as a template",
+    "private": true,
+    "license": "MIT",
+    "type": "module",
+    "engines": {
+        "node": ">=24"
+    },
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "node scripts/serve.mjs",
+        "typecheck": "tsc -b tsconfig.build.json",
+        "bump": "node scripts/release-version.mjs bump"
+    },
+    "dependencies": {
+        "next": "^16.3.8",
+        "react": "^19.3.0",
+        "react-dom": "^19.3.0",
+        "server-only": "^0.0.1"
+    },
+    "devDependencies": {
+        "@types/node": "^24.19.1",
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.3.0",
+        "sass": "^1.105.1",
+        "typescript": "^6.0.3"
+    }
+}

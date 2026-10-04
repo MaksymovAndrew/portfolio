@@ -1,0 +1,16 @@
+{
+    "extends": "./tsconfig.app.json",
+    "compilerOptions": {
+        "jsx": "preserve",
+        "esModuleInterop": true,
+        "incremental": true,
+        "plugins": [{ "name": "next" }]
+    },
+    "include": [
+        "next-env.d.ts",
+        "src",
+        "content",
+        "theme",
+        ".next/types/**/*.ts"
+    ]
+}
