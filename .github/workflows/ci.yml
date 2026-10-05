@@ -1,0 +1,95 @@
+name: CI
+
+on:
+    pull_request:
+        branches: [main]
+        # edited: a renamed pull request gets its title checked again
+        types: [opened, synchronize, reopened, edited]
+    push:
+        branches: [main]
+
+permissions:
+    contents: read
+
+# a newer push to a pull request supersedes the old run; a run on main always finishes
+concurrency:
+    group: ci-${{ github.ref }}
+    cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+    pr-title:
+        if: ${{ github.event_name == 'pull_request' }}
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+            - uses: ./.github/actions/setup
+            - name: Check the pull request title
+              env:
+                  PR_TITLE: ${{ github.event.pull_request.title }}
+              run: printf '%s\n' "$PR_TITLE" | npx --no -- commitlint
+
+    format:
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+            - uses: ./.github/actions/setup
+            - name: Check formatting
+              run: npm run format:check
+
+    quality:
+        name: quality (${{ matrix.task }})
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        strategy:
+            fail-fast: false
+            matrix:
+                task:
+                    - lint
+                    - lint:sonarjs
+                    - stylelint
+                    - typecheck
+                    - test:coverage
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+            - uses: ./.github/actions/setup
+            - name: npm run ${{ matrix.task }}
+              run: npm run ${{ matrix.task }}
+
+    build:
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+            - uses: ./.github/actions/setup
+            - name: Restore the Next.js build cache
+              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+              with:
+                  path: .next/cache
+                  key: next-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**', 'content/**', 'theme/**') }}
+                  restore-keys: next-${{ hashFiles('package-lock.json') }}-
+            - name: Build
+              # CI builds are never deployed, so a placeholder public address is enough
+              env:
+                  NEXT_PUBLIC_SITE_URL: https://example.com
+              run: npm run build
+
+    ci-success:
+        name: ci-success
+        if: always()
+        needs: [pr-title, format, quality, build]
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        steps:
+            - name: Fail if any needed job failed
+              if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
+              run: exit 1
