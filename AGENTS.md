@@ -22,6 +22,7 @@ A personal portfolio site that doubles as a template. Everything personal lives 
 - `content/index.ts` assembles `source`, checked against `ContentSource` in `src/types/content.ts`. A translatable field is `Localized`: one string for every language of `content/locales.ts`.
 - Components know nothing about languages: a page calls `getContent(locale)` from `i18n/content` and passes the strings of one language down through props. Only `src/i18n/` and `src/guards/` import `content/`.
 - Markup (`**bold**`, `*accent*`, `[label](target)`) is allowed only in the rich fields listed in `src/i18n/fields.ts`. `RichText` renders it, `toPlainText` strips it for meta tags and images; never `dangerouslySetInnerHTML`.
+- Addresses: the default language lives at `/`, every other one under its prefix. `proxy.ts` applies the pure `createLocaleRouting` from `i18n/routing`; links take their address from `localePath` in `i18n/paths`, never from a hand-written `/${locale}`. The 404 view gets its texts from `useSystemMessages`: Next passes it no params.
 - `validateContent` reports broken content with the path of each field. The first `getContent` call of a build runs it, so broken content fails the build.
 
 ## Working rules

@@ -6,6 +6,8 @@ import type { ReactNode } from "react";
 
 import { getContent } from "i18n/content";
 import { isLocale, LOCALES } from "i18n/locales";
+import { localePath } from "i18n/paths";
+import { SystemMessagesProvider } from "i18n/SystemMessages";
 
 interface RootLayoutProps {
     children: ReactNode;
@@ -34,9 +36,25 @@ export const generateMetadata = async ({
 const RootLayout = async ({ children, params }: RootLayoutProps) => {
     const { locale } = await params;
 
+    if (!isLocale(locale)) {
+        notFound();
+    }
+
+    const { ui } = getContent(locale);
+    const systemMessages = {
+        homeHref: localePath(locale),
+        home: ui.home,
+        notFound: ui.notFound,
+        error: ui.error,
+    };
+
     return (
         <html lang={locale}>
-            <body>{children}</body>
+            <body>
+                <SystemMessagesProvider value={systemMessages}>
+                    {children}
+                </SystemMessagesProvider>
+            </body>
         </html>
     );
 };

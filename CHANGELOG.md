@@ -24,6 +24,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Bold, accent and links inside texts through a small safe markup, without raw HTML.
 - Automatic checks for empty texts, broken markup and links, missing files and malformed dates; broken content stops the build.
 - A check that keeps the owner's name, email and profile links out of the framework code.
+- English at the root address, Polish at `/pl`, Ukrainian at `/uk`; `/en` redirects to the root, so every page has one address.
+- Unknown addresses answer 404 with a page in the language of the address, readable without JavaScript.
 
 ### Fixed
 

@@ -12,7 +12,8 @@ const publicDir = path.join(rootDir, "public");
 
 const SERVER_FILE = "server.js";
 const DEFAULT_PORT = 3000;
-const DEFAULT_HOST = "127.0.0.1";
+// not 127.0.0.1: Next calls a loopback address localhost inside the proxy, and its rewrites would leave the server
+const DEFAULT_HOST = "localhost";
 
 // the standalone output leaves both folders out: a CDN usually serves them
 const copyStaticFiles = () => {
