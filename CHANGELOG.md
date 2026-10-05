@@ -15,3 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Git hooks: staged files are fixed on commit, commit messages follow Conventional Commits, direct pushes to `main` are refused.
 - Every pull request runs formatting, linting, style checks, type checks, unit tests and the production build, and its title is checked against Conventional Commits.
 - Weekly grouped dependency updates for npm packages and workflow actions.
+- Browser tests on the production build in Chromium, WebKit and Firefox.
+- An automatic accessibility check (WCAG 2.2 AA rules) for every language.
+- A layout check: no horizontal scroll from 320 to 1440 pixels, for every language.
+- A check that the page stays readable with JavaScript turned off.
+- Lighthouse on every pull request, with accessibility, layout-shift and script-size thresholds.

@@ -1,0 +1,11 @@
+{
+    // type-check view of the browser tests; Playwright compiles them itself at run time
+    "extends": "./tsconfig.node.json",
+    "compilerOptions": {
+        "lib": ["ES2023", "DOM"],
+        "paths": {
+            "content/*": ["./content/*"]
+        }
+    },
+    "include": ["e2e", "playwright.config.ts"]
+}

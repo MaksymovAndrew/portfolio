@@ -83,10 +83,76 @@ jobs:
                   NEXT_PUBLIC_SITE_URL: https://example.com
               run: npm run build
 
+    e2e:
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+            - uses: ./.github/actions/setup
+            - name: Restore the Playwright browsers
+              id: browsers
+              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+              with:
+                  path: ~/.cache/ms-playwright
+                  key: playwright-all-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+            - name: Install the Playwright browsers
+              if: ${{ steps.browsers.outputs.cache-hit != 'true' }}
+              run: npx playwright install --with-deps chromium webkit firefox
+            # the cache holds the browsers only; their system libraries still come from apt
+            - name: Install the browser system dependencies
+              if: ${{ steps.browsers.outputs.cache-hit == 'true' }}
+              run: npx playwright install-deps chromium webkit firefox
+            - name: Run the browser tests
+              run: npm run test:e2e
+            - name: Upload traces on failure
+              if: failure()
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+              with:
+                  name: playwright-traces
+                  path: test-results/
+                  retention-days: 7
+
+    lighthouse:
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+            - uses: ./.github/actions/setup
+            # its own key: this job installs Chromium only, the e2e job all three browsers
+            - name: Restore the Playwright Chromium
+              id: browsers
+              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+              with:
+                  path: ~/.cache/ms-playwright
+                  key: playwright-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+            - name: Install the Playwright Chromium
+              if: ${{ steps.browsers.outputs.cache-hit != 'true' }}
+              run: npx playwright install --with-deps chromium
+            - name: Install the Chromium system dependencies
+              if: ${{ steps.browsers.outputs.cache-hit == 'true' }}
+              run: npx playwright install-deps chromium
+            - name: Build
+              env:
+                  NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3101
+              run: npm run build
+            - name: Run Lighthouse
+              run: npm run lighthouse
+            - name: Upload the Lighthouse reports
+              if: ${{ !cancelled() }}
+              uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+              with:
+                  name: lighthouse-report
+                  path: lighthouse-report/
+                  retention-days: 14
+
     ci-success:
         name: ci-success
         if: always()
-        needs: [pr-title, format, quality, build]
+        needs: [pr-title, format, quality, build, e2e, lighthouse]
         runs-on: ubuntu-latest
         timeout-minutes: 5
         steps:

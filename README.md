@@ -50,11 +50,18 @@ Then open <http://localhost:3000/en>. Every language has its own address: `/en`,
 | `npm run typecheck`     | Types of the app, the build config and the tests                              |
 | `npm run test:coverage` | Unit tests (Jest, React Testing Library) with an 80% coverage threshold       |
 
-The lint rules keep the layers apart: text in a component, a raw colour or an import of `content/` outside `src/i18n/` fails the check.
+The lint rules keep the layers apart: text in a component, a raw colour or an import of `content/` from `src/` anywhere but `src/i18n/` and `src/guards/` fails the check.
+
+Two more checks run on the production build, in real browsers:
+
+- `npm run test:e2e` - Playwright builds the site and serves it on port 3100 (a server already running there is reused). Every language answers in Chromium, WebKit and Firefox; nothing scrolls sideways from 320 to 1440 pixels; axe finds no WCAG 2.2 AA violation; the page reads without JavaScript; no page logs an error.
+- `npm run lighthouse` - Lighthouse with mobile emulation on every language of the last `npm run build`. The median of three runs must meet the thresholds in `lighthouse.config.mjs`; the HTML reports land in `lighthouse-report/`.
+
+Install the browsers once with `npx playwright install chromium webkit firefox`. On Windows with Smart App Control turned on, the unsigned WebKit build cannot start; run `npm run test:e2e -- --project=chromium --project=nojs` there - CI runs every browser.
 
 Git hooks are installed by `npm install`. A commit fixes and formats the staged files and runs the type check; a commit message must follow [Conventional Commits](https://www.conventionalcommits.org/) with a header of at most 72 characters; a direct push to `main` is refused.
 
-The same checks run on GitHub Actions for every pull request and every push to `main`, together with a check that the pull request title follows Conventional Commits. One check, `ci-success`, sums them up: make it the required status check of `main`. Dependabot proposes dependency updates once a week: minor and patch npm updates arrive as one pull request, workflow actions as another, major versions one by one.
+All of these checks run on GitHub Actions for every pull request and every push to `main`, together with a check that the pull request title follows Conventional Commits. One check, `ci-success`, sums them up: make it the required status check of `main`. Dependabot proposes dependency updates once a week: minor and patch npm updates arrive as one pull request, workflow actions as another, major versions one by one.
 
 ## Project layout
 
