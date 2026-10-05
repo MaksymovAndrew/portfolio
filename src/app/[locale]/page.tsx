@@ -1,4 +1,8 @@
-import { APP_NAME } from "config/app";
+import { notFound } from "next/navigation";
+
+import { RichText } from "components/ui/RichText";
+import { getContent } from "i18n/content";
+import { isLocale } from "i18n/locales";
 
 interface HomePageProps {
     params: Promise<{ locale: string }>;
@@ -7,10 +11,19 @@ interface HomePageProps {
 const HomePage = async ({ params }: HomePageProps) => {
     const { locale } = await params;
 
+    if (!isLocale(locale)) {
+        notFound();
+    }
+
+    const { hero, profile, ui } = getContent(locale);
+
     return (
         <main>
-            <h1>{APP_NAME}</h1>
-            <p>{locale}</p>
+            <h1>{profile.name}</h1>
+            <p>
+                <RichText text={hero.tagline} externalHint={ui.external} />
+            </p>
+            <p>{hero.sub}</p>
         </main>
     );
 };

@@ -1,11 +1,11 @@
 import "styles/global.scss";
 
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
-import { APP_NAME } from "config/app";
-
-import { LOCALES } from "i18n/locales";
+import { getContent } from "i18n/content";
+import { isLocale, LOCALES } from "i18n/locales";
 
 interface RootLayoutProps {
     children: ReactNode;
@@ -17,7 +17,19 @@ export const dynamicParams = false;
 
 export const generateStaticParams = () => LOCALES.map((locale) => ({ locale }));
 
-export const metadata: Metadata = { title: APP_NAME };
+export const generateMetadata = async ({
+    params,
+}: Pick<RootLayoutProps, "params">): Promise<Metadata> => {
+    const { locale } = await params;
+
+    if (!isLocale(locale)) {
+        notFound();
+    }
+
+    const { seo } = getContent(locale);
+
+    return { title: seo.title, description: seo.description };
+};
 
 const RootLayout = async ({ children, params }: RootLayoutProps) => {
     const { locale } = await params;

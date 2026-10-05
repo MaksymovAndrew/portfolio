@@ -1,10 +1,7 @@
 import "@testing-library/jest-dom";
 
-// the build inlines both from package.json; tests run without a build
-Object.assign(process.env, {
-    APP_NAME: "test-app",
-    APP_VERSION: "0.0.0-test",
-});
+// the build inlines it from package.json; tests run without a build
+Object.assign(process.env, { APP_VERSION: "0.0.0-test" });
 
 afterEach(() => {
     // route handler tests run in the node environment, which has no storage

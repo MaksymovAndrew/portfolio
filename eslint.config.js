@@ -163,7 +163,6 @@ export default tseslint.config(
         languageOptions: {
             globals: globals.browser,
             parserOptions: {
-                // not projectService: the root tsconfig.json is Next's and covers app code only
                 project: [
                     "./tsconfig.app.json",
                     "./tsconfig.node.json",
