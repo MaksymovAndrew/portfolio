@@ -1,0 +1,3 @@
+node scripts/release-version.mjs precommit
+npx lint-staged
+npm run typecheck
