@@ -17,6 +17,13 @@ A personal portfolio site that doubles as a template. Everything personal lives 
 
 `src/` holds no personal data, no raw colours and no user-facing text. If a task needs a literal name, colour or sentence inside `src/`, the task belongs in `content/` or `theme/` instead.
 
+## Content
+
+- `content/index.ts` assembles `source`, checked against `ContentSource` in `src/types/content.ts`. A translatable field is `Localized`: one string for every language of `content/locales.ts`.
+- Components know nothing about languages: a page calls `getContent(locale)` from `i18n/content` and passes the strings of one language down through props. Only `src/i18n/` and `src/guards/` import `content/`.
+- Markup (`**bold**`, `*accent*`, `[label](target)`) is allowed only in the rich fields listed in `src/i18n/fields.ts`. `RichText` renders it, `toPlainText` strips it for meta tags and images; never `dangerouslySetInnerHTML`.
+- `validateContent` reports broken content with the path of each field. The first `getContent` call of a build runs it, so broken content fails the build.
+
 ## Working rules
 
 - Conventional Commits. Every change goes through its own branch and a squash-merged pull request; nothing is committed straight to `main`.
@@ -55,5 +62,6 @@ A release goes through a `chore/release-X.Y.Z` branch: there the commit hook tak
 - Jest with React Testing Library; a test lives in `__tests__/<Unit>.test.ts(x)` next to its subject and is named `it("should ...")`.
 - `act` instead of `waitFor`; an async server component is tested as `render(await Page(props))`.
 - Tests never hard-code the languages: take `LOCALES` and `DEFAULT_LOCALE` from `i18n/locales`.
+- Components are rendered with the fictional person of `test/fixtures/content`: `content` is folded, `contentSource` is the same person before folding. Only `src/i18n/` and `src/guards/` read the real content.
 - A route handler test starts with `/** @jest-environment node */`.
 - Browser tests live in `e2e/` and run against the production build. A spec imports `test` and `expect` from `e2e/support/test` (a console error or an uncaught exception fails the test) and iterates `LOCALES` and `WIDTHS` from `e2e/support/site`; `expectAccessible` from `e2e/support/axe` runs the WCAG 2.2 AA rules.

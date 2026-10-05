@@ -1,16 +1,10 @@
 {
-    "extends": "./tsconfig.app.json",
-    "compilerOptions": {
-        "jsx": "preserve",
-        "esModuleInterop": true,
-        "incremental": true,
-        "plugins": [{ "name": "next" }]
-    },
-    "include": [
-        "next-env.d.ts",
-        "src",
-        "content",
-        "theme",
-        ".next/types/**/*.ts"
+    // the editor and `npm run typecheck` start here; Next itself reads tsconfig.app.json
+    "files": [],
+    "references": [
+        { "path": "./tsconfig.app.json" },
+        { "path": "./tsconfig.node.json" },
+        { "path": "./tsconfig.test.json" },
+        { "path": "./tsconfig.e2e.json" }
     ]
 }

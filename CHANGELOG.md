@@ -20,3 +20,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - A layout check: no horizontal scroll from 320 to 1440 pixels, for every language.
 - A check that the page stays readable with JavaScript turned off.
 - Lighthouse on every pull request, with accessibility, layout-shift and script-size thresholds.
+- All site texts in English, Polish and Ukrainian, kept side by side in `content/`; a missing translation fails the type check.
+- Bold, accent and links inside texts through a small safe markup, without raw HTML.
+- Automatic checks for empty texts, broken markup and links, missing files and malformed dates; broken content stops the build.
+- A check that keeps the owner's name, email and profile links out of the framework code.
+
+### Fixed
+
+- Editors type-check the tests, the browser tests and the TypeScript configs with the project's settings instead of reporting false errors.

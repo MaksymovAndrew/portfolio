@@ -47,7 +47,7 @@ Then open <http://localhost:3000/en>. Every language has its own address: `/en`,
 | `npm run lint`          | ESLint: types, imports, accessibility, the layer rules                        |
 | `npm run lint:sonarjs`  | Code smells and cognitive complexity                                          |
 | `npm run stylelint`     | Styles: no raw colours; radii, layers, fonts and timings come from the tokens |
-| `npm run typecheck`     | Types of the app, the build config and the tests                              |
+| `npm run typecheck`     | Types of the app, the unit and browser tests and the TypeScript configs       |
 | `npm run test:coverage` | Unit tests (Jest, React Testing Library) with an 80% coverage threshold       |
 
 The lint rules keep the layers apart: text in a component, a raw colour or an import of `content/` from `src/` anywhere but `src/i18n/` and `src/guards/` fails the check.
@@ -75,6 +75,31 @@ All of these checks run on GitHub Actions for every pull request and every push 
 To make the site your own, change `content/`, `theme/` and `public/`. `src/` holds no personal data, no raw colours and no user-facing text.
 
 `theme/` is not there yet: it arrives together with the design. The languages are listed in `content/locales.ts`.
+
+## Editing content
+
+Every word on the site lives in `content/`, one file per part of the page, with all languages side by side:
+
+```ts
+tagline: {
+    en: "I build *fast, tested, production-grade* web interfaces.",
+    pl: "Tworzę *szybkie, dokładnie przetestowane* interfejsy webowe gotowe na produkcję.",
+    uk: "Я створюю *швидкі, ретельно протестовані* вебінтерфейси production-рівня.",
+},
+```
+
+A text missing in one of the languages fails the type check. Names, technologies, links and numbers that read the same everywhere are written once.
+
+The hero tagline, the About paragraphs, the experience bullets, the achievements and the project story and bullets accept a small markup; every other field shows its text exactly as written.
+
+| Write                  | Get                                                                                                                                                 |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `**words**`            | bold                                                                                                                                                |
+| `*words*`              | accent                                                                                                                                              |
+| `[label](target)`      | a link to `https://...`, `mailto:...`, `#section`, `/path`, or `@key` - an address written once under `refs` of the About section or of the project |
+| `\*`, `\[`, `\]`, `\)` | the character itself                                                                                                                                |
+
+Markup cannot be nested, and an address with parentheses goes under `refs`. `npm run verify` checks the content and names the field of every problem: an empty text, broken markup, an unknown `@key`, a link that is not https, mail, an anchor or a site path, a file missing from `public/`, a section listed twice, a button pointing at a section that is not on the page, a month not written as `YYYY-MM`. The same check stops the production build, and a test fails when the name, the email or a profile link from `content/profile.ts` appears in `src/`.
 
 ## Licence
 

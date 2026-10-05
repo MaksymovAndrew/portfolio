@@ -1,0 +1,5 @@
+@use "styles/abstracts" as *;
+
+.rich-text__hint {
+    @include sr-only;
+}
