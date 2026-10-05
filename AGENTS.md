@@ -25,6 +25,12 @@ A personal portfolio site that doubles as a template. Everything personal lives 
 - Addresses: the default language lives at `/`, every other one under its prefix. `proxy.ts` applies the pure `createLocaleRouting` from `i18n/routing`; links take their address from `localePath` in `i18n/paths`, never from a hand-written `/${locale}`. The 404 view gets its texts from `useSystemMessages`: Next passes it no params.
 - `validateContent` reports broken content with the path of each field. The first `getContent` call of a build runs it, so broken content fails the build.
 
+## Theme
+
+- `theme/theme.ts` holds both palettes; `buildThemeCss` turns them into CSS variables in the root layout. Components use `var(--token)` and the SCSS tokens of `styles/abstracts` (`$font-*`, `$dur-*`, `$ease-*`, `$z-*`, `$radius-*`, the breakpoint mixins); Stylelint rejects raw colours, z-indexes, radii, font families, durations and easings. Only `src/app/`, `src/components/social/` and `src/guards/` import `theme/`.
+- The theme lives in `data-theme` on `<html>`: the inline pre-paint script sets it from storage, `themeStore` changes it later. A component shows a per-theme part through CSS (`:global(:root[data-theme="light"])`), never by reading the mode while rendering.
+- Storage goes through `utils/storage`: a blocked storage keeps the feature working for the visit.
+
 ## Working rules
 
 - Conventional Commits. Every change goes through its own branch and a squash-merged pull request; nothing is committed straight to `main`.
@@ -65,4 +71,4 @@ A release goes through a `chore/release-X.Y.Z` branch: there the commit hook tak
 - Tests never hard-code the languages: take `LOCALES` and `DEFAULT_LOCALE` from `i18n/locales`.
 - Components are rendered with the fictional person of `test/fixtures/content`: `content` is folded, `contentSource` is the same person before folding. Only `src/i18n/` and `src/guards/` read the real content.
 - A route handler test starts with `/** @jest-environment node */`.
-- Browser tests live in `e2e/` and run against the production build. A spec imports `test` and `expect` from `e2e/support/test` (a console error or an uncaught exception fails the test) and iterates `LOCALES` and `WIDTHS` from `e2e/support/site`; `expectAccessible` from `e2e/support/axe` runs the WCAG 2.2 AA rules.
+- Browser tests live in `e2e/` and run against the production build. A spec imports `test` and `expect` from `e2e/support/test` (a console error or an uncaught exception fails the test) and iterates `LOCALES`, `WIDTHS` and `THEMES` from `e2e/support/site` (`storeTheme` stores a theme choice before the page opens); `expectAccessible` from `e2e/support/axe` runs the WCAG 2.2 AA rules.

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 
+import { ThemeToggle } from "components/controls/ThemeToggle";
 import { RichText } from "components/ui/RichText";
 import { getContent } from "i18n/content";
 import { isLocale } from "i18n/locales";
@@ -24,6 +25,7 @@ const HomePage = async ({ params }: HomePageProps) => {
                 <RichText text={hero.tagline} externalHint={ui.external} />
             </p>
             <p>{hero.sub}</p>
+            <ThemeToggle label={ui.theme} />
         </main>
     );
 };

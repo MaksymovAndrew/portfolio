@@ -42,6 +42,10 @@ module.exports = {
         "!src/app/**/error.tsx",
         "!src/app/**/not-found.tsx",
         "!src/proxy.ts",
+        // drawn by next/og, which Jest cannot load (WebAssembly through a dynamic import); the browser tests fetch every icon
+        "!src/app/icon.tsx",
+        "!src/app/apple-icon.tsx",
+        "!src/app/monogramImage.tsx",
         // barrels, no logic
         "!src/**/index.ts",
         // type-only modules, no runtime code

@@ -4,7 +4,12 @@
     "compilerOptions": {
         "lib": ["ES2023", "DOM"],
         "paths": {
-            "content/*": ["./content/*"]
+            "constants/*": ["./src/constants/*"],
+            "content": ["./content/index.ts"],
+            "content/*": ["./content/*"],
+            "i18n/*": ["./src/i18n/*"],
+            "theme/*": ["./theme/*"],
+            "types/*": ["./src/types/*"]
         }
     },
     "include": ["e2e", "playwright.config.ts"]

@@ -56,6 +56,12 @@
                 "/(^|[\\s,])ease(-in-out|-in|-out)?(?=$|[\\s,])/"
             ]
         },
+        "selector-pseudo-class-no-unknown": [
+            true,
+            {
+                "ignorePseudoClasses": ["global"]
+            }
+        ],
         "selector-max-id": 0,
         "max-nesting-depth": [
             3,

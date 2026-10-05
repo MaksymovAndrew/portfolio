@@ -1,4 +1,12 @@
-import { LOCALES, missingPathFor, pathFor } from "./support/site";
+import { source } from "content";
+import { theme } from "theme/theme";
+
+import {
+    DEFAULT_LOCALE,
+    LOCALES,
+    missingPathFor,
+    pathFor,
+} from "./support/site";
 import { expect, NOT_FOUND, test } from "./support/test";
 
 for (const locale of LOCALES) {
@@ -27,3 +35,21 @@ for (const locale of LOCALES) {
         );
     });
 }
+
+test("should hide the theme switch and keep the default colours without JavaScript", async ({
+    page,
+}) => {
+    await page.goto(pathFor(DEFAULT_LOCALE));
+
+    await expect(
+        page.getByRole("button", { name: source.ui.theme[DEFAULT_LOCALE] }),
+    ).toBeHidden();
+    await expect(page.locator("html")).toHaveAttribute(
+        "data-theme",
+        theme.defaultMode,
+    );
+    await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute(
+        "content",
+        theme.modes[theme.defaultMode].palette.bg,
+    );
+});

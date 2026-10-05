@@ -4,6 +4,8 @@ export { DEFAULT_LOCALE, LOCALES } from "content/locales";
 
 export const WIDTHS = [320, 375, 768, 1024, 1280, 1440] as const;
 
+export const THEMES = ["dark", "light"] as const;
+
 export const VIEWPORT_HEIGHT = 900;
 
 // the default language lives at the root, every other one under its prefix
