@@ -1,5 +1,5 @@
 // Sets the release version: taken from a chore/release-X.Y.Z branch name or passed explicitly.
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 
 const VERSION_FILES = ["package.json", "package-lock.json"];
@@ -35,15 +35,17 @@ const readJson = (file) => {
     return { json: JSON.parse(text), indent };
 };
 
+const isAtVersion = (file, version) => {
+    const { json } = readJson(file);
+    // the lockfile repeats the version in its entry for the root package
+    const rootVersion = json.packages?.[""]?.version ?? version;
+
+    return json.version === version && rootVersion === version;
+};
+
 const writeVersion = (file, version) => {
     const { json, indent } = readJson(file);
-    // the lockfile repeats the version in its entry for the root package
     const rootPackage = json.packages?.[""];
-    const versions = [json.version, rootPackage?.version ?? version];
-
-    if (versions.every((current) => current === version)) {
-        return false;
-    }
 
     json.version = version;
 
@@ -52,9 +54,15 @@ const writeVersion = (file, version) => {
     }
 
     writeFileSync(file, `${JSON.stringify(json, null, indent)}\n`);
-
-    return true;
 };
+
+const outdatedFiles = (version) =>
+    VERSION_FILES.filter(
+        (file) => existsSync(file) && !isAtVersion(file, version),
+    );
+
+const hasUnstagedChanges = (file) =>
+    spawnSync("git", ["diff", "--quiet", "--", file]).status === 1;
 
 const bump = (explicitVersion) => {
     const version = explicitVersion ?? readBranchVersion();
@@ -69,21 +77,51 @@ const bump = (explicitVersion) => {
         fail(`"${version}" is not an X.Y.Z version. ${USAGE}`);
     }
 
-    const written = VERSION_FILES.filter(
-        (file) => existsSync(file) && writeVersion(file, version),
-    );
+    const files = outdatedFiles(version);
+
+    files.forEach((file) => writeVersion(file, version));
 
     console.log(
-        written.length > 0
-            ? `Set ${version} in: ${written.join(", ")}`
+        files.length > 0
+            ? `Set ${version} in: ${files.join(", ")}`
             : `Everything is already at ${version}`,
     );
+};
+
+// runs inside a commit: on a release branch the version joins that same commit
+const precommit = () => {
+    const version = readBranchVersion();
+
+    if (!version) {
+        return;
+    }
+
+    const files = outdatedFiles(version);
+
+    if (files.length === 0) {
+        return;
+    }
+
+    // staging the whole file would also commit edits that were left out on purpose
+    const unstaged = files.filter(hasUnstagedChanges);
+
+    if (unstaged.length > 0) {
+        fail(
+            `Unstaged changes in ${unstaged.join(", ")}. Stage or undo them, then commit again.`,
+        );
+    }
+
+    files.forEach((file) => writeVersion(file, version));
+    execFileSync("git", ["add", ...files]);
+    console.log(`Release version ${version} set and staged`);
 };
 
 const [, , command, versionArgument] = process.argv;
 
 if (command === "bump") {
     bump(versionArgument);
+} else if (command === "precommit") {
+    precommit();
 } else {
     fail(USAGE);
 }

@@ -34,7 +34,23 @@ Then open <http://localhost:3000/en>. Every language has its own address: `/en`,
 
 `npm start` needs a build first and listens on `127.0.0.1:3000`; set `PORT` or `SERVE_HOST` to change that.
 
-`npm run bump` takes the version from the branch name on a `chore/release-X.Y.Z` branch; anywhere else pass it: `npm run bump -- 1.2.3`.
+`npm run bump` takes the version from the branch name on a `chore/release-X.Y.Z` branch; anywhere else pass it: `npm run bump -- 1.2.3`. On a release branch the commit hook does the same by itself.
+
+## Quality checks
+
+| Command                 | What it checks                                                                |
+| ----------------------- | ----------------------------------------------------------------------------- |
+| `npm run verify`        | Everything below, then the production build                                   |
+| `npm run format:check`  | Formatting (Prettier); `npm run format` fixes it                              |
+| `npm run lint`          | ESLint: types, imports, accessibility, the layer rules                        |
+| `npm run lint:sonarjs`  | Code smells and cognitive complexity                                          |
+| `npm run stylelint`     | Styles: no raw colours; radii, layers, fonts and timings come from the tokens |
+| `npm run typecheck`     | Types of the app, the build config and the tests                              |
+| `npm run test:coverage` | Unit tests (Jest, React Testing Library) with an 80% coverage threshold       |
+
+The lint rules keep the layers apart: text in a component, a raw colour or an import of `content/` outside `src/i18n/` fails the check.
+
+Git hooks are installed by `npm install`. A commit fixes and formats the staged files and runs the type check; a commit message must follow [Conventional Commits](https://www.conventionalcommits.org/) with a header of at most 72 characters; a direct push to `main` is refused.
 
 ## Project layout
 

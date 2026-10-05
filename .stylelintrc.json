@@ -1,0 +1,77 @@
+{
+    "extends": ["stylelint-config-standard-scss"],
+    "rules": {
+        "keyframes-name-pattern": "^([a-z][a-zA-Z0-9]*)(-[a-z0-9]+)*$",
+        "selector-class-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
+        "selector-no-vendor-prefix": [
+            true,
+            {
+                "ignoreSelectors": ["/-webkit-/", "/-moz-/"]
+            }
+        ],
+        "property-no-vendor-prefix": [
+            true,
+            {
+                "ignoreProperties": [
+                    "-webkit-font-smoothing",
+                    "-moz-osx-font-smoothing"
+                ]
+            }
+        ],
+        "color-no-hex": true,
+        "color-named": "never",
+        "function-disallowed-list": [
+            "rgb",
+            "rgba",
+            "hsl",
+            "hsla",
+            "hwb",
+            "lab",
+            "lch",
+            "oklab",
+            "oklch"
+        ],
+        "declaration-property-value-allowed-list": {
+            "font-family": ["/^\\$font-[a-z0-9-]+$/", "inherit"],
+            "font": ["inherit"],
+            "z-index": ["/^\\$z-[a-z0-9-]+$/", "auto"],
+            "/^border(-[a-z]+)*-radius$/": [
+                "var(--radius)",
+                "/^\\$radius-[a-z0-9-]+$/",
+                "0",
+                "50%",
+                "inherit"
+            ],
+            "/^(transition|animation)-duration$/": [
+                "/^\\$dur-[a-z0-9-]+(\\s*,\\s*\\$dur-[a-z0-9-]+)*$/"
+            ],
+            "/^(transition|animation)-timing-function$/": [
+                "/^(\\$ease-[a-z0-9-]+|linear|steps\\([^)]*\\))(\\s*,\\s*(\\$ease-[a-z0-9-]+|linear|steps\\([^)]*\\)))*$/"
+            ]
+        },
+        "declaration-property-value-disallowed-list": {
+            "/^(transition|animation)$/": [
+                "/(^|[\\s,(])\\d*\\.?\\d+m?s\\b/",
+                "/cubic-bezier\\(|linear\\(/",
+                "/(^|[\\s,])ease(-in-out|-in|-out)?(?=$|[\\s,])/"
+            ]
+        },
+        "selector-max-id": 0,
+        "max-nesting-depth": [
+            3,
+            {
+                "ignore": ["blockless-at-rules", "pseudo-classes"]
+            }
+        ],
+        "declaration-block-single-line-max-declarations": 1,
+        "font-weight-notation": "numeric"
+    },
+    "overrides": [
+        {
+            "files": ["src/components/**/*.scss"],
+            "rules": {
+                "declaration-no-important": true
+            }
+        }
+    ]
+}

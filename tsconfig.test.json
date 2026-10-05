@@ -1,0 +1,12 @@
+{
+    // editor + `tsc -b` type-check view of the tests; @swc/jest transforms tests at
+    // run time without type-checking them
+    "extends": "./tsconfig.app.json",
+    "compilerOptions": {
+        "types": ["jest", "@testing-library/jest-dom", "node"],
+        "noUnusedLocals": false,
+        "noUnusedParameters": false
+    },
+    "include": ["src"],
+    "exclude": []
+}
