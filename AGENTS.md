@@ -20,6 +20,7 @@ A personal portfolio site that doubles as a template. Everything personal lives 
 ## Working rules
 
 - Conventional Commits. Every change goes through its own branch and a squash-merged pull request; nothing is committed straight to `main`.
+- The pull request title becomes the commit title, so it follows the same rules. CI checks it and runs every check of `verify` on each pull request; `ci-success` must be green before a merge.
 - Commit messages and pull request texts describe the change and nothing else - no trailers.
 - Run `npm run verify` for real before calling anything done, and report failures with their output.
 - No `as any`, `@ts-ignore`, `eslint-disable` or empty `catch`.

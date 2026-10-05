@@ -1,5 +1,7 @@
 # Portfolio
 
+[![CI](https://github.com/MaksymovAndrew/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/MaksymovAndrew/portfolio/actions/workflows/ci.yml)
+
 A personal portfolio site built with Next.js: one page, generated ahead of time for every language. It doubles as a template - everything personal lives in three folders, and the rest is framework you do not have to touch.
 
 > Work in progress: the scaffold is in place, the sections and the design are on their way.
@@ -51,6 +53,8 @@ Then open <http://localhost:3000/en>. Every language has its own address: `/en`,
 The lint rules keep the layers apart: text in a component, a raw colour or an import of `content/` outside `src/i18n/` fails the check.
 
 Git hooks are installed by `npm install`. A commit fixes and formats the staged files and runs the type check; a commit message must follow [Conventional Commits](https://www.conventionalcommits.org/) with a header of at most 72 characters; a direct push to `main` is refused.
+
+The same checks run on GitHub Actions for every pull request and every push to `main`, together with a check that the pull request title follows Conventional Commits. One check, `ci-success`, sums them up: make it the required status check of `main`. Dependabot proposes dependency updates once a week: minor and patch npm updates arrive as one pull request, workflow actions as another, major versions one by one.
 
 ## Project layout
 
