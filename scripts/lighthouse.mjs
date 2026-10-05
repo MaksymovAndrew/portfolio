@@ -8,7 +8,7 @@ import { chromium } from "@playwright/test";
 import { launch } from "chrome-launcher";
 import lighthouse from "lighthouse";
 
-import { LOCALES } from "../content/locales.ts";
+import { DEFAULT_LOCALE, LOCALES } from "../content/locales.ts";
 import config from "../lighthouse.config.mjs";
 import { startServer } from "./serve.mjs";
 
@@ -20,7 +20,7 @@ const reportDir = path.join(rootDir, "lighthouse-report");
 
 // not 3000: the development servers take it; not 3100: the browser tests do
 const PORT = 3101;
-const BASE_URL = `http://127.0.0.1:${PORT}`;
+const BASE_URL = `http://localhost:${PORT}`;
 const SERVER_START_TIMEOUT_MS = 30_000;
 const POLL_INTERVAL_MS = 250;
 const BYTES_PER_KB = 1024;
@@ -32,7 +32,8 @@ const RESOURCE_TYPES = { script: "Script", font: "Font", total: null };
 // performance always runs: it holds the layout-shift and network audits the checks read
 const CATEGORIES = [...new Set(["performance", ...Object.keys(config.scores)])];
 
-const pathFor = (locale) => `/${locale}`;
+// the rule of e2e/support/site.ts, which this script cannot import
+const pathFor = (locale) => (locale === DEFAULT_LOCALE ? "/" : `/${locale}`);
 
 const median = (values) =>
     [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)];

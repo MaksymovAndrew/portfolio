@@ -2,7 +2,7 @@ import { defineConfig, devices } from "@playwright/test";
 
 // not 3000: the development servers of this and other projects take it
 const PORT = 3100;
-const BASE_URL = `http://127.0.0.1:${PORT}`;
+const BASE_URL = `http://localhost:${PORT}`;
 const SERVER_START_TIMEOUT_MS = 240_000;
 const NO_JS_SPEC = "nojs.spec.ts";
 const SMOKE_SPEC = "smoke.spec.ts";

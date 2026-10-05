@@ -22,7 +22,7 @@ npm install
 npm run dev
 ```
 
-Then open <http://localhost:3000/en>. Every language has its own address: `/en`, `/pl`, `/uk`.
+Then open <http://localhost:3000>. English lives at the root, Polish at `/pl`, Ukrainian at `/uk`.
 
 ## Commands
 
@@ -34,7 +34,7 @@ Then open <http://localhost:3000/en>. Every language has its own address: `/en`,
 | `npm run typecheck` | Type check of the whole project                             |
 | `npm run bump`      | Sets the release version in `package.json` and the lockfile |
 
-`npm start` needs a build first and listens on `127.0.0.1:3000`; set `PORT` or `SERVE_HOST` to change that.
+`npm start` needs a build first and listens on `localhost:3000`; set `PORT` or `SERVE_HOST` to change that. Use a host name or `0.0.0.0`, never a loopback address such as `127.0.0.1` or `::1`: Next calls those `localhost` inside the proxy, and its rewrites stop finding the server.
 
 `npm run bump` takes the version from the branch name on a `chore/release-X.Y.Z` branch; anywhere else pass it: `npm run bump -- 1.2.3`. On a release branch the commit hook does the same by itself.
 
@@ -75,6 +75,18 @@ All of these checks run on GitHub Actions for every pull request and every push 
 To make the site your own, change `content/`, `theme/` and `public/`. `src/` holds no personal data, no raw colours and no user-facing text.
 
 `theme/` is not there yet: it arrives together with the design. The languages are listed in `content/locales.ts`.
+
+## Addresses and languages
+
+| Address                                 | What it shows                                          |
+| --------------------------------------- | ------------------------------------------------------ |
+| `/`                                     | the page in the default language, English              |
+| `/pl`, `/uk`                            | the page in Polish, in Ukrainian                       |
+| `/en`, `/en/...`                        | a permanent redirect to the same address without `/en` |
+| an unknown address under `/pl` or `/uk` | a 404 page in that language                            |
+| any other unknown address               | a 404 page in the default language                     |
+
+An unknown address that looks like a file - a dot in it, as in `/old.pdf` - skips this and gets the framework's plain 404. The languages and the default one come from `content/locales.ts`; the addresses follow them. The site never picks a language for the visitor and sets no cookies: the address alone decides.
 
 ## Editing content
 

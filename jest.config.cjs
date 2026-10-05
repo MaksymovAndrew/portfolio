@@ -40,6 +40,8 @@ module.exports = {
         // route wiring only; page.tsx files hold the pages and stay measured
         "!src/app/**/layout.tsx",
         "!src/app/**/error.tsx",
+        "!src/app/**/not-found.tsx",
+        "!src/proxy.ts",
         // barrels, no logic
         "!src/**/index.ts",
         // type-only modules, no runtime code
