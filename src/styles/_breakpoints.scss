@@ -1,0 +1,39 @@
+@use "sass:list";
+
+// the widths the design changes at; from 1024 the page has its left column
+$widths: (360, 480, 640, 1024, 1280);
+
+// the heights from which the left column tightens, on windows 1024 wide or more
+$heights: (859, 759, 639);
+
+@function -px($value, $allowed, $name) {
+    @if not list.index($allowed, $value) {
+        @error "Unknown #{$name} #{$value}. Use one of #{$allowed}.";
+    }
+
+    @return $value * 1px;
+}
+
+@mixin from($width) {
+    @media (width >= #{-px($width, $widths, "width")}) {
+        @content;
+    }
+}
+
+@mixin until($width) {
+    @media (width < #{-px($width, $widths, "width")}) {
+        @content;
+    }
+}
+
+@mixin between($from, $until) {
+    @media (#{-px($from, $widths, "width")} <= width < #{-px($until, $widths, "width")}) {
+        @content;
+    }
+}
+
+@mixin short($height) {
+    @media (width >= 1024px) and (height <= #{-px($height, $heights, "height")}) {
+        @content;
+    }
+}

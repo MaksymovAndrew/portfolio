@@ -54,7 +54,7 @@ The lint rules keep the layers apart: text in a component, a raw colour or an im
 
 Two more checks run on the production build, in real browsers:
 
-- `npm run test:e2e` - Playwright builds the site and serves it on port 3100 (a server already running there is reused). Every language answers in Chromium, WebKit and Firefox; nothing scrolls sideways from 320 to 1440 pixels; axe finds no WCAG 2.2 AA violation; the page reads without JavaScript; no page logs an error.
+- `npm run test:e2e` - Playwright builds the site and serves it on port 3100 (a server already running there is reused). Every language answers in Chromium, WebKit and Firefox; nothing scrolls sideways from 320 to 1440 pixels and axe finds no WCAG 2.2 AA violation, in both themes; a stored theme applies before any script bundle runs; the page reads without JavaScript; no page logs an error.
 - `npm run lighthouse` - Lighthouse with mobile emulation on every language of the last `npm run build`. The median of three runs must meet the thresholds in `lighthouse.config.mjs`; the HTML reports land in `lighthouse-report/`.
 
 Install the browsers once with `npx playwright install chromium webkit firefox`. On Windows with Smart App Control turned on, the unsigned WebKit build cannot start; run `npm run test:e2e -- --project=chromium --project=nojs` there - CI runs every browser.
@@ -74,7 +74,7 @@ All of these checks run on GitHub Actions for every pull request and every push 
 
 To make the site your own, change `content/`, `theme/` and `public/`. `src/` holds no personal data, no raw colours and no user-facing text.
 
-`theme/` is not there yet: it arrives together with the design. The languages are listed in `content/locales.ts`.
+The languages are listed in `content/locales.ts`.
 
 ## Addresses and languages
 
@@ -87,6 +87,19 @@ To make the site your own, change `content/`, `theme/` and `public/`. `src/` hol
 | any other unknown address               | a 404 page in the default language                     |
 
 An unknown address that looks like a file - a dot in it, as in `/old.pdf` - skips this and gets the framework's plain 404. The languages and the default one come from `content/locales.ts`; the addresses follow them. The site never picks a language for the visitor and sets no cookies: the address alone decides.
+
+## Changing the look
+
+Two files hold the look:
+
+- `theme/theme.ts` - both palettes, dark and light, with their tints, the two glow colours and the card radius. `defaultMode` is the theme a first visit opens in; `social.mode` is the one images of the site, such as link previews, are drawn in. The site writes these as CSS variables, so every colour on the page comes from here.
+- `theme/fonts.ts` - the three fonts, loaded with `next/font/google`: downloaded at build time and served by the site itself, never from Google. A page fetches only the alphabets its text uses.
+
+`theme/fonts/Unbounded-Bold.ttf` is a static copy of the heading font: the site icon is drawn from it, because the image renderer reads neither variable fonts nor woff2. Replace it together with the heading font, under the same name, and keep its licence next to it.
+
+The icon is the initials from `content/profile.ts` with a dot in the accent colour. A visitor's theme choice is remembered in the browser and applied before the first paint; without a stored choice the site opens in `defaultMode`, whatever the system setting.
+
+`npm run verify` checks the contrast of both palettes: every text colour on its backgrounds must reach 4.5:1, and a failure names the pair and its ratio.
 
 ## Editing content
 

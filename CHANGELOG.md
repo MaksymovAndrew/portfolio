@@ -26,6 +26,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - A check that keeps the owner's name, email and profile links out of the framework code.
 - English at the root address, Polish at `/pl`, Ukrainian at `/uk`; `/en` redirects to the root, so every page has one address.
 - Unknown addresses answer 404 with a page in the language of the address, readable without JavaScript.
+- Dark and light themes; the choice is remembered and applied before the first paint.
+- One file with both palettes: every colour on the site comes from it.
+- Three self-hosted fonts with Polish and Ukrainian letters; a page loads only the letters it uses.
+- A site icon generated from the initials and the accent colour.
+- An automatic contrast check: every text colour passes WCAG AA in both themes.
 
 ### Fixed
 

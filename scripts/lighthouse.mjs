@@ -50,26 +50,30 @@ const transferKb = (lhr, budget) => {
     return bytes / BYTES_PER_KB;
 };
 
+// a budget is one number for every page, or one per page with `other` for the rest
+const limitKb = (maxKb, page) =>
+    typeof maxKb === "number" ? maxKb : (maxKb[page] ?? maxKb.other);
+
 const CHECKS = [
     ...Object.entries(config.scores).map(([id, { min, level }]) => ({
         name: `${id} score`,
         read: (lhr) => lhr.categories[id].score,
         passes: (value) => value >= min,
-        limit: `>= ${min}`,
+        limit: () => `>= ${min}`,
         level,
     })),
     ...Object.entries(config.metrics).map(([id, { max, level }]) => ({
         name: id,
         read: (lhr) => lhr.audits[id].numericValue,
         passes: (value) => value <= max,
-        limit: `<= ${max}`,
+        limit: () => `<= ${max}`,
         level,
     })),
     ...Object.entries(config.budgets).map(([budget, { maxKb, level }]) => ({
         name: `${budget} transfer, KB`,
         read: (lhr) => transferKb(lhr, budget),
-        passes: (value) => value <= maxKb,
-        limit: `<= ${maxKb}`,
+        passes: (value, page) => value <= limitKb(maxKb, page),
+        limit: (page) => `<= ${limitKb(maxKb, page)}`,
         level,
     })),
 ];
@@ -94,6 +98,17 @@ const checkSetup = async () => {
     if (unknownBudgets.length > 0) {
         throw new Error(
             `Unknown budget in lighthouse.config.mjs: ${unknownBudgets.join(", ")}. Known: ${Object.keys(RESOURCE_TYPES).join(", ")}.`,
+        );
+    }
+
+    const unlimited = Object.entries(config.budgets).filter(
+        ([, { maxKb }]) =>
+            typeof maxKb !== "number" && !Object.hasOwn(maxKb, "other"),
+    );
+
+    if (unlimited.length > 0) {
+        throw new Error(
+            `A per-page budget in lighthouse.config.mjs needs "other" for the remaining pages: ${unlimited.map(([budget]) => budget).join(", ")}.`,
         );
     }
 
@@ -151,15 +166,17 @@ const auditLocale = async (locale, port) => {
         byPerformance[Math.floor(runs.length / 2)].report,
     );
 
+    const page = pathFor(locale);
+
     return CHECKS.map((check) => {
         const value = median(runs.map(({ lhr }) => check.read(lhr)));
-        const passed = check.passes(value);
+        const passed = check.passes(value, page);
 
         return {
-            page: pathFor(locale),
+            page,
             check: check.name,
             value: Math.round(value * DECIMALS) / DECIMALS,
-            limit: check.limit,
+            limit: check.limit(page),
             result: passed ? "pass" : check.level,
         };
     });

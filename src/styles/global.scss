@@ -1,9 +1,60 @@
+@use "styles/abstracts" as *;
+
 *,
 *::before,
 *::after {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+// the only background: the page, the scrollbar gutter and the overscroll change colour together
+html {
+    background: var(--bg);
+    scrollbar-gutter: stable;
+    transition: background-color $dur-theme;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
 }
 
 body {
-    margin: 0;
+    overflow-x: clip;
+    color: var(--text);
+    font-family: $font-body;
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    transition: color $dur-theme;
+}
+
+svg {
+    display: block;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+// focus moved there by a script (a skip link's target, a dialog) is not a control
+[tabindex="-1"]:focus-visible {
+    outline: none;
+}
+
+// a component's own radius wins; a bare link gets a rounded ring
+:where(a:focus-visible) {
+    border-radius: $radius-focus;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
 }

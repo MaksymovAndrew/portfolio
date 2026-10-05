@@ -1,0 +1,42 @@
+@use "styles/abstracts" as *;
+
+.theme-toggle {
+    display: inline-grid;
+    place-items: center;
+    padding: 7px 9px;
+    border: none;
+    border-radius: $radius-control;
+    background: none;
+    color: var(--faint);
+    cursor: pointer;
+    transition:
+        color $dur-fast,
+        background-color $dur-fast;
+
+    @include tap-area;
+
+    @include hover {
+        color: var(--text);
+    }
+
+    &:active {
+        background: var(--accent-soft);
+    }
+}
+
+.theme-toggle__sun,
+.theme-toggle__moon {
+    width: 16px;
+    height: 16px;
+}
+
+// without JavaScript a click could not switch anything
+:global(html:not(.js)) .theme-toggle {
+    display: none;
+}
+
+// the icon of the theme a click switches to
+:global(:root[data-theme="light"]) .theme-toggle__sun,
+:global(:root[data-theme="dark"]) .theme-toggle__moon {
+    display: none;
+}

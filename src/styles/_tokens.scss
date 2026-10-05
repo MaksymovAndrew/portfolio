@@ -1,0 +1,43 @@
+// colours live in theme/theme.ts as CSS variables; these are the values Stylelint lets components use
+
+// the next/font variables set on <html>, with the design's fallbacks
+$font-display: var(--font-display), system-ui, sans-serif;
+$font-body: var(--font-body), system-ui, sans-serif;
+$font-mono: var(--font-mono), ui-monospace, monospace;
+
+// one easing for everything that moves
+$ease-out: cubic-bezier(0.2, 0.7, 0.3, 1);
+
+// durations, from a fade to the slow drift of the glow
+$dur-fade: 0.15s;
+$dur-fast: 0.2s;
+$dur-base: 0.25s;
+$dur-slow: 0.3s;
+$dur-theme: 0.35s;
+$dur-spot: 0.5s;
+$dur-rise: 0.7s;
+$dur-pulse: 2.4s;
+$dur-blink: 1.1s;
+$dur-drift: 26s;
+$dur-marquee: 38s;
+$dur-marquee-reverse: 44s;
+$dur-dialog: 0.3s;
+$dur-sheet: 0.34s;
+$dur-circle: 0.62s;
+
+// layers, from the background up to the custom cursor
+$z-behind: -1;
+$z-atmosphere: 0;
+$z-spot: 1;
+$z-content: 2;
+$z-to-top: 9;
+$z-top-bar: 10;
+$z-cursor: 60;
+
+// radii of the parts; cards use the theme's --radius
+$radius-pill: 99px;
+$radius-button: 12px;
+$radius-tile: 10px;
+$radius-small: 8px;
+$radius-control: 7px;
+$radius-focus: 6px;
