@@ -25,4 +25,11 @@ export default [
             "sonarjs/no-os-command-from-path": "off",
         },
     },
+    {
+        // it misses expect.poll and the shared helpers; playwright/expect-expect in the main config checks this
+        files: ["e2e/**"],
+        rules: {
+            "sonarjs/assertions-in-tests": "off",
+        },
+    },
 ];

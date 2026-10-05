@@ -9,6 +9,7 @@ import deMorgan from "eslint-plugin-de-morgan";
 import i18next from "eslint-plugin-i18next";
 import importPlugin from "eslint-plugin-import";
 import jsxA11y from "eslint-plugin-jsx-a11y";
+import playwright from "eslint-plugin-playwright";
 import reactHooks from "eslint-plugin-react-hooks";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import testingLibrary from "eslint-plugin-testing-library";
@@ -167,6 +168,7 @@ export default tseslint.config(
                     "./tsconfig.app.json",
                     "./tsconfig.node.json",
                     "./tsconfig.test.json",
+                    "./tsconfig.e2e.json",
                 ],
                 tsconfigRootDir: import.meta.dirname,
             },
@@ -282,6 +284,7 @@ export default tseslint.config(
                         "**/*.test.{ts,tsx}",
                         "**/__tests__/**",
                         "src/test/**",
+                        "e2e/**",
                         "**/*.config.{ts,js,cjs}",
                     ],
                 },
@@ -504,6 +507,22 @@ export default tseslint.config(
     {
         ...testingLibrary.configs["flat/react"],
         files: ["**/__tests__/**/*.{ts,tsx}", "src/test/**/*.{ts,tsx}"],
+    },
+    {
+        ...playwright.configs["flat/recommended"],
+        files: ["e2e/**/*.ts"],
+        rules: {
+            ...playwright.configs["flat/recommended"].rules,
+            "playwright/expect-expect": [
+                "error",
+                { assertFunctionNames: ["expectAccessible"] },
+            ],
+        },
+    },
+    {
+        // settle() waits for the page to go quiet before the final checks, not for an element to appear
+        files: ["e2e/support/test.ts"],
+        rules: { "playwright/no-networkidle": "off" },
     },
     prettier,
     {
