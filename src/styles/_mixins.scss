@@ -22,6 +22,18 @@
     }
 }
 
+// the line between the languages and the theme switch; it goes when either of them is missing
+@mixin control-separator {
+    width: 1px;
+    height: 16px;
+    background: var(--line);
+
+    &:first-child,
+    :global(html:not(.js)) & {
+        display: none;
+    }
+}
+
 // touch screens keep a hover stuck after a tap; the keyboard gets the same state on focus
 @mixin hover {
     @media (hover: hover) {

@@ -31,6 +31,14 @@ A personal portfolio site that doubles as a template. Everything personal lives 
 - The theme lives in `data-theme` on `<html>`: the inline pre-paint script sets it from storage, `themeStore` changes it later. A component shows a per-theme part through CSS (`:global(:root[data-theme="light"])`), never by reading the mode while rendering.
 - Storage goes through `utils/storage`: a blocked storage keeps the feature working for the visit.
 
+## Page
+
+- `app/[locale]/page.tsx` wraps the hero and the sections in `Shell`: the skip link, the background, the left column from 1024 pixels, the top bar below that width, `main` and the footer.
+- The sections come from `site.sections` in `content/site.ts`, in that order, through `SECTIONS` in `components/sections/registry.ts`; a listed section without a component is skipped.
+- A section is a server component in `components/sections/<Name>/` with the signature `({ content }: { content: Content }) => ReactNode`. It picks its own slice of the content and wraps itself in `Section`, whose label is the section's `h2`; its id is its key in `SECTION_IDS` and the address `#<id>`.
+- The name is the only `h1`. It exists twice, in the left column and in the hero, and CSS displays exactly one at every width.
+- The language links are plain links from `localePath`, so they work without JavaScript; the current one carries `aria-current="page"`.
+
 ## Working rules
 
 - Conventional Commits. Every change goes through its own branch and a squash-merged pull request; nothing is committed straight to `main`.

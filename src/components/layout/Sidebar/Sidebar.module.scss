@@ -1,0 +1,57 @@
+@use "styles/abstracts" as *;
+
+.sidebar {
+    display: none;
+
+    @include from(1024) {
+        position: sticky;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100dvh;
+        padding: 72px 0;
+    }
+
+    @include from(1280) {
+        padding: 96px 0;
+    }
+
+    // low windows: less air first, then the column scrolls with the page
+    @include short(859) {
+        padding: 56px 0;
+    }
+
+    @include short(759) {
+        padding: 48px 0;
+    }
+
+    @include short(639) {
+        position: static;
+        height: auto;
+        padding: 48px 0 24px;
+    }
+}
+
+.sidebar__controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 36px;
+
+    @include short(859) {
+        margin-bottom: 28px;
+    }
+}
+
+// pulled left by the controls' own padding, so the first language lines up with the name
+.sidebar__settings {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: -9px;
+}
+
+.sidebar__separator {
+    @include control-separator;
+}

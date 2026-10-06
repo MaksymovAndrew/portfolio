@@ -1,4 +1,5 @@
 import { source } from "content";
+import { LOCALE_META } from "content/locales";
 import { theme } from "theme/theme";
 
 import {
@@ -33,6 +34,19 @@ for (const locale of LOCALES) {
             "href",
             pathFor(locale),
         );
+    });
+}
+
+for (const locale of LOCALES.filter((other) => other !== DEFAULT_LOCALE)) {
+    test(`should switch to ${locale} without JavaScript`, async ({ page }) => {
+        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page
+            .getByRole("group", { name: source.ui.languages[DEFAULT_LOCALE] })
+            .getByRole("link", { name: LOCALE_META[locale].name })
+            .click();
+
+        await expect(page).toHaveURL((url) => url.pathname === pathFor(locale));
+        await expect(page.locator("html")).toHaveAttribute("lang", locale);
     });
 }
 

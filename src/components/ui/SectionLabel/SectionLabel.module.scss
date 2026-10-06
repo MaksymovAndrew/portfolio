@@ -1,0 +1,14 @@
+@use "styles/abstracts" as *;
+
+.section-label {
+    margin-bottom: 22px;
+    color: var(--accent);
+    font-family: $font-mono;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+
+    &::before {
+        content: "// " / "";
+    }
+}

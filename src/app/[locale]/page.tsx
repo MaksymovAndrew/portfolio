@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 
-import { ThemeToggle } from "components/controls/ThemeToggle";
-import { RichText } from "components/ui/RichText";
+import { Identity } from "components/layout/Identity";
+import { Shell } from "components/layout/Shell";
+import { pickSections, SECTIONS } from "components/sections/registry";
 import { getContent } from "i18n/content";
 import { isLocale } from "i18n/locales";
 
@@ -16,17 +17,23 @@ const HomePage = async ({ params }: HomePageProps) => {
         notFound();
     }
 
-    const { hero, profile, ui } = getContent(locale);
+    const content = getContent(locale);
+    const { hero, profile, site, ui } = content;
 
     return (
-        <main>
-            <h1>{profile.name}</h1>
-            <p>
-                <RichText text={hero.tagline} externalHint={ui.external} />
-            </p>
+        <Shell content={content}>
+            <Identity
+                place="hero"
+                eyebrow={hero.eyebrow}
+                name={profile.name}
+                tagline={hero.tagline}
+                externalHint={ui.external}
+            />
             <p>{hero.sub}</p>
-            <ThemeToggle label={ui.theme} />
-        </main>
+            {pickSections(site.sections, SECTIONS).map(({ id, Component }) => (
+                <Component key={id} content={content} />
+            ))}
+        </Shell>
     );
 };
 

@@ -13,9 +13,17 @@ const HEX_COLOUR = /^#[\da-f]{6}$/i;
 
 const TEXT_COLOURS = ["text", "muted", "faint", "accent", "ok"] as const;
 
+// the share of the first glow colour at the centre of the background glow (Atmosphere.module.scss)
+const GLOW_CENTRE_PERCENT = 7;
+
 // every pair of text and background the site paints
 const pairsOf = (mode: ThemeMode) => {
     const { palette, tints } = theme.modes[mode];
+    const glowCentre = mixHex(
+        theme.glow[0],
+        palette.bg,
+        (GLOW_CENTRE_PERCENT * tints.glow) / 100,
+    );
     const on = (text: keyof Palette, background: string, name: string) => ({
         pair: `${mode}: ${text} on ${name}`,
         ratio: contrastRatio(palette[text], background),
@@ -25,6 +33,7 @@ const pairsOf = (mode: ThemeMode) => {
         ...TEXT_COLOURS.flatMap((text) => [
             on(text, palette.bg, "bg"),
             on(text, palette.surface, "surface"),
+            on(text, glowCentre, "the glow centre"),
         ]),
         on("text", palette.surface2, "surface2"),
         on("buttonInk", palette.accent, "accent"),
@@ -38,6 +47,12 @@ const pairsOf = (mode: ThemeMode) => {
             "accent",
             mixHex(palette.accent, palette.surface, tints.soft),
             "the soft accent fill on surface",
+        ),
+        // the current language in the top bar, under the glow
+        on(
+            "accent",
+            mixHex(palette.accent, glowCentre, tints.soft),
+            "the soft accent fill on the glow centre",
         ),
     ];
 };

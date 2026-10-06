@@ -1,0 +1,48 @@
+@use "styles/abstracts" as *;
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: max(22px, env(safe-area-inset-top)) 0 22px;
+
+    @include from(1024) {
+        display: none;
+    }
+}
+
+.top-bar__logo {
+    position: relative;
+    display: inline-block;
+    color: var(--text);
+    font-family: $font-display;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+
+    &::after {
+        content: "." / "";
+        color: var(--accent);
+    }
+}
+
+// the initials are what the eye reads, the name is what a screen reader says
+.top-bar__name {
+    @include sr-only;
+}
+
+.top-bar__controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    @include until(360) {
+        gap: 6px;
+    }
+}
+
+.top-bar__separator {
+    @include control-separator;
+}

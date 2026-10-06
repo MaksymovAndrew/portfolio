@@ -14,12 +14,10 @@ describe("HomePage", () => {
 
         render(await HomePage({ params: Promise.resolve({ locale }) }));
 
-        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-            profile.name,
-        );
-        expect(screen.getByRole("main")).toHaveTextContent(
-            toPlainText(hero.tagline),
-        );
+        const main = screen.getByRole("main");
+
+        expect(main).toHaveTextContent(profile.name);
+        expect(main).toHaveTextContent(toPlainText(hero.tagline));
         expect(screen.getByText(hero.sub)).toBeInTheDocument();
     });
 

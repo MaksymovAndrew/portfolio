@@ -22,6 +22,10 @@
     &:active {
         background: var(--accent-soft);
     }
+
+    @include until(360) {
+        padding: 6px;
+    }
 }
 
 .theme-toggle__sun,

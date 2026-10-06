@@ -1,5 +1,5 @@
-import { DEFAULT_LOCALE, LOCALES } from "i18n/locales";
-import { localePath } from "i18n/paths";
+import { DEFAULT_LOCALE, LOCALE_META, LOCALES } from "i18n/locales";
+import { localeLinks, localePath } from "i18n/paths";
 
 describe("localePath", () => {
     it("should place the default language at the root", () => {
@@ -12,5 +12,29 @@ describe("localePath", () => {
         expect(others.map(localePath)).toEqual(
             others.map((locale) => `/${locale}`),
         );
+    });
+});
+
+describe("localeLinks", () => {
+    it("should give every language its address and names", () => {
+        expect(localeLinks(DEFAULT_LOCALE)).toEqual(
+            LOCALES.map((locale) => ({
+                locale,
+                href: localePath(locale),
+                label: LOCALE_META[locale].label,
+                name: LOCALE_META[locale].name,
+                current: locale === DEFAULT_LOCALE,
+            })),
+        );
+    });
+
+    it("should mark only the language of the page", () => {
+        const current = LOCALES.at(-1) ?? DEFAULT_LOCALE;
+
+        expect(
+            localeLinks(current)
+                .filter((link) => link.current)
+                .map((link) => link.locale),
+        ).toEqual([current]);
     });
 });

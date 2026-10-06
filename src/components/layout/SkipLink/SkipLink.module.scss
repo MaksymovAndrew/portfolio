@@ -1,0 +1,19 @@
+@use "styles/abstracts" as *;
+
+.skip-link {
+    position: absolute;
+    top: max(12px, env(safe-area-inset-top));
+    left: max(12px, env(safe-area-inset-left));
+    z-index: $z-skip-link;
+    padding: 10px 18px;
+    border-radius: $radius-button;
+    background: var(--accent);
+    color: var(--btn-ink);
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+
+    &:not(:focus) {
+        @include sr-only;
+    }
+}
