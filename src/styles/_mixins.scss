@@ -1,3 +1,5 @@
+@use "styles/tokens" as *;
+
 // off screen, still read by assistive technology
 @mixin sr-only {
     position: absolute;
@@ -31,6 +33,24 @@
     &:first-child,
     :global(html:not(.js)) & {
         display: none;
+    }
+}
+
+// a first-screen block rising in at its step: faint while it waits, no transform left once it has risen
+@mixin rise($step) {
+    $delay-at-step: $delay-first + ($step - 1) * $delay-step;
+
+    animation: rise $dur-rise $ease-out backwards;
+    animation-delay: $delay-at-step;
+}
+
+// once per module that rises (keyframes are module-local); from 0.3, as a block that starts invisible is the largest paint only once risen
+@mixin rise-keyframes {
+    @keyframes rise {
+        from {
+            opacity: 0.3;
+            transform: translateY(18px);
+        }
     }
 }
 

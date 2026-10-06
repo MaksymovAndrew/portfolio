@@ -1,4 +1,5 @@
 @use "styles/abstracts" as *;
+@include rise-keyframes;
 
 .identity__eyebrow {
     margin-bottom: 18px;
@@ -32,10 +33,16 @@
         display: none;
     }
 
+    .identity__eyebrow {
+        @include rise(1);
+    }
+
     .identity__name {
         margin-bottom: 20px;
         font-size: clamp(34px, 9vw, 58px);
         line-height: 1.08;
+
+        @include rise(2);
     }
 
     .identity__tagline {
@@ -43,6 +50,8 @@
         color: var(--text);
         font-size: clamp(17px, 4.4vw, 21px);
         font-weight: 600;
+
+        @include rise(3);
     }
 }
 

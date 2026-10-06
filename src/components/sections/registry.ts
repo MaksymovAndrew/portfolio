@@ -2,12 +2,16 @@ import type { ReactNode } from "react";
 
 import type { Content, SectionId } from "types/content";
 
+import { Skills } from "components/sections/Skills";
+
 export type SectionComponent = (props: { content: Content }) => ReactNode;
 
 export type SectionRegistry = Partial<Record<SectionId, SectionComponent>>;
 
 // the component of each section; content/site.ts decides which of them appear and in what order
-export const SECTIONS: SectionRegistry = {};
+export const SECTIONS: SectionRegistry = {
+    skills: Skills,
+};
 
 export const pickSections = (
     ids: readonly SectionId[],

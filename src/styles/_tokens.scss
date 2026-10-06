@@ -26,6 +26,10 @@ $dur-dialog: 0.3s;
 $dur-sheet: 0.34s;
 $dur-circle: 0.62s;
 
+// entry delays of the first screen: the first block, then one step for each block after it
+$delay-first: 0.05s;
+$delay-step: 0.1s;
+
 // layers, from the background up to the custom cursor
 $z-behind: -1;
 $z-atmosphere: 0;

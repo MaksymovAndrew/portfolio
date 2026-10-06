@@ -1,0 +1,52 @@
+@use "styles/abstracts" as *;
+
+// focus keeps the button in place and shows the ring, as the design draws it
+.button {
+    display: inline-block;
+    padding: 13px 26px;
+    border: 1px solid transparent;
+    border-radius: $radius-button;
+    font-family: $font-body;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.65;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        transform $dur-fast,
+        box-shadow $dur-base,
+        background-color $dur-base,
+        color $dur-base,
+        border-color $dur-base;
+}
+
+.button--primary {
+    background: var(--accent);
+    color: var(--btn-ink);
+
+    @media (hover: hover) {
+        &:hover {
+            box-shadow: 0 10px 30px -8px
+                color-mix(
+                    in srgb,
+                    var(--accent) var(--t-btn-shadow),
+                    transparent
+                );
+            transform: translateY(-2px);
+        }
+    }
+}
+
+.button--ghost {
+    border-color: var(--line);
+    background: none;
+    color: var(--text);
+
+    @media (hover: hover) {
+        &:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+    }
+}

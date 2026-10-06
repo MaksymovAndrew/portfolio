@@ -1,6 +1,6 @@
 import { JetBrains_Mono, Manrope, Unbounded } from "next/font/google";
 
-// every alphabet is declared and a page fetches only what its text needs; the first screen of every page sets all three in Latin, so those files are preloaded
+// every alphabet is declared and a page fetches only what its text needs; the first screen sets all three in Latin, so those files are preloaded, and the running text's Cyrillic too: arriving late, it reflows the Ukrainian first screen
 
 // headings and the name
 export const display = Unbounded({
@@ -14,7 +14,7 @@ export const display = Unbounded({
 export const body = Manrope({
     display: "swap",
     preload: true,
-    subsets: ["latin"],
+    subsets: ["latin", "cyrillic"],
     variable: "--font-body",
 });
 

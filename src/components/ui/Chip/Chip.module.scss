@@ -1,0 +1,30 @@
+@use "styles/abstracts" as *;
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: $radius-pill;
+    background: var(--surface);
+    color: var(--muted);
+    font-family: $font-mono;
+    font-size: 12px;
+}
+
+.chip__dot {
+    flex-shrink: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ok);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--ok) 70%, transparent);
+    animation: pulse $dur-pulse $ease-in-out infinite;
+}
+
+@keyframes pulse {
+    50% {
+        opacity: 0.35;
+    }
+}

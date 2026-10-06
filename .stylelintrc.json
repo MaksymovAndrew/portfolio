@@ -45,6 +45,9 @@
             "/^(transition|animation)-duration$/": [
                 "/^\\$dur-[a-z0-9-]+(\\s*,\\s*\\$dur-[a-z0-9-]+)*$/"
             ],
+            "/^(transition|animation)-delay$/": [
+                "/^\\$delay-[a-z0-9-]+(\\s*,\\s*\\$delay-[a-z0-9-]+)*$/"
+            ],
             "/^(transition|animation)-timing-function$/": [
                 "/^(\\$ease-[a-z0-9-]+|linear|steps\\([^)]*\\))(\\s*,\\s*(\\$ease-[a-z0-9-]+|linear|steps\\([^)]*\\)))*$/"
             ]

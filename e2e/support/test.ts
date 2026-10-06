@@ -18,11 +18,22 @@ export const storeTheme = async (page: Page, mode: string): Promise<void> => {
     );
 };
 
-// late work - hydration, fonts, islands - happens after `load`; checks of the final page wait for it
+// late work - hydration, fonts, islands, the entry animations - happens after `load`; checks of the final page wait for it
 export const settle = async (page: Page): Promise<void> => {
     await page.waitForLoadState("networkidle");
     await page.evaluate(async () => {
         await document.fonts.ready;
+        // the marquee, the pulse and the glow never end; a cancelled animation counts as done
+        await Promise.allSettled(
+            document
+                .getAnimations()
+                .filter(
+                    (animation) =>
+                        animation.effect?.getComputedTiming().iterations !==
+                        Infinity,
+                )
+                .map((animation) => animation.finished),
+        );
     });
 };
 
