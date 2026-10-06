@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - An automatic accessibility check (WCAG 2.2 AA rules) for every language.
 - A layout check: no horizontal scroll from 320 to 1440 pixels, for every language.
 - A check that the page stays readable with JavaScript turned off.
-- Lighthouse on every pull request, with accessibility, layout-shift and script-size thresholds.
+- Lighthouse on every pull request, with thresholds for accessibility, best practices, SEO, layout shift and the size of scripts, fonts and the whole page.
 - All site texts in English, Polish and Ukrainian, kept side by side in `content/`; a missing translation fails the type check.
 - Bold, accent and links inside texts through a small safe markup, without raw HTML.
 - Automatic checks for empty texts, broken markup and links, missing files and malformed dates; broken content stops the build.
@@ -28,9 +28,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Unknown addresses answer 404 with a page in the language of the address, readable without JavaScript.
 - Dark and light themes; the choice is remembered and applied before the first paint.
 - One file with both palettes: every colour on the site comes from it.
-- Three self-hosted fonts with Polish and Ukrainian letters; a page loads only the letters it uses.
+- Three self-hosted fonts with Polish and Ukrainian letters; a page loads only the letters it uses, and the Latin letters every first screen needs are preloaded.
 - A site icon generated from the initials and the accent colour.
 - An automatic contrast check: every text colour passes WCAG AA in both themes.
+- Two-column layout from 1024 pixels with a sticky left column; a top bar on tablets and phones.
+- Language links that work without JavaScript.
+- A skip-to-content link, a footer with the version, and a background glow.
+- The sections are listed in `content/site.ts`: reorder or remove them there.
 
 ### Fixed
 

@@ -1,0 +1,35 @@
+@use "styles/abstracts" as *;
+
+// above the background glow
+.shell {
+    position: relative;
+    z-index: $z-content;
+}
+
+.shell__layout {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 max(24px, env(safe-area-inset-right)) 0
+        max(24px, env(safe-area-inset-left));
+
+    @include from(1024) {
+        display: grid;
+        grid-template-columns: minmax(260px, 320px) minmax(0, 620px);
+        justify-content: center;
+        gap: 64px;
+        max-width: 1240px;
+        padding: 0 max(36px, env(safe-area-inset-right)) 0
+            max(36px, env(safe-area-inset-left));
+    }
+
+    @include from(1280) {
+        grid-template-columns: minmax(300px, 380px) minmax(0, 620px);
+        gap: 110px;
+        padding: 0 max(48px, env(safe-area-inset-right)) 0
+            max(48px, env(safe-area-inset-left));
+    }
+}
+
+.shell__column {
+    min-width: 0;
+}

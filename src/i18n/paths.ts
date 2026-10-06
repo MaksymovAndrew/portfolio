@@ -1,5 +1,22 @@
 import type { Locale } from "i18n/locales";
-import { DEFAULT_LOCALE } from "i18n/locales";
+import { DEFAULT_LOCALE, LOCALE_META, LOCALES } from "i18n/locales";
+
+export interface LocaleLink {
+    locale: string;
+    href: string;
+    label: string;
+    name: string;
+    current: boolean;
+}
 
 export const localePath = (locale: Locale): string =>
     locale === DEFAULT_LOCALE ? "/" : `/${locale}`;
+
+export const localeLinks = (current: Locale): readonly LocaleLink[] =>
+    LOCALES.map((locale) => ({
+        locale,
+        href: localePath(locale),
+        label: LOCALE_META[locale].label,
+        name: LOCALE_META[locale].name,
+        current: locale === current,
+    }));

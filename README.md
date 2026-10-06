@@ -4,7 +4,7 @@
 
 A personal portfolio site built with Next.js: one page, generated ahead of time for every language. It doubles as a template - everything personal lives in three folders, and the rest is framework you do not have to touch.
 
-> Work in progress: the scaffold is in place, the sections and the design are on their way.
+> Work in progress: the page frame, the languages and the themes are in place, the sections are on their way.
 
 ## Stack
 
@@ -54,7 +54,7 @@ The lint rules keep the layers apart: text in a component, a raw colour or an im
 
 Two more checks run on the production build, in real browsers:
 
-- `npm run test:e2e` - Playwright builds the site and serves it on port 3100 (a server already running there is reused). Every language answers in Chromium, WebKit and Firefox; nothing scrolls sideways from 320 to 1440 pixels and axe finds no WCAG 2.2 AA violation, in both themes; a stored theme applies before any script bundle runs; the page reads without JavaScript; no page logs an error.
+- `npm run test:e2e` - Playwright builds the site and serves it on port 3100 (a server already running there is reused). Every language answers in Chromium, WebKit and Firefox; nothing scrolls sideways from 320 to 1440 pixels and axe finds no WCAG 2.2 AA violation, in both themes; the top bar gives way to the left column at 1024 pixels, with exactly one main heading on screen; the skip link leads to the content; a stored theme applies before any script bundle runs; the page reads and its language links work without JavaScript; no page logs an error.
 - `npm run lighthouse` - Lighthouse with mobile emulation on every language of the last `npm run build`. The median of three runs must meet the thresholds in `lighthouse.config.mjs`; the HTML reports land in `lighthouse-report/`.
 
 Install the browsers once with `npx playwright install chromium webkit firefox`. On Windows with Smart App Control turned on, the unsigned WebKit build cannot start; run `npm run test:e2e -- --project=chromium --project=nojs` there - CI runs every browser.
@@ -93,7 +93,7 @@ An unknown address that looks like a file - a dot in it, as in `/old.pdf` - skip
 Two files hold the look:
 
 - `theme/theme.ts` - both palettes, dark and light, with their tints, the two glow colours and the card radius. `defaultMode` is the theme a first visit opens in; `social.mode` is the one images of the site, such as link previews, are drawn in. The site writes these as CSS variables, so every colour on the page comes from here.
-- `theme/fonts.ts` - the three fonts, loaded with `next/font/google`: downloaded at build time and served by the site itself, never from Google. A page fetches only the alphabets its text uses.
+- `theme/fonts.ts` - the three fonts, loaded with `next/font/google`: downloaded at build time and served by the site itself, never from Google. A page fetches only the alphabets its text uses; the Latin files of all three are preloaded, because every first screen needs them.
 
 `theme/fonts/Unbounded-Bold.ttf` is a static copy of the heading font: the site icon is drawn from it, because the image renderer reads neither variable fonts nor woff2. Replace it together with the heading font, under the same name, and keep its licence next to it.
 
@@ -114,6 +114,8 @@ tagline: {
 ```
 
 A text missing in one of the languages fails the type check. Names, technologies, links and numbers that read the same everywhere are written once.
+
+`sections` in `content/site.ts` decides which sections the page shows and in what order: move a line to move a section, delete it to hide one. The same file holds the footer's credit line and the technologies listed next to the version.
 
 The hero tagline, the About paragraphs, the experience bullets, the achievements and the project story and bullets accept a small markup; every other field shows its text exactly as written.
 

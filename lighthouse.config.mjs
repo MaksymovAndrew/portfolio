@@ -3,6 +3,8 @@ export default {
     runs: 3,
     scores: {
         accessibility: { min: 0.95, level: "error" },
+        "best-practices": { min: 0.95, level: "error" },
+        seo: { min: 0.95, level: "error" },
         performance: { min: 0.95, level: "warn" },
     },
     metrics: {

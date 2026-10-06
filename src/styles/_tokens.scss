@@ -5,8 +5,9 @@ $font-display: var(--font-display), system-ui, sans-serif;
 $font-body: var(--font-body), system-ui, sans-serif;
 $font-mono: var(--font-mono), ui-monospace, monospace;
 
-// one easing for everything that moves
+// easings: one for everything that answers the reader, one for what drifts back and forth
 $ease-out: cubic-bezier(0.2, 0.7, 0.3, 1);
+$ease-in-out: ease-in-out;
 
 // durations, from a fade to the slow drift of the glow
 $dur-fade: 0.15s;
@@ -32,6 +33,7 @@ $z-spot: 1;
 $z-content: 2;
 $z-to-top: 9;
 $z-top-bar: 10;
+$z-skip-link: 20;
 $z-cursor: 60;
 
 // radii of the parts; cards use the theme's --radius
