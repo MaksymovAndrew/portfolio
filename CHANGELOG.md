@@ -28,13 +28,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Unknown addresses answer 404 with a page in the language of the address, readable without JavaScript.
 - Dark and light themes; the choice is remembered and applied before the first paint.
 - One file with both palettes: every colour on the site comes from it.
-- Three self-hosted fonts with Polish and Ukrainian letters; a page loads only the letters it uses, and the Latin letters every first screen needs are preloaded.
+- Three self-hosted fonts with Polish and Ukrainian letters; a page loads only the letters it uses, and the Latin letters of all three and the Cyrillic of the running text are preloaded.
 - A site icon generated from the initials and the accent colour.
 - An automatic contrast check: every text colour passes WCAG AA in both themes.
 - Two-column layout from 1024 pixels with a sticky left column; a top bar on tablets and phones.
 - Language links that work without JavaScript.
 - A skip-to-content link, a footer with the version, and a background glow.
 - The sections are listed in `content/site.ts`: reorder or remove them there.
+- First screen: role, name, tagline, short summary, three status chips and two buttons.
+- Two rows of skills moving towards each other, pausing under the pointer.
+- With reduced motion the skills are shown as a static wrapped list.
 
 ### Fixed
 

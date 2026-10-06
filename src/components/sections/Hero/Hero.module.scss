@@ -1,0 +1,44 @@
+@use "styles/abstracts" as *;
+@include rise-keyframes;
+
+.hero {
+    padding: 64px 0 56px;
+
+    @include from(1024) {
+        padding-top: 104px;
+    }
+
+    @include short(859) {
+        padding-top: 64px;
+    }
+
+    @include short(759) {
+        padding-top: 56px;
+    }
+}
+
+.hero__sub {
+    max-width: 56ch;
+    margin-bottom: 26px;
+    color: var(--muted);
+
+    @include rise(3);
+}
+
+.hero__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 34px;
+    list-style: none;
+
+    @include rise(4);
+}
+
+.hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+
+    @include rise(5);
+}

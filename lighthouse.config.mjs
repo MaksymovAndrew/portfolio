@@ -13,7 +13,7 @@ export default {
     // transfer sizes in KB; a per-page limit names the page, `other` covers the rest
     budgets: {
         script: { maxKb: 180, level: "error" },
-        // "/" fetches the Latin files of three fonts; Polish and Ukrainian add the files of their letters
+        // "/" fetches the Latin files of three fonts and the preloaded Cyrillic of the body font; Polish and Ukrainian add the files of their letters
         font: { maxKb: { "/": 160, other: 280 }, level: "error" },
         total: { maxKb: { "/": 400, other: 600 }, level: "error" },
     },

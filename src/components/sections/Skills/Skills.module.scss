@@ -1,0 +1,101 @@
+@use "styles/abstracts" as *;
+@include rise-keyframes;
+
+// the edges fade out; only the mask's opacity matters, not its colour
+.marquee {
+    padding: 10px 0 8px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    mask-image: linear-gradient(
+        90deg,
+        transparent,
+        currentcolor 12%,
+        currentcolor 88%,
+        transparent
+    );
+    user-select: none;
+
+    @include rise(6);
+}
+
+.marquee__row {
+    display: flex;
+    overflow: hidden;
+
+    &:nth-of-type(even) .marquee__track {
+        animation-duration: $dur-marquee-reverse;
+        animation-direction: reverse;
+    }
+
+    @media (hover: hover) {
+        &:hover .marquee__track {
+            animation-play-state: paused;
+        }
+    }
+
+    &:active .marquee__track {
+        animation-play-state: paused;
+    }
+}
+
+.marquee__track {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: space-around;
+    min-width: 100%;
+    list-style: none;
+    animation: scroll $dur-marquee linear infinite;
+}
+
+@keyframes scroll {
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+.marquee__token {
+    padding: 12px 18px;
+    color: var(--muted);
+    font-family: $font-mono;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: default;
+    transition: color $dur-base;
+
+    &::before {
+        content: "◇ " / "";
+        color: var(--faint);
+        transition: color $dur-base;
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            color: var(--text);
+
+            &::before {
+                color: var(--accent);
+            }
+        }
+    }
+}
+
+// nothing moves: the rows wrap and show every skill once
+@media (prefers-reduced-motion: reduce) {
+    .marquee {
+        mask-image: none;
+    }
+
+    .marquee__track {
+        flex-shrink: 1;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+
+        &[aria-hidden="true"] {
+            display: none;
+        }
+    }
+
+    .marquee__token {
+        padding-block: 5px;
+    }
+}

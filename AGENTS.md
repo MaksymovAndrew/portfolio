@@ -27,15 +27,16 @@ A personal portfolio site that doubles as a template. Everything personal lives 
 
 ## Theme
 
-- `theme/theme.ts` holds both palettes; `buildThemeCss` turns them into CSS variables in the root layout. Components use `var(--token)` and the SCSS tokens of `styles/abstracts` (`$font-*`, `$dur-*`, `$ease-*`, `$z-*`, `$radius-*`, the breakpoint mixins); Stylelint rejects raw colours, z-indexes, radii, font families, durations and easings. Only `src/app/`, `src/components/social/` and `src/guards/` import `theme/`.
+- `theme/theme.ts` holds both palettes; `buildThemeCss` turns them into CSS variables in the root layout. Components use `var(--token)` and the SCSS tokens of `styles/abstracts` (`$font-*`, `$dur-*`, `$delay-*`, `$ease-*`, `$z-*`, `$radius-*`, the breakpoint mixins); Stylelint rejects raw colours, z-indexes, radii, font families, durations, delays and easings. Only `src/app/`, `src/components/social/` and `src/guards/` import `theme/`.
 - The theme lives in `data-theme` on `<html>`: the inline pre-paint script sets it from storage, `themeStore` changes it later. A component shows a per-theme part through CSS (`:global(:root[data-theme="light"])`), never by reading the mode while rendering.
 - Storage goes through `utils/storage`: a blocked storage keeps the feature working for the visit.
 
 ## Page
 
-- `app/[locale]/page.tsx` wraps the hero and the sections in `Shell`: the skip link, the background, the left column from 1024 pixels, the top bar below that width, `main` and the footer.
+- `app/[locale]/page.tsx` wraps `Hero` and the sections in `Shell`: the skip link, the background, the left column from 1024 pixels, the top bar below that width, `main` and the footer.
 - The sections come from `site.sections` in `content/site.ts`, in that order, through `SECTIONS` in `components/sections/registry.ts`; a listed section without a component is skipped.
-- A section is a server component in `components/sections/<Name>/` with the signature `({ content }: { content: Content }) => ReactNode`. It picks its own slice of the content and wraps itself in `Section`, whose label is the section's `h2`; its id is its key in `SECTION_IDS` and the address `#<id>`.
+- A section is a server component in `components/sections/<Name>/` with the signature `({ content }: { content: Content }) => ReactNode`. It picks its own slice of the content and wraps itself in `Section`, whose label is the section's `h2`; its id is its key in `SECTION_IDS` and the address `#<id>`. `Skills` is a band without a label and renders its own `section`.
+- The blocks of the first screen rise into place with the `rise($step)` mixin (a module that uses it includes `rise-keyframes` once); delays come from `$delay-first` and `$delay-step`, and Stylelint rejects a raw delay. Under reduced motion nothing moves: the skills marquee becomes a wrapped list.
 - The name is the only `h1`. It exists twice, in the left column and in the hero, and CSS displays exactly one at every width.
 - The language links are plain links from `localePath`, so they work without JavaScript; the current one carries `aria-current="page"`.
 

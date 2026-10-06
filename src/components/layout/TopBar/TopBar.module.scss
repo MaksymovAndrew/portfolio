@@ -1,4 +1,5 @@
 @use "styles/abstracts" as *;
+@include rise-keyframes;
 
 .top-bar {
     display: flex;
@@ -6,6 +7,8 @@
     justify-content: space-between;
     gap: 10px;
     padding: max(22px, env(safe-area-inset-top)) 0 22px;
+
+    @include rise(1);
 
     @include from(1024) {
         display: none;
