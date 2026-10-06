@@ -19,7 +19,11 @@ const renderNode = (node: InlineNode, externalHint: string): ReactNode => {
     }
 
     if (node.type === "strong") {
-        return <strong>{node.value}</strong>;
+        return (
+            <strong className={styles["rich-text__strong"]}>
+                {node.value}
+            </strong>
+        );
     }
 
     if (node.type === "accent") {

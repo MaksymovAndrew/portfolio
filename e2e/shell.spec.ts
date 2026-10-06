@@ -20,6 +20,8 @@ const DESKTOP = { width: 1440, height: VIEWPORT_HEIGHT };
 const PHONE = { width: 375, height: VIEWPORT_HEIGHT };
 const LOW_WINDOW = { width: 1280, height: 700 };
 const LONG_PAGE_PX = 3000;
+// scroll offsets are whole pixels and the page height is not, so at the very bottom the column may lose a fraction of one
+const ALL_BUT_A_PIXEL = (DESKTOP.height - 1) / DESKTOP.height;
 // WCAG 2.2 target size
 const MIN_TARGET_PX = 24;
 
@@ -101,7 +103,9 @@ test("should keep the left column in view while the page scrolls", async ({
     await expect
         .poll(() => page.evaluate(() => window.scrollY))
         .toBeGreaterThan(LONG_PAGE_PX / 2);
-    await expect(page.getByRole("banner")).toBeInViewport({ ratio: 1 });
+    await expect(page.getByRole("banner")).toBeInViewport({
+        ratio: ALL_BUT_A_PIXEL,
+    });
 });
 
 for (const locale of LOCALES) {

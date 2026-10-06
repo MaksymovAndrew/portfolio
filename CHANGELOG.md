@@ -38,6 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - First screen: role, name, tagline, short summary, three status chips and two buttons.
 - Two rows of skills moving towards each other, pausing under the pointer.
 - With reduced motion the skills are shown as a static wrapped list.
+- About section with highlighted key phrases and the spoken languages.
 
 ### Fixed
 
