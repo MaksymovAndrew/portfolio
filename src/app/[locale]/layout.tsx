@@ -61,7 +61,7 @@ export const generateMetadata = async ({
 // no themeColor here: hydration would put the tag back next to the one the pre-paint script wrote
 export const viewport: Viewport = { viewportFit: "cover" };
 
-// suppressHydrationWarning: the pre-paint script sets data-theme and the js class before React hydrates
+// suppressHydrationWarning: the pre-paint script sets data-theme and the js class before React hydrates; safe while these props never change on the client, so React never rewrites them
 const RootLayout = async ({ children, params }: RootLayoutProps) => {
     const { locale } = await params;
 

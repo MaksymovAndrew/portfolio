@@ -1,0 +1,13 @@
+@use "styles/abstracts" as *;
+
+.about__paragraph {
+    margin-bottom: 16px;
+    color: var(--muted);
+}
+
+.about__languages {
+    margin-top: 22px;
+    color: var(--faint);
+    font-family: $font-mono;
+    font-size: 12.5px;
+}
