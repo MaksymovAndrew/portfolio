@@ -9,6 +9,7 @@ export interface EntryProps {
     period: string;
     organisation: string;
     meta: string | null;
+    detail?: string;
     children?: ReactNode;
 }
 
@@ -17,6 +18,7 @@ export const Entry = ({
     period,
     organisation,
     meta,
+    detail,
     children,
 }: EntryProps) => (
     <article className={styles.entry}>
@@ -27,6 +29,12 @@ export const Entry = ({
         <p className={styles.entry__organisation}>
             <b>{organisation}</b>
             {meta === null ? null : ` ${GLYPHS.separator} ${meta}`}
+            {detail ? (
+                <>
+                    <br />
+                    {detail}
+                </>
+            ) : null}
         </p>
         {children}
     </article>

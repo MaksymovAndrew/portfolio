@@ -39,11 +39,13 @@
     }
 }
 
-// the label of a missing image is set here, the placeholder takes it
+// the label of a missing image is set here, the placeholder takes it; a short window narrows the box, so it keeps its proportions
 .viewer__image {
-    width: 100%;
+    --image-ratio: 1.6;
+
+    width: min(100%, (100dvh - 250px) * var(--image-ratio));
     max-height: calc(100dvh - 250px);
-    aspect-ratio: 16 / 10;
+    aspect-ratio: var(--image-ratio);
     overflow: hidden;
     border: 1px solid var(--line);
     border-radius: $radius-tile;
@@ -52,8 +54,9 @@
 }
 
 .viewer__image--certificate {
+    --image-ratio: 1.414;
+
     max-width: 760px;
-    aspect-ratio: 1.414;
 }
 
 .viewer__picture {
@@ -93,6 +96,7 @@
     color: var(--faint);
     font-family: $font-mono;
     font-size: 12px;
+    overflow-wrap: anywhere;
 }
 
 .viewer__actions {

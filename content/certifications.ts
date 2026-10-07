@@ -15,6 +15,7 @@ export const certifications = {
     label: { en: "certifications", pl: "certyfikaty", uk: "сертифікати" },
     nav: { en: "Certificates", pl: "Certyfikaty", uk: "Сертифікати" },
     verifyLabel: { en: "Verify", pl: "Zweryfikuj", uk: "Перевірити" },
+    credentialLabel: { en: "ID {id}", pl: "ID {id}", uk: "ID {id}" },
     items: [
         certificate("Claude Code in Action", "claude-code-in-action"),
         certificate("[Certificate title]", "certificate-2"),

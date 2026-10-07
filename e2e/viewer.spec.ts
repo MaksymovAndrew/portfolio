@@ -20,11 +20,17 @@ import { expect, storeTheme, test } from "./support/test";
 
 const DESKTOP = { width: 1440, height: VIEWPORT_HEIGHT };
 const PHONE = { width: 375, height: VIEWPORT_HEIGHT };
+// a common laptop screen less the browser's bars: the height, not the width, limits the image
+const SHORT_LAPTOP = { width: 1366, height: 657 };
 // up to 639 pixels the dialog leaves this much of the screen free
 const PHONE_MARGIN_PX = 24;
 const WHEEL_PX = 800;
+// a certificate is drawn in the proportions of an A4 sheet; whole pixels round the measured ratio
+const CERTIFICATE_RATIO = 1.414;
+const RATIO_TOLERANCE = 0.01;
 
 const screenshots = source.projects.items.at(0)?.screenshots ?? [];
+const certificate = source.certifications.items.at(0);
 
 const thumbnail = (
     page: Page,
@@ -72,6 +78,39 @@ test("should open a screenshot from its thumbnail and step with the arrow keys",
     await expect(page.getByRole("dialog")).toBeHidden();
     await expect(thumbnail(page, 0)).toBeFocused();
 });
+
+for (const viewport of [DESKTOP, SHORT_LAPTOP]) {
+    test(`should open a certificate in the proportions of a certificate at ${String(viewport.width)}x${String(viewport.height)}`, async ({
+        page,
+    }) => {
+        await page.setViewportSize(viewport);
+        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page
+            .getByRole("button", {
+                name: format(source.ui.viewer.openCertificate[DEFAULT_LOCALE], {
+                    title: certificate?.title ?? "",
+                }),
+            })
+            .click();
+
+        const dialog = page.getByRole("dialog", { name: certificate?.title });
+
+        await expect(dialog).toBeVisible();
+
+        // the box holding the image or its placeholder is the one with an aspect ratio
+        const ratio = await dialog.evaluate((element) => {
+            const box = [...element.querySelectorAll("div")].find(
+                (div) => getComputedStyle(div).aspectRatio !== "auto",
+            );
+
+            return box ? box.offsetWidth / box.offsetHeight : 0;
+        });
+
+        expect(Math.abs(ratio - CERTIFICATE_RATIO)).toBeLessThanOrEqual(
+            RATIO_TOLERANCE,
+        );
+    });
+}
 
 test("should keep the page still under the open viewer", async ({ page }) => {
     await page.setViewportSize(DESKTOP);

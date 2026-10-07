@@ -1,22 +1,16 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 
 import { ProjectCard } from "components/sections/Projects/ProjectCard";
-import type { ViewerLabels } from "components/ui/Viewer";
+import { toViewerLabels } from "components/ui/Viewer";
 
 import { format } from "utils/inline";
 import { placeholderLabel } from "utils/placeholderLabel";
 
 import { content } from "test/fixtures/content";
 
-const { certifications, projects, ui } = content;
+const { projects, ui } = content;
 
-const viewerLabels: ViewerLabels = {
-    close: ui.close,
-    previous: ui.viewer.previous,
-    next: ui.viewer.next,
-    verify: certifications.verifyLabel,
-    externalHint: ui.external,
-};
+const viewerLabels = toViewerLabels(content);
 
 const renderCards = (items: typeof projects.items) =>
     items.map((project) =>

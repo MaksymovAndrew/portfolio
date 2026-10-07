@@ -2,14 +2,18 @@ import { fireEvent, render, screen } from "@testing-library/react";
 
 import { GLYPHS } from "constants/glyphs";
 
-import type { ViewerItem, ViewerLabels } from "components/ui/Viewer";
-import { ViewerRoot, ViewerTrigger } from "components/ui/Viewer";
+import type { ViewerItem } from "components/ui/Viewer";
+import {
+    toViewerLabels,
+    ViewerRoot,
+    ViewerTrigger,
+} from "components/ui/Viewer";
 
 import { placeholderLabel } from "utils/placeholderLabel";
 
 import { content } from "test/fixtures/content";
 
-const { certifications, projects, ui } = content;
+const { certifications, projects } = content;
 
 // the fixture's screenshots: the first has an image, the second has none
 const screenshots: readonly ViewerItem[] = projects.items.flatMap((project) =>
@@ -35,13 +39,7 @@ const certificates: readonly ViewerItem[] = certifications.items.map(
     }),
 );
 
-const labels: ViewerLabels = {
-    close: ui.close,
-    previous: ui.viewer.previous,
-    next: ui.viewer.next,
-    verify: certifications.verifyLabel,
-    externalHint: ui.external,
-};
+const labels = toViewerLabels(content);
 
 const triggerLabel = (index: number) => `Open ${String(index + 1)}`;
 

@@ -1,0 +1,112 @@
+@use "styles/abstracts" as *;
+
+$row-tint: color-mix(in srgb, var(--accent) 4%, transparent);
+
+.certifications {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    list-style: none;
+}
+
+// the pointer and the keyboard tint a row alike: its thumbnail or its link holds the focus
+.certifications__item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 6px 16px;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    transition: background-color $dur-base;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            background: $row-tint;
+        }
+    }
+
+    &:has(:focus-visible) {
+        background: $row-tint;
+    }
+
+    @include until(480) {
+        grid-template-columns: auto minmax(0, 1fr);
+        padding: 14px 16px;
+    }
+}
+
+// after the thumbnail in the grid, before it in the markup
+.certifications__text {
+    grid-column: 2;
+}
+
+// the label of a missing image is set here, the placeholder takes it
+.certifications__thumb {
+    display: block;
+    grid-row: 1;
+    grid-column: 1;
+    width: 78px;
+    aspect-ratio: 1.414;
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: $radius-small;
+    background: var(--surface-2);
+    font-size: 9px;
+    cursor: zoom-in;
+    transition:
+        border-color $dur-base,
+        transform $dur-base;
+
+    @include hover {
+        border-color: color-mix(
+            in srgb,
+            var(--accent) var(--t-card-line),
+            transparent
+        );
+        transform: translateY(-2px);
+    }
+
+    @include until(480) {
+        align-self: start;
+        width: 64px;
+
+        // beside the text and the link under it; a row without a link has no second line
+        .certifications__item:has(.certifications__link) & {
+            grid-row: 1 / span 2;
+        }
+    }
+}
+
+.certifications__picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.certifications__title {
+    color: var(--text);
+    font-size: 15.5px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.certifications__meta {
+    margin-top: 3px;
+    color: var(--faint);
+    font-family: $font-mono;
+    font-size: 12px;
+}
+
+.certifications__link {
+    @include until(480) {
+        grid-column: 2;
+        justify-self: start;
+    }
+}

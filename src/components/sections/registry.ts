@@ -4,6 +4,8 @@ import type { Content, SectionId } from "types/content";
 
 import { About } from "components/sections/About";
 import { Achievements } from "components/sections/Achievements";
+import { Certifications } from "components/sections/Certifications";
+import { Education } from "components/sections/Education";
 import { Experience } from "components/sections/Experience";
 import { Projects } from "components/sections/Projects";
 import { Skills } from "components/sections/Skills";
@@ -19,6 +21,8 @@ export const SECTIONS: SectionRegistry = {
     experience: Experience,
     achievements: Achievements,
     projects: Projects,
+    certifications: Certifications,
+    education: Education,
 };
 
 export const pickSections = (
