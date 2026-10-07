@@ -46,6 +46,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Placeholders where an image is not available yet.
 - Certifications list; each certificate opens in the viewer with its credential ID and links to its verification page.
 - Education section.
+- Contact section with the email address, a one-click copy button and links to GitHub, LinkedIn and Telegram.
+- The copy is announced to screen readers; without clipboard access the address is selected instead.
 
 ### Fixed
 

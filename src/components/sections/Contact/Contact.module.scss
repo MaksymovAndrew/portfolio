@@ -1,0 +1,71 @@
+@use "styles/abstracts" as *;
+
+.contact__heading {
+    margin-bottom: 18px;
+    font-family: $font-display;
+    font-size: clamp(22px, 5.5vw, 30px);
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
+
+.contact__text {
+    max-width: 52ch;
+    margin-bottom: 26px;
+    color: var(--muted);
+}
+
+// the copy button always stays beside the address: the address shrinks, then breaks at its "@"
+.contact__mail-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.contact__mail {
+    min-width: 0;
+    color: var(--text);
+    font-family: $font-display;
+    font-size: clamp(13px, 3.7vw, 22px);
+    font-weight: 600;
+    line-height: 1.5;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    transition: color $dur-base;
+
+    @include hover {
+        color: var(--accent);
+    }
+}
+
+.contact__socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+}
+
+.contact__social {
+    position: relative;
+    padding: 9px 18px;
+    border: 1px solid var(--line);
+    border-radius: $radius-pill;
+    color: var(--muted);
+    font-family: $font-mono;
+    font-size: 13px;
+    text-decoration: none;
+    transition:
+        color $dur-base,
+        border-color $dur-base,
+        transform $dur-fast;
+
+    @include hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        transform: translateY(-2px);
+    }
+}
+
+.contact__hint {
+    @include sr-only;
+}
