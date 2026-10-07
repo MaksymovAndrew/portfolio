@@ -31,14 +31,21 @@ const renderNode = (node: InlineNode, externalHint: string): ReactNode => {
     }
 
     return node.external ? (
-        <a href={node.href} target="_blank" rel="noreferrer">
+        <a
+            href={node.href}
+            target="_blank"
+            rel="noreferrer"
+            className={styles["rich-text__link"]}
+        >
             {node.value}
             <span className={styles["rich-text__hint"]}>
                 {` ${externalHint}`}
             </span>
         </a>
     ) : (
-        <a href={node.href}>{node.value}</a>
+        <a href={node.href} className={styles["rich-text__link"]}>
+            {node.value}
+        </a>
     );
 };
 

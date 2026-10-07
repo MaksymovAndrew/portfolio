@@ -1,0 +1,61 @@
+@use "styles/abstracts" as *;
+
+// a display value would show a closed dialog: the browser hides it with a weaker rule
+.dialog {
+    max-width: none;
+    padding: 0;
+    color: var(--text);
+
+    &:not([open]) {
+        display: none;
+    }
+
+    &::backdrop {
+        background: color-mix(
+            in srgb,
+            var(--scrim) var(--t-scrim),
+            transparent
+        );
+        backdrop-filter: blur(6px);
+    }
+
+    &[open]::backdrop {
+        animation: fade-in $dur-dialog $ease-out;
+    }
+}
+
+.dialog--window {
+    display: flex;
+    flex-direction: column;
+    width: min(940px, calc(100% - 48px));
+    max-height: calc(100% - 48px);
+    margin: auto;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: 0 40px 120px -32px
+        color-mix(in srgb, var(--shadow) var(--t-shadow), transparent);
+
+    &[open] {
+        animation: dialog-in $dur-dialog $ease-out;
+    }
+
+    @include until(640) {
+        width: calc(100% - 24px);
+        max-height: calc(100% - 24px);
+    }
+}
+
+@keyframes dialog-in {
+    from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.98);
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+}

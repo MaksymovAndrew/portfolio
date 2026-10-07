@@ -21,6 +21,11 @@ html {
     }
 }
 
+// the page stays put under an open dialog; the stable gutter keeps it from shifting
+html:has(dialog[open]) {
+    overflow: hidden;
+}
+
 body {
     overflow-x: clip;
     color: var(--text);
@@ -56,5 +61,10 @@ svg {
     *::after {
         animation: none !important;
         transition: none !important;
+    }
+
+    // apart from the list above: a browser drops a whole selector list over one pseudo-element it does not know
+    ::backdrop {
+        animation: none !important;
     }
 }

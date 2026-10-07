@@ -16,6 +16,9 @@ const TEXT_COLOURS = ["text", "muted", "faint", "accent", "ok"] as const;
 // the share of the first glow colour at the centre of the background glow (Atmosphere.module.scss)
 const GLOW_CENTRE_PERCENT = 7;
 
+// the project card fades from surface2 at the top to surface at the bottom; its tags never start above 78% of its height
+const CARD_UNDER_TAGS_SURFACE_PERCENT = 75;
+
 // every pair of text and background the site paints
 const pairsOf = (mode: ThemeMode) => {
     const { palette, tints } = theme.modes[mode];
@@ -23,6 +26,11 @@ const pairsOf = (mode: ThemeMode) => {
         theme.glow[0],
         palette.bg,
         (GLOW_CENTRE_PERCENT * tints.glow) / 100,
+    );
+    const cardUnderTags = mixHex(
+        palette.surface,
+        palette.surface2,
+        CARD_UNDER_TAGS_SURFACE_PERCENT,
     );
     const on = (text: keyof Palette, background: string, name: string) => ({
         pair: `${mode}: ${text} on ${name}`,
@@ -38,6 +46,10 @@ const pairsOf = (mode: ThemeMode) => {
         on("text", palette.surface2, "surface2"),
         // the title of a window bar
         on("faint", palette.surface2, "surface2"),
+        // the top of the project card: the live badge, the description, the story link
+        on("ok", palette.surface2, "surface2"),
+        on("muted", palette.surface2, "surface2"),
+        on("accent", palette.surface2, "surface2"),
         on("buttonInk", palette.accent, "accent"),
         // the soft accent fill behind tags and the current language
         on(
@@ -49,6 +61,11 @@ const pairsOf = (mode: ThemeMode) => {
             "accent",
             mixHex(palette.accent, palette.surface, tints.soft),
             "the soft accent fill on surface",
+        ),
+        on(
+            "accent",
+            mixHex(palette.accent, cardUnderTags, tints.soft),
+            "the soft accent fill on the project card under its tags",
         ),
         // the current language in the top bar, under the glow
         on(

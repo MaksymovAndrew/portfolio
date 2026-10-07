@@ -13,6 +13,15 @@
     font-size: 12px;
 }
 
+.chip--live {
+    padding: 4px 10px;
+    border-color: color-mix(in srgb, var(--ok) var(--t-live-line), transparent);
+    background: none;
+    color: var(--ok);
+    font-size: 11.5px;
+    white-space: nowrap;
+}
+
 .chip__dot {
     flex-shrink: 0;
     width: 7px;

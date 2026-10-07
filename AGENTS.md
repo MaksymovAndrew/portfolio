@@ -37,6 +37,7 @@ A personal portfolio site that doubles as a template. Everything personal lives 
 - The sections come from `site.sections` in `content/site.ts`, in that order, through `SECTIONS` in `components/sections/registry.ts`; a listed section without a component is skipped.
 - A section is a server component in `components/sections/<Name>/` with the signature `({ content }: { content: Content }) => ReactNode`. It picks its own slice of the content and wraps itself in `Section`, whose label is the section's `h2`; its id is its key in `SECTION_IDS` and the address `#<id>`. `Skills` is a band without a label and renders its own `section`.
 - The blocks of the first screen rise into place with the `rise($step)` mixin (a module that uses it includes `rise-keyframes` once); delays come from `$delay-first` and `$delay-step`, and Stylelint rejects a raw delay. Under reduced motion nothing moves: the skills marquee becomes a wrapped list.
+- An overlay is `Dialog` on the native `<dialog>`: `showModal()` brings Escape, the focus trap and the return of focus. The image viewer is a `ViewerRoot` with `ViewerTrigger` buttons inside it, so the section around them stays a server component; an image without a file in `public/` is drawn as a `Placeholder`.
 - The name is the only `h1`. It exists twice, in the left column and in the hero, and CSS displays exactly one at every width.
 - The language links are plain links from `localePath`, so they work without JavaScript; the current one carries `aria-current="page"`.
 

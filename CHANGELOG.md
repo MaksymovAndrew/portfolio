@@ -41,6 +41,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - About section with highlighted key phrases and the spoken languages.
 - Experience section: role, period, company, summary, responsibilities and technologies.
 - Achievements shown as a diff file with six shipped results.
+- Featured project card: description, screenshots, the story of the project, key facts, technologies and links.
+- Image viewer: opens from a thumbnail, arrows and keyboard arrows switch images, Escape closes it.
+- Placeholders where an image is not available yet.
 
 ### Fixed
 
