@@ -111,6 +111,7 @@ export interface ProjectsSource extends SectionMeta {
 
 export interface CertificationsSource extends SectionMeta {
     verifyLabel: Localized;
+    credentialLabel: Localized;
     items: readonly {
         title: string;
         issuer: string;

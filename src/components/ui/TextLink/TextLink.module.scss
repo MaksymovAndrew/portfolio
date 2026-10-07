@@ -35,6 +35,15 @@
     }
 }
 
+.text-link--small {
+    font-size: 13.5px;
+
+    .text-link__arrow {
+        width: 11px;
+        height: 11px;
+    }
+}
+
 // the arrow glyph it stands for sits below the middle of the line
 .text-link__arrow {
     flex-shrink: 0;

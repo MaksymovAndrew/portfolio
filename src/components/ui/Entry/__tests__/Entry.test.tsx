@@ -20,4 +20,20 @@ describe("Entry", () => {
         expect(organisation).toHaveTextContent("Example University");
         expect(organisation).not.toHaveTextContent(GLYPHS.separator);
     });
+
+    it("should put the detail on a line after the organisation", () => {
+        render(
+            <Entry
+                title="Computer Science"
+                period="Oct 2017 - Jun 2021"
+                organisation="Example University"
+                meta={null}
+                detail="Faculty of Informatics"
+            />,
+        );
+
+        expect(screen.getByRole("paragraph").innerHTML).toContain(
+            "<b>Example University</b><br>Faculty of Informatics",
+        );
+    });
 });

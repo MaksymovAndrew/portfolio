@@ -1,7 +1,7 @@
 import type { Content } from "types/content";
 
 import { Section } from "components/sections/Section";
-import type { ViewerLabels } from "components/ui/Viewer";
+import { toViewerLabels } from "components/ui/Viewer";
 
 import { ProjectCard } from "./ProjectCard";
 
@@ -10,14 +10,8 @@ export interface ProjectsProps {
 }
 
 export const Projects = ({ content }: ProjectsProps) => {
-    const { projects, certifications, ui } = content;
-    const viewerLabels: ViewerLabels = {
-        close: ui.close,
-        previous: ui.viewer.previous,
-        next: ui.viewer.next,
-        verify: certifications.verifyLabel,
-        externalHint: ui.external,
-    };
+    const { projects, ui } = content;
+    const viewerLabels = toViewerLabels(content);
 
     return (
         <Section id="projects" label={projects.label}>

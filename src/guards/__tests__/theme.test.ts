@@ -19,6 +19,9 @@ const GLOW_CENTRE_PERCENT = 7;
 // the project card fades from surface2 at the top to surface at the bottom; its tags never start above 78% of its height
 const CARD_UNDER_TAGS_SURFACE_PERCENT = 75;
 
+// the accent tint of a hovered certificate row (Certifications.module.scss)
+const CERTIFICATE_HOVER_ACCENT_PERCENT = 4;
+
 // every pair of text and background the site paints
 const pairsOf = (mode: ThemeMode) => {
     const { palette, tints } = theme.modes[mode];
@@ -51,6 +54,16 @@ const pairsOf = (mode: ThemeMode) => {
         on("muted", palette.surface2, "surface2"),
         on("accent", palette.surface2, "surface2"),
         on("buttonInk", palette.accent, "accent"),
+        // the date of a certificate under the pointer
+        on(
+            "faint",
+            mixHex(
+                palette.accent,
+                palette.surface,
+                CERTIFICATE_HOVER_ACCENT_PERCENT,
+            ),
+            "a hovered certificate row",
+        ),
         // the soft accent fill behind tags and the current language
         on(
             "accent",

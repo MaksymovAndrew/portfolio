@@ -149,6 +149,7 @@ export const contentSource: ContentSource = {
         label: text("certifications"),
         nav: text("Certificates"),
         verifyLabel: text("Verify"),
+        credentialLabel: text("ID {id}"),
         items: [
             {
                 title: "Example Certificate",

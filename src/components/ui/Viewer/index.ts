@@ -1,4 +1,5 @@
 export type { ViewerItem, ViewerLabels } from "./Viewer";
+export { toViewerLabels } from "./viewerLabels";
 export type { ViewerRootProps } from "./ViewerRoot";
 export { ViewerRoot } from "./ViewerRoot";
 export type { ViewerTriggerProps } from "./ViewerTrigger";
