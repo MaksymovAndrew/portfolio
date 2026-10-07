@@ -1,0 +1,19 @@
+@use "styles/abstracts" as *;
+
+.bullet-list {
+    list-style: none;
+}
+
+.bullet-list__item {
+    display: flex;
+    gap: 12px;
+    padding: 5px 0;
+    color: var(--muted);
+    font-size: 14.5px;
+
+    &::before {
+        content: "▸" / "";
+        flex-shrink: 0;
+        color: var(--accent);
+    }
+}

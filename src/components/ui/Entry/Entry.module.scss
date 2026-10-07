@@ -1,0 +1,40 @@
+@use "styles/abstracts" as *;
+
+.entry + .entry {
+    margin-top: 40px;
+}
+
+.entry__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 2px 18px;
+    margin-bottom: 4px;
+}
+
+.entry__title {
+    font-family: $font-display;
+    font-size: clamp(17px, 4.7vw, 19px);
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.005em;
+}
+
+.entry__period {
+    color: var(--faint);
+    font-family: $font-mono;
+    font-size: 12.5px;
+    white-space: nowrap;
+}
+
+.entry__organisation {
+    margin-bottom: 14px;
+    color: var(--muted);
+    font-size: 15px;
+
+    b {
+        color: var(--text);
+        font-weight: 600;
+    }
+}

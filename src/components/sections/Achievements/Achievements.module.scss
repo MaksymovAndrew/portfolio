@@ -1,0 +1,38 @@
+@use "styles/abstracts" as *;
+
+.diff {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+}
+
+.diff__list {
+    list-style: none;
+}
+
+.diff__item {
+    display: flex;
+    gap: 14px;
+    padding: 15px 18px;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 15px;
+    transition: background-color $dur-base;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &::before {
+        content: "+" / "";
+        flex-shrink: 0;
+        color: var(--ok);
+        font-family: $font-mono;
+        font-weight: 500;
+    }
+
+    @include hover {
+        background-color: color-mix(in srgb, var(--ok) 4.5%, transparent);
+    }
+}
