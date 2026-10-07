@@ -36,6 +36,8 @@ const pairsOf = (mode: ThemeMode) => {
             on(text, glowCentre, "the glow centre"),
         ]),
         on("text", palette.surface2, "surface2"),
+        // the title of a window bar
+        on("faint", palette.surface2, "surface2"),
         on("buttonInk", palette.accent, "accent"),
         // the soft accent fill behind tags and the current language
         on(

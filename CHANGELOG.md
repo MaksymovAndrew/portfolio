@@ -39,6 +39,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Two rows of skills moving towards each other, pausing under the pointer.
 - With reduced motion the skills are shown as a static wrapped list.
 - About section with highlighted key phrases and the spoken languages.
+- Experience section: role, period, company, summary, responsibilities and technologies.
+- Achievements shown as a diff file with six shipped results.
 
 ### Fixed
 

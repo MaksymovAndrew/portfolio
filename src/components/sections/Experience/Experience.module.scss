@@ -1,0 +1,9 @@
+@use "styles/abstracts" as *;
+
+.experience__text {
+    color: var(--muted);
+}
+
+.experience__bullets {
+    margin: 10px 0 18px;
+}

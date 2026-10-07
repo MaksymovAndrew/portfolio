@@ -3,6 +3,8 @@ import type { ReactNode } from "react";
 import type { Content, SectionId } from "types/content";
 
 import { About } from "components/sections/About";
+import { Achievements } from "components/sections/Achievements";
+import { Experience } from "components/sections/Experience";
 import { Skills } from "components/sections/Skills";
 
 export type SectionComponent = (props: { content: Content }) => ReactNode;
@@ -13,6 +15,8 @@ export type SectionRegistry = Partial<Record<SectionId, SectionComponent>>;
 export const SECTIONS: SectionRegistry = {
     skills: Skills,
     about: About,
+    experience: Experience,
+    achievements: Achievements,
 };
 
 export const pickSections = (

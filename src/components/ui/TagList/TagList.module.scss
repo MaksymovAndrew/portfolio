@@ -1,0 +1,19 @@
+@use "styles/abstracts" as *;
+
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+}
+
+.tag-list__item {
+    padding: 4px 10px;
+    border: 1px solid
+        color-mix(in srgb, var(--accent) var(--t-tag-line), transparent);
+    border-radius: $radius-pill;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-family: $font-mono;
+    font-size: 11.5px;
+}
