@@ -1,6 +1,8 @@
 import "@testing-library/jest-dom";
 import "test/shims/dialog";
 
+import { restoreClipboard } from "test/shims/clipboard";
+
 // the build inlines it from package.json; tests run without a build
 Object.assign(process.env, { APP_VERSION: "0.0.0-test" });
 
@@ -12,4 +14,5 @@ afterEach(() => {
 
     localStorage.clear();
     sessionStorage.clear();
+    restoreClipboard();
 });

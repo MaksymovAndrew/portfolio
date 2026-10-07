@@ -67,3 +67,18 @@ test("should hide the theme switch and keep the default colours without JavaScri
         theme.modes[theme.defaultMode].palette.bg,
     );
 });
+
+test("should hide the copy button and keep the mail link without JavaScript", async ({
+    page,
+}) => {
+    await page.goto(pathFor(DEFAULT_LOCALE));
+
+    await expect(
+        page.getByRole("button", {
+            name: source.ui.copy.label[DEFAULT_LOCALE],
+        }),
+    ).toBeHidden();
+    await expect(
+        page.getByRole("link", { name: source.profile.email, exact: true }),
+    ).toHaveAttribute("href", `mailto:${source.profile.email}`);
+});

@@ -1,24 +1,16 @@
-import type { SectionRegistry } from "components/sections/registry";
-import { pickSections } from "components/sections/registry";
-
-const About = () => null;
-const Contact = () => null;
-
-const registry: SectionRegistry = { about: About, contact: Contact };
+import { pickSections, SECTIONS } from "components/sections/registry";
 
 describe("pickSections", () => {
     it("should keep the configured order", () => {
-        expect(pickSections(["contact", "about"], registry)).toEqual([
-            { id: "contact", Component: Contact },
-            { id: "about", Component: About },
+        expect(pickSections(["contact", "about"], SECTIONS)).toEqual([
+            { id: "contact", Component: SECTIONS.contact },
+            { id: "about", Component: SECTIONS.about },
         ]);
     });
 
-    it("should skip a section that has no component yet", () => {
+    it("should leave out a section the configuration does not list", () => {
         expect(
-            pickSections(["about", "projects", "contact"], registry).map(
-                ({ id }) => id,
-            ),
+            pickSections(["about", "contact"], SECTIONS).map(({ id }) => id),
         ).toEqual(["about", "contact"]);
     });
 });

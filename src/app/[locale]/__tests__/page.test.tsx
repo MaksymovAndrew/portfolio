@@ -21,6 +21,25 @@ describe("HomePage", () => {
         expect(screen.getByText(hero.sub)).toBeInTheDocument();
     });
 
+    it("should render every section of the configuration", async () => {
+        const content = getContent(DEFAULT_LOCALE);
+
+        render(
+            await HomePage({
+                params: Promise.resolve({ locale: DEFAULT_LOCALE }),
+            }),
+        );
+
+        // where each section's id stands in the markup: every one present, in the configured order
+        const markup = screen.getByRole("main").innerHTML;
+        const positions = content.site.sections.map((id) =>
+            markup.indexOf(`id="${id}"`),
+        );
+
+        expect(positions).not.toContain(-1);
+        expect(positions).toEqual([...positions].sort((a, b) => a - b));
+    });
+
     it("should answer 404 for a language that is not configured", async () => {
         const locale = `${LOCALES.join("")}x`;
 
