@@ -1,0 +1,133 @@
+@use "styles/abstracts" as *;
+
+.project-card {
+    position: relative;
+    padding: 28px 26px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: linear-gradient(180deg, var(--surface-2), var(--surface));
+    transition:
+        transform $dur-base,
+        border-color $dur-slow,
+        box-shadow $dur-slow;
+
+    & + & {
+        margin-top: 24px;
+    }
+
+    @include hover {
+        border-color: color-mix(
+            in srgb,
+            var(--accent) var(--t-card-line),
+            transparent
+        );
+        box-shadow: 0 24px 60px -24px
+            color-mix(in srgb, var(--accent) var(--t-card-shadow), transparent);
+        transform: translateY(-4px);
+    }
+
+    @include until(480) {
+        padding: 24px 20px;
+    }
+}
+
+// hidden until the pointer effects tilt the card and move the light to the pointer
+.project-card__glare {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+        420px circle at var(--gx, 50%) var(--gy, 0%),
+        color-mix(in srgb, var(--accent) 9%, transparent),
+        transparent 60%
+    );
+    opacity: 0;
+    pointer-events: none;
+}
+
+.project-card__top {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.project-card__title {
+    font-family: $font-display;
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.project-card__description {
+    margin: 10px 0 16px;
+    color: var(--muted);
+}
+
+.project-card__shots {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 18px 0 4px;
+    list-style: none;
+
+    @include until(480) {
+        gap: 8px;
+    }
+}
+
+// the label of a missing image is set here, the placeholder takes it
+.project-card__shot {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: $radius-tile;
+    background: var(--surface);
+    font-size: 11px;
+    cursor: zoom-in;
+    transition:
+        border-color $dur-base,
+        transform $dur-base;
+
+    @include hover {
+        border-color: color-mix(
+            in srgb,
+            var(--accent) var(--t-card-line),
+            transparent
+        );
+        transform: translateY(-2px);
+    }
+}
+
+.project-card__picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.project-card__story {
+    margin: 18px 0;
+    padding: 2px 0 2px 16px;
+    border-left: 2px solid var(--accent);
+    color: var(--muted);
+    font-size: 14.5px;
+}
+
+.project-card__bullets {
+    margin: 16px 0 20px;
+}
+
+.project-card__tags {
+    margin-bottom: 22px;
+}
+
+.project-card__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+}

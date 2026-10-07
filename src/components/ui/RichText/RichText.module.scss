@@ -5,6 +5,15 @@
     font-weight: 600;
 }
 
+.rich-text__link {
+    color: var(--accent);
+    text-decoration: none;
+
+    @include hover {
+        text-decoration: underline;
+    }
+}
+
 .rich-text__hint {
     @include sr-only;
 }

@@ -5,6 +5,7 @@ import type { Content, SectionId } from "types/content";
 import { About } from "components/sections/About";
 import { Achievements } from "components/sections/Achievements";
 import { Experience } from "components/sections/Experience";
+import { Projects } from "components/sections/Projects";
 import { Skills } from "components/sections/Skills";
 
 export type SectionComponent = (props: { content: Content }) => ReactNode;
@@ -17,6 +18,7 @@ export const SECTIONS: SectionRegistry = {
     about: About,
     experience: Experience,
     achievements: Achievements,
+    projects: Projects,
 };
 
 export const pickSections = (
