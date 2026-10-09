@@ -1,0 +1,45 @@
+@use "styles/abstracts" as *;
+
+// 90% down the first screen
+.back-to-top__marker {
+    position: absolute;
+    top: 90vh;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+.back-to-top {
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(18px, env(safe-area-inset-bottom));
+    z-index: $z-to-top;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    color: var(--accent);
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition:
+        border-color $dur-base,
+        transform $dur-fast;
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    @include hover {
+        border-color: var(--accent);
+        transform: translateY(-2px);
+    }
+
+    @include from(1024) {
+        display: none;
+    }
+}

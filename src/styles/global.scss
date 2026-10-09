@@ -15,9 +15,26 @@ html {
     transition: background-color $dur-theme;
 }
 
+// below 1024 the sticky bar covers the top of the window: a jump or a focused element lands below it
+html {
+    @include until(1024) {
+        scroll-padding-top: calc($top-bar-height + env(safe-area-inset-top));
+    }
+}
+
+// smooth only for jumps the reader starts; a page opened with an address ending in #section lands at once
 @media (prefers-reduced-motion: no-preference) {
-    html {
+    html:focus-within {
         scroll-behavior: smooth;
+    }
+
+    @view-transition {
+        navigation: auto;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: $dur-fade;
     }
 }
 

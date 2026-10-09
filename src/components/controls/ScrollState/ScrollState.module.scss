@@ -1,0 +1,11 @@
+@use "styles/abstracts" as *;
+
+// the first 8px of the page; once they leave the window the page counts as scrolled
+.scroll-state {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 8px;
+    pointer-events: none;
+}

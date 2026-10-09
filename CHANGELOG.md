@@ -48,6 +48,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Education section.
 - Contact section with the email address, a one-click copy button and links to GitHub, LinkedIn and Telegram.
 - The copy is announced to screen readers; without clipboard access the address is selected instead.
+- The left column lists the sections and highlights the one being read.
+- On phones and tablets: a sticky top bar, a bottom menu with all sections and a back-to-top button.
+- Changing the language keeps the section you were reading, with a short fade where the browser supports it.
 
 ### Fixed
 

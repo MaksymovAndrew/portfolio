@@ -13,7 +13,8 @@ export interface SectionProps {
 }
 
 export const Section = ({ id, label, children }: SectionProps) => (
-    <section id={id} className={styles.section}>
+    // focusable from a script only: the menu hands the focus to the section it opened
+    <section id={id} tabIndex={-1} className={styles.section}>
         {label === null ? null : <SectionLabel>{label}</SectionLabel>}
         {children}
     </section>

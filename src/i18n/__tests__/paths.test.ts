@@ -1,5 +1,5 @@
 import { DEFAULT_LOCALE, LOCALE_META, LOCALES } from "i18n/locales";
-import { localeLinks, localePath } from "i18n/paths";
+import { localeHref, localeLinks, localePath } from "i18n/paths";
 
 describe("localePath", () => {
     it("should place the default language at the root", () => {
@@ -36,5 +36,17 @@ describe("localeLinks", () => {
                 .filter((link) => link.current)
                 .map((link) => link.locale),
         ).toEqual([current]);
+    });
+});
+
+describe("localeHref", () => {
+    it("should keep the address of a language when no section is current", () => {
+        expect(localeHref("/", null)).toBe("/");
+        expect(localeHref("/de", null)).toBe("/de");
+    });
+
+    it("should carry the current section into the address", () => {
+        expect(localeHref("/", "about")).toBe("/#about");
+        expect(localeHref("/de", "about")).toBe("/de#about");
     });
 });

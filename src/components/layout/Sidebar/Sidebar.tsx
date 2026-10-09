@@ -2,9 +2,12 @@ import type { Content } from "types/content";
 
 import { CvLink } from "components/controls/CvLink";
 import { LocaleSwitcher } from "components/controls/LocaleSwitcher";
+import { SectionNav } from "components/controls/SectionNav";
 import { ThemeToggle } from "components/controls/ThemeToggle";
 import { Identity } from "components/layout/Identity";
 import { localeLinks } from "i18n/paths";
+
+import { buildNavItems } from "utils/navItems";
 
 import styles from "./Sidebar.module.scss";
 
@@ -14,6 +17,7 @@ export interface SidebarProps {
 
 export const Sidebar = ({ content }: SidebarProps) => {
     const { locale, hero, profile, ui } = content;
+    const navItems = buildNavItems(content);
 
     return (
         <header className={styles.sidebar}>
@@ -22,6 +26,7 @@ export const Sidebar = ({ content }: SidebarProps) => {
                     <LocaleSwitcher
                         links={localeLinks(locale)}
                         label={ui.languages}
+                        sections={navItems.map((item) => item.id)}
                     />
                     <span
                         className={styles.sidebar__separator}
@@ -38,6 +43,9 @@ export const Sidebar = ({ content }: SidebarProps) => {
                 tagline={hero.tagline}
                 externalHint={ui.external}
             />
+            <div className={styles.sidebar__nav}>
+                <SectionNav items={navItems} label={ui.sections} />
+            </div>
         </header>
     );
 };

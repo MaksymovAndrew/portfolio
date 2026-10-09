@@ -12,7 +12,7 @@ type DialogName =
 export type DialogProps = DialogName & {
     open: boolean;
     onClose: () => void;
-    variant: "window";
+    variant: "window" | "sheet";
     children: ReactNode;
 };
 

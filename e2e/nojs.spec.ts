@@ -7,6 +7,7 @@ import {
     LOCALES,
     missingPathFor,
     pathFor,
+    VIEWPORT_HEIGHT,
 } from "./support/site";
 import { expect, NOT_FOUND, test } from "./support/test";
 
@@ -81,4 +82,24 @@ test("should hide the copy button and keep the mail link without JavaScript", as
     await expect(
         page.getByRole("link", { name: source.profile.email, exact: true }),
     ).toHaveAttribute("href", `mailto:${source.profile.email}`);
+});
+
+test("should link every section from the left column without JavaScript", async ({
+    page,
+}) => {
+    // the left column, where the section links live
+    await page.setViewportSize({ width: 1440, height: VIEWPORT_HEIGHT });
+    await page.goto(pathFor(DEFAULT_LOCALE));
+
+    const links = page
+        .getByRole("navigation", { name: source.ui.sections[DEFAULT_LOCALE] })
+        .getByRole("link");
+
+    await expect(links).not.toHaveCount(0);
+
+    for (const href of await links.evaluateAll((anchors) =>
+        anchors.map((anchor) => anchor.getAttribute("href") ?? ""),
+    )) {
+        await expect(page.locator(href)).toHaveCount(1);
+    }
 });

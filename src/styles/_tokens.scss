@@ -40,8 +40,12 @@ $z-top-bar: 10;
 $z-skip-link: 20;
 $z-cursor: 60;
 
+// the sticky top bar below 1024: 14px of air above and below a 32px row
+$top-bar-height: 60px;
+
 // radii of the parts; cards use the theme's --radius
 $radius-pill: 99px;
+$radius-sheet: 22px;
 $radius-button: 12px;
 $radius-tile: 10px;
 $radius-small: 8px;
