@@ -1,0 +1,52 @@
+@use "styles/abstracts" as *;
+
+@mixin lit {
+    color: var(--text);
+
+    .section-nav__bar {
+        width: 64px;
+        background: var(--accent);
+    }
+}
+
+.section-nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.section-nav__link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 7px 0;
+    color: var(--muted);
+    font-family: $font-mono;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color $dur-base;
+
+    @include hover {
+        @include lit;
+    }
+
+    &[aria-current="location"] {
+        @include lit;
+    }
+
+    .section-nav--sheet & {
+        padding: 13px 0;
+        font-size: 13px;
+    }
+}
+
+.section-nav__bar {
+    flex-shrink: 0;
+    width: 34px;
+    height: 1px;
+    background: var(--faint);
+    transition:
+        width $dur-slow,
+        background-color $dur-slow;
+}

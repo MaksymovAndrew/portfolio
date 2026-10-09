@@ -55,3 +55,15 @@
 .sidebar__separator {
     @include control-separator;
 }
+
+.sidebar__nav {
+    margin-top: 44px;
+
+    @include short(859) {
+        margin-top: 32px;
+    }
+
+    @include short(759) {
+        margin-top: 28px;
+    }
+}

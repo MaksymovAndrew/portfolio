@@ -1,9 +1,10 @@
 @use "styles/abstracts" as *;
 
-// above the background glow
+// above the background glow; cuts the top bar's wide backdrop here, as the body's clip passes to the viewport as scrollable
 .shell {
     position: relative;
     z-index: $z-content;
+    overflow-x: clip;
 }
 
 .shell__layout {

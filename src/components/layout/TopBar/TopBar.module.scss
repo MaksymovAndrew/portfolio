@@ -1,18 +1,43 @@
 @use "styles/abstracts" as *;
 @include rise-keyframes;
 
+// sticks to the top of the window; its backdrop reaches both edges of the window and gets a line once the page scrolls
 .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: $z-top-bar;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    padding: max(22px, env(safe-area-inset-top)) 0 22px;
+    min-height: $top-bar-height;
+    padding: max(14px, env(safe-area-inset-top)) 0 14px;
 
     @include rise(1);
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0 -50vw;
+        z-index: $z-behind;
+        border-bottom: 1px solid transparent;
+        background: color-mix(in srgb, var(--bg) 84%, transparent);
+        backdrop-filter: blur(14px);
+        transition: border-color $dur-base;
+    }
 
     @include from(1024) {
         display: none;
     }
+}
+
+:global(:root[data-scrolled]) .top-bar::before {
+    border-bottom-color: var(--line);
+}
+
+// the page's scroll padding would count the bar's own controls as covered and scroll the page to reveal them on focus
+.top-bar :where(a, button) {
+    scroll-margin-top: calc(-1 * $top-bar-height);
 }
 
 .top-bar__logo {

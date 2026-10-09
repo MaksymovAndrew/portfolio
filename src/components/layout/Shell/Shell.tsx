@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 
 import type { Content } from "types/content";
 
+import { BackToTop } from "components/controls/BackToTop";
+import { ScrollState } from "components/controls/ScrollState";
 import { Atmosphere } from "components/decor/Atmosphere";
 import { Footer } from "components/layout/Footer";
 import { Sidebar } from "components/layout/Sidebar";
@@ -22,6 +24,7 @@ export const Shell = ({ content, children }: ShellProps) => (
         <SkipLink targetId={MAIN_ID} label={content.ui.skipToContent} />
         <Atmosphere />
         <div className={styles.shell}>
+            <ScrollState />
             <div className={styles.shell__layout}>
                 <Sidebar content={content} />
                 <div className={styles.shell__column}>
@@ -33,6 +36,7 @@ export const Shell = ({ content, children }: ShellProps) => (
                     <Footer content={content} />
                 </div>
             </div>
+            <BackToTop label={content.ui.backToTop} targetId={MAIN_ID} />
         </div>
     </>
 );

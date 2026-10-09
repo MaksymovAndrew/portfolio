@@ -1,8 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 
 import { LocaleSwitcher } from "components/controls/LocaleSwitcher";
 
+import { intersect } from "test/shims/intersectionObserver";
+
 const LABEL = "Language";
+const SECTIONS = ["about", "experience"] as const;
 
 const ENGLISH = {
     locale: "en",
@@ -22,7 +25,13 @@ const GERMAN = {
 
 describe("LocaleSwitcher", () => {
     it("should link every language to its page", () => {
-        render(<LocaleSwitcher links={[ENGLISH, GERMAN]} label={LABEL} />);
+        render(
+            <LocaleSwitcher
+                links={[ENGLISH, GERMAN]}
+                label={LABEL}
+                sections={SECTIONS}
+            />,
+        );
 
         const link = screen.getByRole("link", { name: "DE Deutsch" });
 
@@ -32,7 +41,13 @@ describe("LocaleSwitcher", () => {
     });
 
     it("should mark the language of the page", () => {
-        render(<LocaleSwitcher links={[ENGLISH, GERMAN]} label={LABEL} />);
+        render(
+            <LocaleSwitcher
+                links={[ENGLISH, GERMAN]}
+                label={LABEL}
+                sections={SECTIONS}
+            />,
+        );
 
         expect(
             screen.getByRole("link", { name: "EN English" }),
@@ -43,13 +58,51 @@ describe("LocaleSwitcher", () => {
     });
 
     it("should name the group of links", () => {
-        render(<LocaleSwitcher links={[ENGLISH, GERMAN]} label={LABEL} />);
+        render(
+            <LocaleSwitcher
+                links={[ENGLISH, GERMAN]}
+                label={LABEL}
+                sections={SECTIONS}
+            />,
+        );
 
         expect(screen.getByRole("group", { name: LABEL })).toBeInTheDocument();
     });
 
+    it("should carry the current section into every link", () => {
+        render(
+            <>
+                <LocaleSwitcher
+                    links={[ENGLISH, GERMAN]}
+                    label={LABEL}
+                    sections={SECTIONS}
+                />
+                <section id="experience" aria-label="experience section" />
+            </>,
+        );
+        const section = screen.getByRole("region", {
+            name: "experience section",
+        });
+
+        act(() => {
+            intersect(section, true);
+        });
+
+        expect(
+            screen
+                .getAllByRole("link")
+                .map((link) => link.getAttribute("href")),
+        ).toEqual(["/#experience", "/de#experience"]);
+    });
+
     it("should render nothing for a single language", () => {
-        render(<LocaleSwitcher links={[ENGLISH]} label={LABEL} />);
+        render(
+            <LocaleSwitcher
+                links={[ENGLISH]}
+                label={LABEL}
+                sections={SECTIONS}
+            />,
+        );
 
         expect(() => screen.getByRole("link")).toThrow();
     });

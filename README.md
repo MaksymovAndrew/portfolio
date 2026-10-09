@@ -4,7 +4,7 @@
 
 A personal portfolio site built with Next.js: one page, generated ahead of time for every language. It doubles as a template - everything personal lives in three folders, and the rest is framework you do not have to touch.
 
-> Work in progress: the page frame, every section, the languages and the themes are in place; the section navigation, the motion and the link previews are on their way.
+> Work in progress: the page frame, every section, the section navigation, the languages and the themes are in place; the motion and the link previews are on their way.
 
 ## Stack
 
