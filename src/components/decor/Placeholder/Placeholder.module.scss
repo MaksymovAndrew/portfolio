@@ -14,6 +14,7 @@
     font-family: $font-mono;
     line-height: 1.4;
     text-align: center;
+    container-type: inline-size;
 }
 
 .placeholder__label {
@@ -23,5 +24,13 @@
 
     &::after {
         content: " ]" / "";
+    }
+
+    // a small box wraps the label between its words; the brackets would sit alone on a line
+    @container (width < 110px) {
+        &::before,
+        &::after {
+            content: none;
+        }
     }
 }

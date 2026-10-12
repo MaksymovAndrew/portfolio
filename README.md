@@ -34,7 +34,7 @@ Then open <http://localhost:3000>. English lives at the root, Polish at `/pl`, U
 | `npm run typecheck` | Type check of the whole project                             |
 | `npm run bump`      | Sets the release version in `package.json` and the lockfile |
 
-`npm start` needs a build first and listens on `localhost:3000`; set `PORT` or `SERVE_HOST` to change that. Use a host name or `0.0.0.0`, never a loopback address such as `127.0.0.1` or `::1`: Next calls those `localhost` inside the proxy, and its rewrites stop finding the server.
+`npm start` needs a build first and listens on port 3000 of every interface: `localhost` on this machine, and the printed address on a phone connected to the same network (Windows asks once whether Node.js may accept connections: allow private networks). Set `PORT` or `SERVE_HOST` to change that. `npm run dev` opens on a phone the same way, at the `Network` address it prints. Use a host name or `0.0.0.0`, never a loopback address such as `127.0.0.1` or `::1`: Next calls those `localhost` inside the proxy, and its rewrites stop finding the server.
 
 `npm run bump` takes the version from the branch name on a `chore/release-X.Y.Z` branch; anywhere else pass it: `npm run bump -- 1.2.3`. On a release branch the commit hook does the same by itself.
 

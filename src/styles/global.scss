@@ -36,6 +36,49 @@ html {
     ::view-transition-new(root) {
         animation-duration: $dur-fade;
     }
+
+    // a theme change: the new page grows in a circle from the button over the old one, which stays still
+    :root[data-vt="circle"]::view-transition-old(root) {
+        animation: none;
+    }
+
+    :root[data-vt="circle"]::view-transition-new(root) {
+        z-index: $z-transition-new;
+        animation: circle-in $dur-circle $ease-out;
+        mix-blend-mode: normal;
+    }
+
+    // the snapshots already hold both looks; the colours' own fades would only lag behind the circle
+    :root[data-vt],
+    :root[data-vt] * {
+        transition: none !important;
+    }
+}
+
+// a block out of view at load waits below its place until it scrolls in; a printed page shows everything
+@media screen and (prefers-reduced-motion: no-preference) {
+    :root.js [data-reveal] {
+        opacity: 0;
+        transform: translateY(16px);
+        transition:
+            opacity $dur-rise $ease-out,
+            transform $dur-rise $ease-out;
+    }
+
+    :root.js [data-reveal="in"] {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes circle-in {
+    from {
+        clip-path: circle(0 at var(--vt-x) var(--vt-y));
+    }
+
+    to {
+        clip-path: circle(var(--vt-r) at var(--vt-x) var(--vt-y));
+    }
 }
 
 // the page stays put under an open dialog; the stable gutter keeps it from shifting
@@ -57,6 +100,53 @@ svg {
     display: block;
 }
 
+// selected text in the accent of the theme
+::selection {
+    background: color-mix(
+        in srgb,
+        var(--accent) var(--t-selection),
+        transparent
+    );
+    color: var(--text);
+}
+
+// a thin scrollbar in the colours of the theme; every scroll area inherits the colours
+:root {
+    scrollbar-color: color-mix(
+            in srgb,
+            var(--muted) var(--t-scrollbar),
+            transparent
+        )
+        transparent;
+}
+
+* {
+    scrollbar-width: thin;
+}
+
+// Safari has no scrollbar-color yet: the same thin thumb, drawn through its own pseudo-elements
+@supports not (scrollbar-color: auto) {
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        border: 3px solid transparent;
+        border-radius: $radius-pill;
+        background: color-mix(
+                in srgb,
+                var(--muted) var(--t-scrollbar),
+                transparent
+            )
+            padding-box;
+    }
+}
+
 :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
@@ -70,6 +160,22 @@ svg {
 // a component's own radius wins; a bare link gets a rounded ring
 :where(a:focus-visible) {
     border-radius: $radius-focus;
+}
+
+// the ring stands in for the system cursor everywhere, dialogs included
+:root[data-cursor="ring"],
+:root[data-cursor="ring"] *,
+:root[data-cursor="ring"] ::backdrop {
+    cursor: none !important;
+}
+
+// no Popover API: the ring cannot rise above a modal, so the system cursor comes back there
+@supports not selector(:popover-open) {
+    :root[data-cursor="ring"] dialog,
+    :root[data-cursor="ring"] dialog *,
+    :root[data-cursor="ring"] ::backdrop {
+        cursor: auto !important;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -40,6 +40,9 @@ $z-top-bar: 10;
 $z-skip-link: 20;
 $z-cursor: 60;
 
+// inside a view transition: the new page above the old one
+$z-transition-new: 1;
+
 // the sticky top bar below 1024: 14px of air above and below a 32px row
 $top-bar-height: 60px;
 

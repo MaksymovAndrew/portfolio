@@ -9,6 +9,7 @@ import { STORAGE_KEYS } from "constants/storage";
 import { body, display, mono } from "theme/fonts";
 import { theme } from "theme/theme";
 
+import { PointerEffects } from "components/effects/PointerEffects";
 import { getContent } from "i18n/content";
 import { isLocale, LOCALES } from "i18n/locales";
 import { localePath } from "i18n/paths";
@@ -96,6 +97,7 @@ const RootLayout = async ({ children, params }: RootLayoutProps) => {
                 <SystemMessagesProvider value={systemMessages}>
                     {children}
                 </SystemMessagesProvider>
+                <PointerEffects />
             </body>
         </html>
     );

@@ -4,6 +4,8 @@ import { createPortal } from "react-dom";
 
 import { useHydrated } from "hooks/useHydrated";
 
+import { topLayer } from "utils/topLayer";
+
 import styles from "./Dialog.module.scss";
 
 // a dialog is named by a visible title or, without one, by a label
@@ -41,6 +43,7 @@ export const Dialog = ({
 
         if (open) {
             dialog.showModal();
+            topLayer.notify();
         } else {
             dialog.close();
         }

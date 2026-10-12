@@ -3,6 +3,8 @@ import { useState } from "react";
 
 import { Dialog } from "components/ui/Dialog";
 
+import { topLayer } from "utils/topLayer";
+
 const LABEL = "Image viewer";
 
 // the parent owns the open state, as every user of the dialog does
@@ -36,6 +38,16 @@ describe("Dialog", () => {
         expect(screen.getByRole("dialog", { name: LABEL })).toHaveAttribute(
             "open",
         );
+    });
+
+    it("should tell the top layer once it has opened", () => {
+        const listener = jest.fn();
+        const unsubscribe = topLayer.subscribe(listener);
+
+        render(<Harness />);
+        unsubscribe();
+
+        expect(listener).toHaveBeenCalledTimes(1);
     });
 
     it("should report closing through onClose", () => {

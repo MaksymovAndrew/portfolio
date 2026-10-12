@@ -1,0 +1,79 @@
+@use "styles/abstracts" as *;
+
+// the light under the pointer: a fixed-size glow on its own layer
+.pointer-layer__spot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: $z-spot;
+    width: 1040px;
+    height: 1040px;
+    margin: -520px 0 0 -520px;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle closest-side,
+        color-mix(in srgb, var(--spot) 12%, transparent),
+        transparent 65%
+    );
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity $dur-spot;
+    will-change: transform;
+
+    &[data-on] {
+        opacity: 1;
+    }
+}
+
+// a popover in the top layer, so a modal dialog never covers the cursor
+.pointer-layer {
+    position: fixed;
+    inset: 0;
+    z-index: $z-cursor;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    background: none;
+    pointer-events: none;
+}
+
+.pointer-layer__dot,
+.pointer-layer__ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform;
+
+    &[data-on] {
+        opacity: 1;
+    }
+}
+
+.pointer-layer__dot {
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
+    background: var(--accent);
+}
+
+.pointer-layer__ring {
+    width: 36px;
+    height: 36px;
+    margin: -18px 0 0 -18px;
+    border: 1px solid color-mix(in srgb, var(--accent) 70%, transparent);
+    transition:
+        opacity $dur-slow,
+        background-color $dur-base,
+        border-color $dur-base;
+
+    &[data-hot] {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+    }
+}

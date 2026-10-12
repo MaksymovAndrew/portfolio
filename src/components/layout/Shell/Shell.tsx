@@ -5,6 +5,7 @@ import type { Content } from "types/content";
 import { BackToTop } from "components/controls/BackToTop";
 import { ScrollState } from "components/controls/ScrollState";
 import { Atmosphere } from "components/decor/Atmosphere";
+import { Reveal } from "components/effects/Reveal";
 import { Footer } from "components/layout/Footer";
 import { Sidebar } from "components/layout/Sidebar";
 import { SkipLink } from "components/layout/SkipLink";
@@ -38,5 +39,6 @@ export const Shell = ({ content, children }: ShellProps) => (
             </div>
             <BackToTop label={content.ui.backToTop} targetId={MAIN_ID} />
         </div>
+        <Reveal />
     </>
 );

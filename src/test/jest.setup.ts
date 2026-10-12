@@ -4,6 +4,7 @@ import "test/shims/intersectionObserver";
 
 import { restoreClipboard } from "test/shims/clipboard";
 import { resetMedia } from "test/shims/matchMedia";
+import { disableViewTransitions } from "test/shims/viewTransition";
 
 // the build inlines it from package.json; tests run without a build
 Object.assign(process.env, { APP_VERSION: "0.0.0-test" });
@@ -18,4 +19,5 @@ afterEach(() => {
     sessionStorage.clear();
     restoreClipboard();
     resetMedia();
+    disableViewTransitions();
 });

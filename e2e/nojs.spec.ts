@@ -11,7 +11,7 @@ import {
     pathFor,
     VIEWPORT_HEIGHT,
 } from "./support/site";
-import { expect, NOT_FOUND, test } from "./support/test";
+import { expect, NOT_FOUND, settle, test } from "./support/test";
 
 for (const locale of LOCALES) {
     test(`should show the ${locale} content without JavaScript`, async ({
@@ -121,4 +121,19 @@ test("should hide the pause and show the terminal at rest without JavaScript", a
         page.getByText(source.terminal.commands[0].result),
     ).toBeVisible();
     await expect(page.getByText(GLYPHS.clock)).toBeVisible();
+});
+
+test("should show every block fully without JavaScript", async ({ page }) => {
+    await page.goto(pathFor(DEFAULT_LOCALE));
+    // the first screen's own entry has ended; nothing else may be waiting
+    await settle(page);
+
+    const opacities = await page
+        .locator("main section > *, main ~ footer")
+        .evaluateAll((blocks) =>
+            blocks.map((block) => getComputedStyle(block).opacity),
+        );
+
+    expect(opacities).not.toHaveLength(0);
+    expect(new Set(opacities)).toEqual(new Set(["1"]));
 });

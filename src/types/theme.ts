@@ -24,6 +24,8 @@ export interface Tints {
     cardLine: number;
     cardShadow: number;
     buttonShadow: number;
+    selection: number;
+    scrollbar: number;
     scrim: number;
     shadow: number;
     grain: number;
