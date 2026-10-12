@@ -35,6 +35,12 @@
         "react-dom": "^19.3.0",
         "server-only": "^0.0.1"
     },
+    "overrides": {
+        "handlebars": "4.7.10",
+        "js-yaml@3": {
+            "argparse": "2.0.1"
+        }
+    },
     "devDependencies": {
         "@axe-core/playwright": "^4.13.0",
         "@commitlint/cli": "^21.2.3",
