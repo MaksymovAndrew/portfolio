@@ -1,6 +1,7 @@
 // Serves the production build with the standalone server, exactly what ships in the container.
 import { spawn } from "node:child_process";
 import { cpSync, existsSync } from "node:fs";
+import { networkInterfaces } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -12,8 +13,8 @@ const publicDir = path.join(rootDir, "public");
 
 const SERVER_FILE = "server.js";
 const DEFAULT_PORT = 3000;
-// not 127.0.0.1: Next calls a loopback address localhost inside the proxy, and its rewrites would leave the server
-const DEFAULT_HOST = "localhost";
+// every interface: localhost and the other devices of the same network. Not 127.0.0.1: Next calls a loopback address localhost inside the proxy, and its rewrites would leave the server
+const DEFAULT_HOST = "0.0.0.0";
 
 // the standalone output leaves both folders out: a CDN usually serves them
 const copyStaticFiles = () => {
@@ -50,12 +51,24 @@ export const startServer = ({
     });
 };
 
+// the addresses a phone on the same network opens
+const lanUrls = (port) =>
+    Object.values(networkInterfaces())
+        .flat()
+        .filter((address) => address?.family === "IPv4" && !address.internal)
+        .map((address) => `http://${address.address}:${port}`);
+
 if (process.argv[1] === scriptFile) {
     try {
-        const server = startServer({
-            port: process.env.PORT,
-            host: process.env.SERVE_HOST,
-        });
+        const port = process.env.PORT ?? DEFAULT_PORT;
+        const host = process.env.SERVE_HOST ?? DEFAULT_HOST;
+        const server = startServer({ port, host });
+
+        const urls = host === DEFAULT_HOST ? lanUrls(port) : [];
+
+        if (urls.length > 0) {
+            console.log(`- On this network: ${urls.join(", ")}`);
+        }
 
         server.on("exit", (code) => {
             process.exit(code ?? 1);

@@ -53,6 +53,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Changing the language keeps the section you were reading, with a short fade where the browser supports it.
 - A small terminal at the bottom of the left column types commands, and a status line shows the local time; the status line is in the bottom menu too.
 - A "pause animations" button in the footer freezes everything that moves by itself and remembers the choice; with reduced motion it is not shown, as nothing moves.
+- With a mouse: a soft light and a custom cursor follow the pointer, the main buttons pull towards it and the project card tilts; touch devices do not load this code, and reduced motion or high-contrast settings turn it off.
+- Blocks rise into place as they scroll into view.
+- The theme changes with a circle growing from the button.
+- `npm start` and `npm run dev` open on phones and other devices on the same network too; `npm start` prints the address to open.
 
 ### Fixed
 

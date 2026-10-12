@@ -11,6 +11,14 @@
         border-color $dur-slow,
         box-shadow $dur-slow;
 
+    // the pointer effects tilt the card themselves
+    &[data-pointer] {
+        transition:
+            border-color $dur-slow,
+            box-shadow $dur-slow;
+        will-change: transform;
+    }
+
     & + & {
         margin-top: 24px;
     }
@@ -43,6 +51,11 @@
     );
     opacity: 0;
     pointer-events: none;
+    transition: opacity $dur-theme;
+
+    [data-tilting] > & {
+        opacity: 1;
+    }
 }
 
 .project-card__top {

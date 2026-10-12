@@ -18,6 +18,17 @@
         background-color $dur-base,
         color $dur-base,
         border-color $dur-base;
+
+    // the pointer effects move a magnetic button themselves, the hover lift included
+    &[data-pointer],
+    &[data-pointer]:hover {
+        transform: none;
+        transition:
+            box-shadow $dur-base,
+            background-color $dur-base,
+            color $dur-base,
+            border-color $dur-base;
+    }
 }
 
 .button--primary {
