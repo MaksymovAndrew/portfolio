@@ -154,6 +154,22 @@ const periodIssues = ({ path, value }: Found<Period>): ContentIssue[] => {
         : issues;
 };
 
+// the status line's clock reads the time there; Intl knows every IANA zone name
+const timeZoneIssues = ({ profile }: ContentSource): ContentIssue[] => {
+    try {
+        new Intl.DateTimeFormat(undefined, { timeZone: profile.timeZone });
+
+        return [];
+    } catch {
+        return [
+            {
+                path: "profile.timeZone",
+                message: `"${profile.timeZone}" is not a known time zone`,
+            },
+        ];
+    }
+};
+
 // every problem in the content, each with the path of the field it is in
 export const validateContent = (
     source: ContentSource,
@@ -165,6 +181,7 @@ export const validateContent = (
     ...linkIssues(source),
     ...fileIssues(source, files),
     ...sectionIssues(source),
+    ...timeZoneIssues(source),
     ...periodFields(source).flatMap(periodIssues),
     ...monthFields(source).flatMap(monthIssues),
 ];

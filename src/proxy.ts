@@ -38,7 +38,7 @@ export const proxy = (request: NextRequest): NextResponse => {
         : NextResponse.rewrite(url);
 };
 
-// not pages (build files, the health check, icons, any file with an extension): they have no language
+// not pages (build files, the health check, icons, a file at the root): they have no language
 export const config = {
-    matcher: ["/((?!_next/|health$|(?:apple-)?icon(?:$|/)|.*\\.).*)"],
+    matcher: ["/((?!_next/|health$|(?:apple-)?icon(?:$|/)|[^/]*\\.).*)"],
 };

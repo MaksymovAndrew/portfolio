@@ -4,6 +4,8 @@ import { CvLink } from "components/controls/CvLink";
 import { LocaleSwitcher } from "components/controls/LocaleSwitcher";
 import { SectionNav } from "components/controls/SectionNav";
 import { ThemeToggle } from "components/controls/ThemeToggle";
+import { StatusLine } from "components/decor/StatusLine";
+import { Terminal } from "components/decor/Terminal";
 import { Identity } from "components/layout/Identity";
 import { localeLinks } from "i18n/paths";
 
@@ -16,7 +18,7 @@ export interface SidebarProps {
 }
 
 export const Sidebar = ({ content }: SidebarProps) => {
-    const { locale, hero, profile, ui } = content;
+    const { locale, hero, profile, terminal, ui } = content;
     const navItems = buildNavItems(content);
 
     return (
@@ -45,6 +47,16 @@ export const Sidebar = ({ content }: SidebarProps) => {
             />
             <div className={styles.sidebar__nav}>
                 <SectionNav items={navItems} label={ui.sections} />
+            </div>
+            <div className={styles.sidebar__terminal}>
+                <Terminal commands={terminal.commands} />
+            </div>
+            <div className={styles.sidebar__status}>
+                <StatusLine
+                    availability={profile.availability}
+                    city={profile.city}
+                    timeZone={profile.timeZone}
+                />
             </div>
         </header>
     );

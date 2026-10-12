@@ -1,6 +1,8 @@
 @use "styles/abstracts" as *;
 
 .menu-button {
+    @include waits-for-hydration;
+
     display: inline-grid;
     place-items: center;
     width: 38px;

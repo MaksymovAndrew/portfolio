@@ -26,6 +26,27 @@ const { ui } = source;
 // with a single language there is nothing to switch to
 const OTHER_LOCALES = LOCALES.filter((locale) => locale !== DEFAULT_LOCALE);
 
+// runs in the page, so it carries its own numbers: waits for a smooth scroll to stop, then tells whether the page is at its end
+const settledAtEnd = () =>
+    new Promise<boolean>((resolve) => {
+        let last = -1;
+        const check = () => {
+            if (window.scrollY === last) {
+                resolve(
+                    window.scrollY + window.innerHeight >=
+                        document.documentElement.scrollHeight - 1,
+                );
+
+                return;
+            }
+
+            last = window.scrollY;
+            setTimeout(check, 100);
+        };
+
+        check();
+    });
+
 test.describe("with the left column", () => {
     test.use({ viewport: DESKTOP });
 
@@ -53,6 +74,29 @@ test.describe("with the left column", () => {
             await expect(page.locator(`#${item.id}`)).toBeInViewport();
             await expectCurrent(
                 sectionNav(page).getByRole("link", { name: item.label }),
+            );
+        }
+    });
+
+    test("should keep each chosen section marked once the reader scrolls on", async ({
+        page,
+    }) => {
+        await page.goto(pathFor(DEFAULT_LOCALE));
+
+        for (const item of NAV_ITEMS) {
+            await sectionNav(page)
+                .getByRole("link", { name: item.label })
+                .click();
+            await expect(page.locator(`#${item.id}`)).toBeInViewport();
+            const atEnd = await page.evaluate(settledAtEnd);
+
+            // a nudge of the wheel hands the mark from the link back to what the window shows
+            await page.mouse.wheel(0, 1);
+
+            await expectCurrent(
+                sectionNav(page).getByRole("link", {
+                    name: atEnd ? LAST_ITEM.label : item.label,
+                }),
             );
         }
     });

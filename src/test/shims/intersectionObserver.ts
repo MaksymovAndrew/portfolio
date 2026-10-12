@@ -56,11 +56,12 @@ if (typeof window !== "undefined") {
     Object.assign(window, { IntersectionObserver: FakeIntersectionObserver });
 }
 
-// what the browser reports when the target enters or leaves the observed area; top is its distance from the top of the window
+// what the browser reports when the target enters or leaves the observed area; top is its distance from the top of the window, ratio how much of it shows
 export const intersect = (
     target: Element,
     isIntersecting: boolean,
     top = 0,
+    ratio = isIntersecting ? 1 : 0,
 ): void => {
     const rect = rectAt(top);
 
@@ -69,7 +70,7 @@ export const intersect = (
             observer.report({
                 target,
                 isIntersecting,
-                intersectionRatio: isIntersecting ? 1 : 0,
+                intersectionRatio: ratio,
                 boundingClientRect: rect,
                 intersectionRect: rect,
                 // the observed area as a line at the top of the window: a target below it has a positive top

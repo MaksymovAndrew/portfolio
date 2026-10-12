@@ -9,6 +9,8 @@ const config = {
 
 const { resolve } = createLocaleRouting(config);
 
+const PL_NOT_FOUND = "/pl/not-found";
+
 describe("createLocaleRouting", () => {
     it("should serve the root in the default language", () => {
         expect(resolve("/")).toEqual({ kind: "rewrite", pathname: "/en" });
@@ -28,12 +30,23 @@ describe("createLocaleRouting", () => {
     });
 
     it("should answer an unknown prefixed address in its language", () => {
-        for (const pathname of ["/pl/nope", "/pl/a/b", "/pl/not-found"]) {
+        for (const pathname of ["/pl/nope", "/pl/a/b", PL_NOT_FOUND]) {
             expect(resolve(pathname)).toEqual({
                 kind: "notFound",
-                pathname: "/pl/not-found",
+                pathname: PL_NOT_FOUND,
             });
         }
+    });
+
+    it("should answer a prefixed address with a dot in its language", () => {
+        expect(resolve("/pl/old.pdf")).toEqual({
+            kind: "notFound",
+            pathname: PL_NOT_FOUND,
+        });
+    });
+
+    it("should leave a file in a folder to the server", () => {
+        expect(resolve("/images/photo.webp")).toEqual({ kind: "pass" });
     });
 
     it("should answer any other address in the default language", () => {

@@ -48,6 +48,11 @@ export const createLocaleRouting = ({
             return pages.includes(rest) ? { kind: "pass" } : notFound(first);
         }
 
+        // a file served from a folder of public/; a missing one gets the server's own 404
+        if (pathname.includes(".")) {
+            return { kind: "pass" };
+        }
+
         return pages.includes(pathname)
             ? { kind: "rewrite", pathname: prefixed(defaultLocale, pathname) }
             : notFound(defaultLocale);

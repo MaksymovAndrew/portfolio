@@ -64,6 +64,7 @@ test.describe("on a phone", () => {
 
     test("should go on from the chosen section with Tab", async ({ page }) => {
         await page.goto(pathFor(DEFAULT_LOCALE));
+        await expect(menuButton(page)).toBeVisible();
         await menuButton(page).focus();
         await page.keyboard.press("Enter");
         await expect(sheet(page)).toBeVisible();
@@ -90,6 +91,7 @@ test.describe("on a phone", () => {
         await page.goto(pathFor(DEFAULT_LOCALE));
         await scrollToSection(page, FIRST_ITEM.id);
         // a click would first scroll the sticky button to its place in the flow, far above the section
+        await expect(menuButton(page)).toBeVisible();
         await menuButton(page).focus();
         await page.keyboard.press("Enter");
 

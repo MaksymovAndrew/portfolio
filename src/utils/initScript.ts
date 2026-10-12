@@ -2,31 +2,36 @@ import type { ThemeMode } from "types/theme";
 
 export interface InitScriptOptions {
     themeKey: string;
+    motionKey: string;
     defaultMode: ThemeMode;
     backgrounds: Readonly<Record<ThemeMode, string>>;
 }
 
 // runs inline before the first paint as its own source text, so it may use nothing from outside itself
-export const applyStoredTheme = ({
+export const applyStoredSettings = ({
     themeKey,
+    motionKey,
     defaultMode,
     backgrounds,
 }: InitScriptOptions): void => {
     const root = document.documentElement;
     const isMode = (value: string | null): value is ThemeMode =>
         value !== null && Object.hasOwn(backgrounds, value);
-    const readStored = (): ThemeMode => {
+    const readStored = (key: string): string | null => {
         try {
-            const stored = localStorage.getItem(themeKey);
-
-            return isMode(stored) ? stored : defaultMode;
+            return localStorage.getItem(key);
         } catch {
-            return defaultMode;
+            return null;
         }
     };
-    const mode = readStored();
+    const stored = readStored(themeKey);
+    const mode = isMode(stored) ? stored : defaultMode;
 
     root.dataset.theme = mode;
+
+    if (readStored(motionKey) === "off") {
+        root.dataset.motion = "off";
+    }
 
     // the only theme-color tag with scripts on; iOS Safari ignores a changed one, so it is replaced
     for (const meta of document.querySelectorAll('meta[name="theme-color"]')) {
@@ -42,4 +47,4 @@ export const applyStoredTheme = ({
 };
 
 export const buildInitScript = (options: InitScriptOptions): string =>
-    `(${applyStoredTheme.toString()})(${JSON.stringify(options)})`;
+    `(${applyStoredSettings.toString()})(${JSON.stringify(options)})`;

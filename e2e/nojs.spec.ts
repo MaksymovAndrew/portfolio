@@ -1,3 +1,5 @@
+import { GLYPHS } from "constants/glyphs";
+
 import { source } from "content";
 import { LOCALE_META } from "content/locales";
 import { theme } from "theme/theme";
@@ -102,4 +104,21 @@ test("should link every section from the left column without JavaScript", async 
     )) {
         await expect(page.locator(href)).toHaveCount(1);
     }
+});
+
+test("should hide the pause and show the terminal at rest without JavaScript", async ({
+    page,
+}) => {
+    await page.setViewportSize({ width: 1440, height: VIEWPORT_HEIGHT });
+    await page.goto(pathFor(DEFAULT_LOCALE));
+
+    await expect(
+        page.getByRole("button", {
+            name: source.ui.motion.pause[DEFAULT_LOCALE],
+        }),
+    ).toBeHidden();
+    await expect(
+        page.getByText(source.terminal.commands[0].result),
+    ).toBeVisible();
+    await expect(page.getByText(GLYPHS.clock)).toBeVisible();
 });

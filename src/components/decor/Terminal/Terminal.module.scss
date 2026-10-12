@@ -1,0 +1,51 @@
+@use "styles/abstracts" as *;
+
+.terminal {
+    color: var(--muted);
+    font-family: $font-mono;
+    font-size: 13.5px;
+    line-height: 2.1;
+    user-select: none;
+}
+
+.terminal__line {
+    min-height: 2.1em;
+    white-space: pre-wrap;
+}
+
+.terminal__prompt {
+    color: var(--accent);
+}
+
+.terminal__home {
+    color: var(--faint);
+}
+
+.terminal--ok .terminal__output {
+    color: var(--ok);
+}
+
+.terminal--bad .terminal__output {
+    color: var(--muted);
+}
+
+.terminal__caret {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    margin-left: 2px;
+    vertical-align: -2px;
+    background: var(--accent);
+    animation: blink $dur-blink steps(1) infinite;
+
+    // paused, it rests lit instead of freezing half way
+    :global(:root[data-motion="off"]) & {
+        animation: none;
+    }
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}

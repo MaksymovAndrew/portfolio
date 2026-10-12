@@ -14,6 +14,7 @@
         background-color $dur-fast;
 
     @include tap-area;
+    @include waits-for-hydration;
 
     @include hover {
         color: var(--text);

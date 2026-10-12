@@ -45,6 +45,11 @@
     min-width: 100%;
     list-style: none;
     animation: scroll $dur-marquee linear infinite;
+
+    // paused, the rows stop where they are
+    :global(:root[data-motion="off"]) & {
+        animation-play-state: paused;
+    }
 }
 
 @keyframes scroll {

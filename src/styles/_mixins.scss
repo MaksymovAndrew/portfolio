@@ -93,3 +93,34 @@
         color: var(--text);
     }
 }
+
+// the green dot beside a status; it rests lit while the animations are paused
+@mixin pulse-dot {
+    flex-shrink: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ok);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--ok) 70%, transparent);
+    animation: pulse $dur-pulse $ease-in-out infinite;
+
+    :global(:root[data-motion="off"]) & {
+        animation: none;
+    }
+}
+
+// once per module with a pulsing dot (keyframes are module-local)
+@mixin pulse-keyframes {
+    @keyframes pulse {
+        50% {
+            opacity: 0.35;
+        }
+    }
+}
+
+// a control that works only once its island runs: before that it keeps its place but shows nothing to click
+@mixin waits-for-hydration {
+    &:not([data-ready]) {
+        visibility: hidden;
+    }
+}

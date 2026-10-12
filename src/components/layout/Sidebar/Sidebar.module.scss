@@ -67,3 +67,24 @@
         margin-top: 28px;
     }
 }
+
+// the terminal and the status line sit at the bottom of the column
+.sidebar__terminal {
+    margin-top: auto;
+
+    @include short(759) {
+        display: none;
+    }
+}
+
+.sidebar__status {
+    margin-top: 12px;
+
+    @include short(759) {
+        margin-top: auto;
+    }
+
+    @include short(639) {
+        margin-top: 28px;
+    }
+}

@@ -4,6 +4,7 @@ import { CvLink } from "components/controls/CvLink";
 import { LocaleSwitcher } from "components/controls/LocaleSwitcher";
 import { MenuSheet } from "components/controls/MenuSheet";
 import { ThemeToggle } from "components/controls/ThemeToggle";
+import { StatusLine } from "components/decor/StatusLine";
 import { localeLinks, localePath } from "i18n/paths";
 
 import { buildNavItems } from "utils/navItems";
@@ -47,6 +48,11 @@ export const TopBar = ({ content }: TopBarProps) => {
                     }}
                 >
                     <CvLink cv={profile.cv} />
+                    <StatusLine
+                        availability={profile.availability}
+                        city={profile.city}
+                        timeZone={profile.timeZone}
+                    />
                 </MenuSheet>
             </div>
         </header>
