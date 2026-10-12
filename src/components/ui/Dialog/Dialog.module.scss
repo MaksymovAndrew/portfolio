@@ -22,6 +22,16 @@
     &[open]::backdrop {
         animation: fade-in $dur-dialog $ease-out;
     }
+
+    // paused, a dialog is simply there: a paused entry would hold it at its first, invisible frame
+    :global(:root[data-motion="off"]) &[open] {
+        animation: none;
+    }
+
+    // apart: a browser drops a whole selector list over one pseudo-element it does not know
+    :global(:root[data-motion="off"]) &[open]::backdrop {
+        animation: none;
+    }
 }
 
 .dialog--window {

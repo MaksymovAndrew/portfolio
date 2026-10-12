@@ -51,7 +51,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - The left column lists the sections and highlights the one being read.
 - On phones and tablets: a sticky top bar, a bottom menu with all sections and a back-to-top button.
 - Changing the language keeps the section you were reading, with a short fade where the browser supports it.
+- A small terminal at the bottom of the left column types commands, and a status line shows the local time; the status line is in the bottom menu too.
+- A "pause animations" button in the footer freezes everything that moves by itself and remembers the choice; with reduced motion it is not shown, as nothing moves.
 
 ### Fixed
 
 - Editors type-check the tests, the browser tests and the TypeScript configs with the project's settings instead of reporting false errors.
+- The left column and the menu mark the section a link was chosen for, even a short one or one at the very end of the page; the last section is marked once the page is scrolled to its end.
+- A click on a menu item with Ctrl, Cmd or Shift opens it elsewhere and leaves the menu as it is; an open menu closes when the window grows wide enough for the left column.
+- An old file address under a language prefix, such as `/pl/old.pdf`, answers with the 404 page in that language.
+- The theme, menu, copy and pause buttons appear only once they work, instead of ignoring clicks while the page is still loading.

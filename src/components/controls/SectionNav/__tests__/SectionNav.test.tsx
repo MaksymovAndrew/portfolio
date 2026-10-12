@@ -5,6 +5,7 @@ import { SectionNav } from "components/controls/SectionNav";
 import { intersect } from "test/shims/intersectionObserver";
 
 const LABEL = "Sections";
+const CURRENT = "aria-current";
 
 const ITEMS = [
     { id: "about", label: "About" },
@@ -45,11 +46,11 @@ describe("SectionNav", () => {
         });
 
         expect(screen.getByRole("link", { name: "Contact" })).toHaveAttribute(
-            "aria-current",
+            CURRENT,
             "location",
         );
         expect(screen.getByRole("link", { name: "About" })).not.toHaveAttribute(
-            "aria-current",
+            CURRENT,
         );
     });
 
@@ -60,5 +61,29 @@ describe("SectionNav", () => {
         fireEvent.click(screen.getByRole("link", { name: "About" }));
 
         expect(onNavigate.mock.calls).toEqual([["about"]]);
+    });
+
+    it("should mark a chosen item at once", () => {
+        render(<Page />);
+        fireEvent.click(screen.getByRole("link", { name: "Contact" }));
+
+        expect(screen.getByRole("link", { name: "Contact" })).toHaveAttribute(
+            CURRENT,
+            "location",
+        );
+    });
+
+    it("should leave a click with a modifier to the browser", () => {
+        const onNavigate = jest.fn();
+
+        render(<Page onNavigate={onNavigate} />);
+        fireEvent.click(screen.getByRole("link", { name: "Contact" }), {
+            ctrlKey: true,
+        });
+
+        expect(onNavigate.mock.calls).toEqual([]);
+        expect(
+            screen.getByRole("link", { name: "Contact" }),
+        ).not.toHaveAttribute(CURRENT);
     });
 });

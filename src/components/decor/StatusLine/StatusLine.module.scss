@@ -1,0 +1,15 @@
+@use "styles/abstracts" as *;
+@include pulse-keyframes;
+
+.status-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--faint);
+    font-family: $font-mono;
+    font-size: 12px;
+}
+
+.status-line__dot {
+    @include pulse-dot;
+}

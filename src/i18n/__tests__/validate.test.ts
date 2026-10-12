@@ -130,6 +130,15 @@ describe("validateContent", () => {
         expect(issuePaths(source)).toEqual(["certifications.items[0].date"]);
     });
 
+    it("should report an unknown time zone", () => {
+        const source = {
+            ...contentSource,
+            profile: { ...contentSource.profile, timeZone: "Europe/Nowhere" },
+        };
+
+        expect(issuePaths(source)).toEqual(["profile.timeZone"]);
+    });
+
     it("should report a section listed twice", () => {
         const source = {
             ...contentSource,

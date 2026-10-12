@@ -1,11 +1,13 @@
 "use client";
 
+import type { MouseEvent } from "react";
 import { useMemo } from "react";
 
 import type { SectionId } from "types/content";
 
 import { useActiveSection } from "hooks/useActiveSection";
 
+import { activeSectionStore } from "utils/activeSectionStore";
 import type { NavItem } from "utils/navItems";
 
 import styles from "./SectionNav.module.scss";
@@ -16,6 +18,10 @@ export interface SectionNavProps {
     variant?: "column" | "sheet";
     onNavigate?: (id: SectionId) => void;
 }
+
+// a click with a modifier opens the link elsewhere, so this page stays as it is
+const opensElsewhere = (event: MouseEvent): boolean =>
+    event.ctrlKey || event.metaKey || event.shiftKey || event.altKey;
 
 // plain anchors, so the links work before and without JavaScript; the store only marks the current one
 export const SectionNav = ({
@@ -43,7 +49,12 @@ export const SectionNav = ({
                     href={`#${item.id}`}
                     aria-current={item.id === current ? "location" : undefined}
                     className={styles["section-nav__link"]}
-                    onClick={() => {
+                    onClick={(event) => {
+                        if (opensElsewhere(event)) {
+                            return;
+                        }
+
+                        activeSectionStore.hold(item.id);
                         onNavigate?.(item.id);
                     }}
                 >

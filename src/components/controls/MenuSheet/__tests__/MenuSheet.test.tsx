@@ -1,8 +1,11 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 
+import { COLUMN_QUERY } from "constants/breakpoints";
+
 import { MenuSheet } from "components/controls/MenuSheet";
 
 import { intersect } from "test/shims/intersectionObserver";
+import { matchMedia } from "test/shims/matchMedia";
 
 const LABELS = {
     open: "Open menu",
@@ -63,6 +66,29 @@ describe("MenuSheet", () => {
         expect(
             screen.getByRole("dialog", { hidden: true }),
         ).not.toHaveAttribute("open");
+    });
+
+    it("should close once the window is wide enough for the left column", () => {
+        renderMenu();
+        openMenu();
+
+        act(() => {
+            matchMedia(COLUMN_QUERY);
+        });
+
+        expect(
+            screen.getByRole("dialog", { hidden: true }),
+        ).not.toHaveAttribute("open");
+    });
+
+    it("should stay open after a click with a modifier", () => {
+        renderMenu();
+        openMenu();
+        fireEvent.click(screen.getByRole("link", { name: "Contact" }), {
+            ctrlKey: true,
+        });
+
+        expect(screen.getByRole("dialog")).toHaveAttribute("open");
     });
 
     it("should return the focus to the menu button", () => {

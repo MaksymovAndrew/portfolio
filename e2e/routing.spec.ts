@@ -15,6 +15,11 @@ const NOT_FOUND_CASES = [
     ...LOCALES.map((locale) => ({ path: missingPathFor(locale), locale })),
     // a language code in another case is no language at all
     { path: `/${DEFAULT_LOCALE.toUpperCase()}`, locale: DEFAULT_LOCALE },
+    // an old file address under a language prefix
+    ...OTHER_LOCALES.map((locale) => ({
+        path: `${pathFor(locale)}/old.pdf`,
+        locale,
+    })),
 ];
 
 test("should move the default language's prefix to the root", async ({

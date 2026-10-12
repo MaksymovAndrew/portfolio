@@ -3,6 +3,7 @@
 import type { Content } from "types/content";
 
 import { useCopy } from "hooks/useCopy";
+import { useHydrated } from "hooks/useHydrated";
 
 import { Check } from "components/icons/Check";
 import { Copy } from "components/icons/Copy";
@@ -18,6 +19,7 @@ export interface CopyButtonProps {
 // the note is for the eye; the status region tells a screen reader, and it exists before anything is written into it
 export const CopyButton = ({ value, targetId, labels }: CopyButtonProps) => {
     const { copied, copy } = useCopy(value, targetId);
+    const hydrated = useHydrated();
 
     return (
         <>
@@ -31,6 +33,7 @@ export const CopyButton = ({ value, targetId, labels }: CopyButtonProps) => {
                     .join(" ")}
                 aria-label={labels.label}
                 title={labels.label}
+                data-ready={hydrated || undefined}
                 onClick={() => {
                     void copy();
                 }}

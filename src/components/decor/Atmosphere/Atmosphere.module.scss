@@ -23,6 +23,10 @@
     );
     opacity: var(--glow-o);
     animation: drift $dur-drift $ease-in-out infinite alternate;
+
+    :global(:root[data-motion="off"]) & {
+        animation-play-state: paused;
+    }
 }
 
 @keyframes drift {

@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
+
+import { useHydrated } from "hooks/useHydrated";
 
 import styles from "./Dialog.module.scss";
 
@@ -16,16 +18,6 @@ export type DialogProps = DialogName & {
     children: ReactNode;
 };
 
-const subscribeToNothing = () => () => undefined;
-
-// false on the server and while hydrating, true afterwards: the body to portal into exists only then
-const useIsClient = () =>
-    useSyncExternalStore(
-        subscribeToNothing,
-        () => true,
-        () => false,
-    );
-
 // showModal() brings Escape, the focus trap and the return of focus; every way of closing ends in the close event.
 // The dialog lives at the end of the body, so hovering it never hovers the section that opened it
 export const Dialog = ({
@@ -37,7 +29,8 @@ export const Dialog = ({
     children,
 }: DialogProps) => {
     const ref = useRef<HTMLDialogElement>(null);
-    const isClient = useIsClient();
+    // the body to portal into exists only once hydrated
+    const isClient = useHydrated();
 
     useEffect(() => {
         const dialog = ref.current;

@@ -1,5 +1,6 @@
 "use client";
 
+import { useHydrated } from "hooks/useHydrated";
 import { useTheme } from "hooks/useTheme";
 
 import { Moon } from "components/icons/Moon";
@@ -14,12 +15,14 @@ export interface ThemeToggleProps {
 // both icons are always there and CSS shows one, so the markup is the same in every theme
 export const ThemeToggle = ({ label }: ThemeToggleProps) => {
     const { toggle } = useTheme();
+    const hydrated = useHydrated();
 
     return (
         <button
             type="button"
             className={styles["theme-toggle"]}
             aria-label={label}
+            data-ready={hydrated || undefined}
             onClick={toggle}
         >
             <Sun className={styles["theme-toggle__sun"]} />

@@ -18,6 +18,9 @@
     line-height: 1;
     white-space: nowrap;
     cursor: pointer;
+
+    @include waits-for-hydration;
+
     transition:
         color $dur-base,
         border-color $dur-base,

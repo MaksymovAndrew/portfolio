@@ -1,9 +1,12 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
+import { COLUMN_QUERY } from "constants/breakpoints";
 import type { SectionId } from "types/content";
+
+import { useHydrated } from "hooks/useHydrated";
 
 import { SectionNav } from "components/controls/SectionNav";
 import { Close } from "components/icons/Close";
@@ -26,8 +29,29 @@ export const MenuSheet = ({ items, labels, children }: MenuSheetProps) => {
     const [open, setOpen] = useState(false);
     const button = useRef<HTMLButtonElement>(null);
     const titleId = useId();
+    const hydrated = useHydrated();
 
     const chosen = useRef<SectionId | null>(null);
+
+    // a tablet turned wide enough for the left column needs no sheet
+    useEffect(() => {
+        if (!open) {
+            return undefined;
+        }
+
+        const column = window.matchMedia(COLUMN_QUERY);
+        const closeOnColumn = () => {
+            if (column.matches) {
+                setOpen(false);
+            }
+        };
+
+        column.addEventListener("change", closeOnColumn);
+
+        return () => {
+            column.removeEventListener("change", closeOnColumn);
+        };
+    }, [open]);
 
     const close = () => {
         setOpen(false);
@@ -58,6 +82,7 @@ export const MenuSheet = ({ items, labels, children }: MenuSheetProps) => {
                 className={styles["menu-button"]}
                 aria-label={labels.open}
                 aria-haspopup="dialog"
+                data-ready={hydrated || undefined}
                 onClick={() => {
                     setOpen(true);
                 }}
