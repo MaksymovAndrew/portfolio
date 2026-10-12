@@ -26,6 +26,8 @@ const TINT_VARIABLES: Readonly<
     cardLine: { name: "--t-card-line", unit: "%" },
     cardShadow: { name: "--t-card-shadow", unit: "%" },
     buttonShadow: { name: "--t-btn-shadow", unit: "%" },
+    selection: { name: "--t-selection", unit: "%" },
+    scrollbar: { name: "--t-scrollbar", unit: "%" },
     scrim: { name: "--t-scrim", unit: "%" },
     shadow: { name: "--t-shadow", unit: "%" },
     grain: { name: "--grain-o", unit: "opacity" },

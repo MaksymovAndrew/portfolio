@@ -25,6 +25,8 @@ const tints: Tints = {
     cardLine: 4,
     cardShadow: 5,
     buttonShadow: 6,
+    selection: 11,
+    scrollbar: 12,
     scrim: 7,
     shadow: 8,
     grain: 9,
@@ -77,6 +79,8 @@ describe("buildThemeCss", () => {
 
         expect(root).toContain("--t-soft:1%");
         expect(root).toContain("--t-btn-shadow:6%");
+        expect(root).toContain("--t-selection:11%");
+        expect(root).toContain("--t-scrollbar:12%");
         expect(root).toContain("--grain-o:0.09");
         expect(root).toContain("--glow-o:0.5");
     });

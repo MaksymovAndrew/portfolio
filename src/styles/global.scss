@@ -100,6 +100,53 @@ svg {
     display: block;
 }
 
+// selected text in the accent of the theme
+::selection {
+    background: color-mix(
+        in srgb,
+        var(--accent) var(--t-selection),
+        transparent
+    );
+    color: var(--text);
+}
+
+// a thin scrollbar in the colours of the theme; every scroll area inherits the colours
+:root {
+    scrollbar-color: color-mix(
+            in srgb,
+            var(--muted) var(--t-scrollbar),
+            transparent
+        )
+        transparent;
+}
+
+* {
+    scrollbar-width: thin;
+}
+
+// Safari has no scrollbar-color yet: the same thin thumb, drawn through its own pseudo-elements
+@supports not (scrollbar-color: auto) {
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        border: 3px solid transparent;
+        border-radius: $radius-pill;
+        background: color-mix(
+                in srgb,
+                var(--muted) var(--t-scrollbar),
+                transparent
+            )
+            padding-box;
+    }
+}
+
 :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;

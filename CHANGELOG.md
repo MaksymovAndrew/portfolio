@@ -56,6 +56,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - With a mouse: a soft light and a custom cursor follow the pointer, the main buttons pull towards it and the project card tilts; touch devices do not load this code, and reduced motion or high-contrast settings turn it off.
 - Blocks rise into place as they scroll into view.
 - The theme changes with a circle growing from the button.
+- Selected text and the scrollbar take the colours of the theme.
 - `npm start` and `npm run dev` open on phones and other devices on the same network too; `npm start` prints the address to open.
 
 ### Fixed

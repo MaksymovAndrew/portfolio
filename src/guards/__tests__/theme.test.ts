@@ -86,6 +86,15 @@ const pairsOf = (mode: ThemeMode) => {
             mixHex(palette.accent, glowCentre, tints.soft),
             "the soft accent fill on the glow centre",
         ),
+        // selected text, on the page and on the cards
+        ...([palette.bg, palette.surface, palette.surface2] as const).map(
+            (under) =>
+                on(
+                    "text",
+                    mixHex(palette.accent, under, tints.selection),
+                    "the selection",
+                ),
+        ),
     ];
 };
 
