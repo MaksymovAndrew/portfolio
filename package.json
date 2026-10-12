@@ -29,7 +29,7 @@
         "prepare": "husky"
     },
     "dependencies": {
-        "next": "^16.3.8",
+        "next": "^16.4.0",
         "react": "^19.3.0",
         "react-dom": "^19.3.0",
         "server-only": "^0.0.1"
@@ -40,8 +40,8 @@
         "@commitlint/config-conventional": "^21.2.3",
         "@eslint/compat": "^2.1.1",
         "@eslint/js": "^9.39.5",
-        "@next/eslint-plugin-next": "^16.3.8",
-        "@playwright/test": "^1.63.0",
+        "@next/eslint-plugin-next": "^16.4.0",
+        "@playwright/test": "^1.64.0",
         "@swc/core": "^1.16.13",
         "@swc/jest": "^0.2.39",
         "@testing-library/dom": "^10.4.2",
@@ -77,6 +77,6 @@
         "stylelint": "^17.16.0",
         "stylelint-config-standard-scss": "^17.0.0",
         "typescript": "^6.0.3",
-        "typescript-eslint": "^8.71.0"
+        "typescript-eslint": "^8.71.1"
     }
 }
