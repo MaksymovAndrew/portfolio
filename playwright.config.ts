@@ -35,10 +35,12 @@ export default defineConfig({
             use: { ...devices["Desktop Safari"] },
             testMatch: SMOKE_SPEC,
         },
+        // several Firefox processes at once starve each other on a busy machine and never reach network idle
         {
             name: "firefox",
             use: { ...devices["Desktop Firefox"] },
             testMatch: SMOKE_SPEC,
+            workers: 1,
         },
     ],
     // the production build, served exactly as it ships
