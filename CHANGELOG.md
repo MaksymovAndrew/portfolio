@@ -65,3 +65,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - A click on a menu item with Ctrl, Cmd or Shift opens it elsewhere and leaves the menu as it is; an open menu closes when the window grows wide enough for the left column.
 - An old file address under a language prefix, such as `/pl/old.pdf`, answers with the 404 page in that language.
 - The theme, menu, copy and pause buttons appear only once they work, instead of ignoring clicks while the page is still loading.
+- On iPhone the top bar covers the area under the clock and no longer shakes while the page scrolls.
+- The top bar stands still while the page opens instead of sliding into place.
+- The label of a missing image wraps between its words in a small box instead of leaving a bracket on a line of its own.

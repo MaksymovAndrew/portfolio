@@ -1,10 +1,15 @@
 @use "styles/abstracts" as *;
 
-// above the background glow; cuts the top bar's wide backdrop here, as the body's clip passes to the viewport as scrollable
+// above the background glow; cuts the full-window top bar where a classic scrollbar takes part of the window, as the body's clip passes to the viewport as scrollable
 .shell {
     position: relative;
     z-index: $z-content;
     overflow-x: clip;
+
+    // iOS Safari moves a sticky bar inside a clipping ancestor a frame late, so it shakes; iOS has no classic scrollbar to clip for
+    @supports (-webkit-touch-callout: none) {
+        overflow-x: visible;
+    }
 }
 
 .shell__layout {
