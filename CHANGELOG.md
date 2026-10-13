@@ -58,6 +58,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - The theme changes with a circle growing from the button.
 - Selected text and the scrollbar take the colours of the theme.
 - `npm start` and `npm run dev` open on phones and other devices on the same network too; `npm start` prints the address to open.
+- Every language has its own title, description, canonical address and links to the other languages, including a default for readers of none of them.
+- Link previews on social networks and messengers get the title, description, address and language of the page.
+- Structured data describes the person: role, city, profile links, languages, education and certificates.
+- A sitemap with every language, robots rules that point to it, and a web manifest with app icons.
+- The production build requires the public site address in `NEXT_PUBLIC_SITE_URL` and stops with a clear error without it.
 
 ### Fixed
 

@@ -40,6 +40,18 @@ describe("HomePage", () => {
         expect(positions).toEqual([...positions].sort((a, b) => a - b));
     });
 
+    it("should describe the person as structured data", async () => {
+        render(
+            await HomePage({
+                params: Promise.resolve({ locale: DEFAULT_LOCALE }),
+            }),
+        );
+
+        expect(screen.getByRole("main")).toHaveTextContent(
+            '"@type":"ProfilePage"',
+        );
+    });
+
     it("should answer 404 for a language that is not configured", async () => {
         const locale = `${LOCALES.join("")}x`;
 

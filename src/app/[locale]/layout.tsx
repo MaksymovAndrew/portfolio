@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
+import { SITE_URL } from "config/site";
 import { STORAGE_KEYS } from "constants/storage";
 
 import { body, display, mono } from "theme/fonts";
@@ -17,6 +18,7 @@ import { SystemMessagesProvider } from "i18n/SystemMessages";
 
 import { buildThemeCss } from "utils/buildThemeCss";
 import { buildInitScript } from "utils/initScript";
+import { buildMetadata } from "utils/metadata";
 
 interface RootLayoutProps {
     children: ReactNode;
@@ -55,9 +57,7 @@ export const generateMetadata = async ({
         notFound();
     }
 
-    const { seo } = getContent(locale);
-
-    return { title: seo.title, description: seo.description };
+    return buildMetadata(getContent(locale), SITE_URL);
 };
 
 // no themeColor here: hydration would put the tag back next to the one the pre-paint script wrote
