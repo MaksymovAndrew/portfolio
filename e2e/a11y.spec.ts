@@ -1,5 +1,11 @@
 import { expectAccessible } from "./support/axe";
-import { LOCALES, pathFor, THEMES, VIEWPORT_HEIGHT } from "./support/site";
+import {
+    LOCALES,
+    missingPathFor,
+    pathFor,
+    THEMES,
+    VIEWPORT_HEIGHT,
+} from "./support/site";
 import { storeTheme, test } from "./support/test";
 
 // a phone and a desktop: the two layouts differ the most
@@ -11,14 +17,21 @@ for (const width of AUDITED_WIDTHS) {
 
         for (const mode of THEMES) {
             for (const locale of LOCALES) {
-                test(`should pass the accessibility rules in ${locale}, ${mode}`, async ({
-                    page,
-                }) => {
-                    await storeTheme(page, mode);
-                    await page.goto(pathFor(locale));
+                const pages = [
+                    { name: locale, path: pathFor(locale) },
+                    { name: `${locale} 404`, path: missingPathFor(locale) },
+                ];
 
-                    await expectAccessible(page);
-                });
+                for (const { name, path } of pages) {
+                    test(`should pass the accessibility rules in ${name}, ${mode}`, async ({
+                        page,
+                    }) => {
+                        await storeTheme(page, mode);
+                        await page.goto(path);
+
+                        await expectAccessible(page);
+                    });
+                }
             }
         }
     });

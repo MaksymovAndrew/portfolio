@@ -13,14 +13,24 @@ import styles from "./TopBar.module.scss";
 
 export interface TopBarProps {
     content: Content;
+    // the 404 and error pages: no sections to list, so no menu, and the bar at every width
+    variant?: "page" | "system";
 }
 
-export const TopBar = ({ content }: TopBarProps) => {
+export const TopBar = ({ content, variant = "page" }: TopBarProps) => {
     const { locale, profile, ui } = content;
-    const navItems = buildNavItems(content);
+    const navItems = variant === "page" ? buildNavItems(content) : [];
 
     return (
-        <header className={styles["top-bar"]} aria-label={ui.topBar}>
+        <header
+            className={[
+                styles["top-bar"],
+                variant === "system" ? styles["top-bar--system"] : null,
+            ]
+                .filter(Boolean)
+                .join(" ")}
+            aria-label={ui.topBar}
+        >
             <a href={localePath(locale)} className={styles["top-bar__logo"]}>
                 {profile.initials}
                 <span className={styles["top-bar__name"]}>
@@ -38,22 +48,24 @@ export const TopBar = ({ content }: TopBarProps) => {
                     aria-hidden="true"
                 />
                 <ThemeToggle label={ui.theme} />
-                <MenuSheet
-                    items={navItems}
-                    labels={{
-                        open: ui.menu.open,
-                        title: ui.menu.title,
-                        close: ui.close,
-                        sections: ui.sections,
-                    }}
-                >
-                    <CvLink cv={profile.cv} />
-                    <StatusLine
-                        availability={profile.availability}
-                        city={profile.city}
-                        timeZone={profile.timeZone}
-                    />
-                </MenuSheet>
+                {variant === "page" && (
+                    <MenuSheet
+                        items={navItems}
+                        labels={{
+                            open: ui.menu.open,
+                            title: ui.menu.title,
+                            close: ui.close,
+                            sections: ui.sections,
+                        }}
+                    >
+                        <CvLink cv={profile.cv} />
+                        <StatusLine
+                            availability={profile.availability}
+                            city={profile.city}
+                            timeZone={profile.timeZone}
+                        />
+                    </MenuSheet>
+                )}
             </div>
         </header>
     );

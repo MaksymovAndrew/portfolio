@@ -5,6 +5,7 @@ import {
     localeLinks,
     localePath,
     localeUrl,
+    socialImagePath,
 } from "i18n/paths";
 
 const SITE_URL = new URL("https://example.com");
@@ -83,5 +84,13 @@ describe("languageAlternates", () => {
             ),
             "x-default": localeUrl(DEFAULT_LOCALE, SITE_URL),
         });
+    });
+});
+
+describe("socialImagePath", () => {
+    it("should name every language's card after it and carry the version", () => {
+        expect(
+            LOCALES.map((locale) => socialImagePath(locale, "1.2.3")),
+        ).toEqual(LOCALES.map((locale) => `/social/${locale}.png?v=1.2.3`));
     });
 });

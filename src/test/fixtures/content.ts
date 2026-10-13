@@ -9,6 +9,7 @@ const text = (value: string): Localized =>
     Object.fromEntries(LOCALES.map((locale) => [locale, value])) as Localized;
 
 const systemPage = (label: string, heading: string, result: string) => ({
+    title: text(`${heading} - Jane Example`),
     label: text(label),
     heading: text(heading),
     text: text(`${heading} Text.`),

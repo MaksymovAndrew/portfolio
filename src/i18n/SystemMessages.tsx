@@ -10,6 +10,8 @@ export interface SystemMessages {
     home: string;
     notFound: Content["ui"]["notFound"];
     error: Content["ui"]["error"];
+    // drawn by the layout, which has the language: the views get no params
+    topBar: ReactNode;
 }
 
 interface SystemMessagesProviderProps {

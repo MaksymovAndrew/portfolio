@@ -1,3 +1,4 @@
+import { SOCIAL_IMAGE_DIR, SOCIAL_IMAGE_EXTENSION } from "constants/social";
 import type { SectionId } from "types/content";
 
 import type { Locale } from "i18n/locales";
@@ -33,6 +34,10 @@ export const localeLinks = (current: Locale): readonly LocaleLink[] =>
         name: LOCALE_META[locale].name,
         current: locale === current,
     }));
+
+// the version makes the platforms that cache a preview fetch the new card after a release
+export const socialImagePath = (locale: Locale, version: string): string =>
+    `${SOCIAL_IMAGE_DIR}/${locale}${SOCIAL_IMAGE_EXTENSION}?v=${version}`;
 
 // a language's address with the section being read, so switching keeps the place: "/pl#experience"
 export const localeHref = (href: string, section: SectionId | null): string =>

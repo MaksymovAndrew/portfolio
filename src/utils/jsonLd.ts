@@ -1,7 +1,8 @@
+import { APP_VERSION } from "config/app";
 import { SCHEMA_CONTEXT } from "constants/schema";
 import type { Content } from "types/content";
 
-import { localeUrl } from "i18n/paths";
+import { localeUrl, socialImagePath } from "i18n/paths";
 
 type Certificate = Content["certifications"]["items"][number];
 
@@ -34,6 +35,7 @@ export const buildProfileJsonLd = (content: Content, siteUrl: URL) => {
             description: seo.description,
             jobTitle: hero.eyebrow,
             url,
+            image: new URL(socialImagePath(locale, APP_VERSION), siteUrl).href,
             sameAs: profile.links.map((link) => link.href),
             knowsLanguage: profile.languages.map((language) => language.code),
             address: {

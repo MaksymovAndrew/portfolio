@@ -18,6 +18,7 @@ describe("MissingPage", () => {
                     home: ui.home,
                     notFound: ui.notFound,
                     error: ui.error,
+                    topBar: null,
                 }}
             >
                 <MissingPage />
@@ -29,14 +30,14 @@ describe("MissingPage", () => {
         );
     });
 
-    it("should name the page after the 404 heading and keep it out of search", async () => {
+    it("should name the page after the 404 title and keep it out of search", async () => {
         const locale = LOCALES.at(-1) ?? DEFAULT_LOCALE;
         const { ui } = getContent(locale);
 
         expect(
             await generateMetadata({ params: Promise.resolve({ locale }) }),
         ).toEqual({
-            title: ui.notFound.heading,
+            title: ui.notFound.title,
             description: ui.notFound.text,
             robots: { index: false },
             alternates: null,
