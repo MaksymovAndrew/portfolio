@@ -4,7 +4,7 @@
 
 A personal portfolio site built with Next.js: one page, generated ahead of time for every language. It doubles as a template - everything personal lives in three folders, and the rest is framework you do not have to touch.
 
-> Work in progress: the page frame, every section, the section navigation, the languages and the themes are in place; the motion and the link previews are on their way.
+> Work in progress: the page, its languages, themes, motion, link previews and error pages are in place; deployment and the final content are on their way.
 
 ## Stack
 
@@ -57,7 +57,7 @@ The lint rules keep the layers apart: text in a component, a raw colour or an im
 
 Two more checks run on the production build, in real browsers:
 
-- `npm run test:e2e` - Playwright builds the site and serves it on port 3100 (a server already running there is reused). Every language answers in Chromium, WebKit and Firefox; nothing scrolls sideways from 320 to 1440 pixels and axe finds no WCAG 2.2 AA violation, in both themes; the top bar gives way to the left column at 1024 pixels, with exactly one main heading on screen; the skip link leads to the content; the first screen's entry animation ends with every block in place, and under reduced motion every skill shows once and nothing moves; the pause button stops what moves by itself, at every width, and the choice holds across a reload before any script bundle runs; a stored theme applies before any script bundle runs; the page reads and its language links work without JavaScript; the server's HTML of every language carries its canonical address, the same set of language alternates, the preview tags and the structured data, and the sitemap, robots rules and manifest answer; no page logs an error.
+- `npm run test:e2e` - Playwright builds the site and serves it on port 3100 (a server already running there is reused). Every language answers in Chromium, WebKit and Firefox; nothing scrolls sideways from 320 to 1440 pixels and axe finds no WCAG 2.2 AA violation, in both themes, on the home and the 404 page; the top bar gives way to the left column at 1024 pixels, with exactly one main heading on screen; the skip link leads to the content; the first screen's entry animation ends with every block in place, and under reduced motion every skill shows once and nothing moves; the pause button stops what moves by itself, at every width, and the choice holds across a reload before any script bundle runs; a stored theme applies before any script bundle runs; the page reads and its language links work without JavaScript; the server's HTML of every language carries its canonical address, the same set of language alternates, the preview tags and the structured data, every preview card answers as a 1200x630 PNG under 300 KB, and the sitemap, robots rules and manifest answer; no page logs an error.
 - `npm run lighthouse` - Lighthouse with mobile emulation on every language of the last `npm run build`. The median of three runs must meet the thresholds in `lighthouse.config.mjs`; the HTML reports land in `lighthouse-report/`.
 
 Install the browsers once with `npx playwright install chromium webkit firefox`. On Windows with Smart App Control turned on, the unsigned WebKit build cannot start; run `npm run test:e2e -- --project=chromium --project=nojs` there - CI runs every browser.
@@ -98,7 +98,9 @@ Two files hold the look:
 - `theme/theme.ts` - both palettes, dark and light, with their tints, the two glow colours and the card radius. `defaultMode` is the theme a first visit opens in; `social.mode` is the one images of the site, such as link previews, are drawn in. The site writes these as CSS variables, so every colour on the page comes from here.
 - `theme/fonts.ts` - the three fonts, loaded with `next/font/google`: downloaded at build time and served by the site itself, never from Google. A page fetches only the alphabets its text uses; the Latin files of all three and the Cyrillic file of the body font are preloaded, so the running text of the first screen is drawn in its own font from the start.
 
-`theme/fonts/Unbounded-Bold.ttf` is a static copy of the heading font: the site icon is drawn from it, because the image renderer reads neither variable fonts nor woff2. Replace it together with the heading font, under the same name, and keep its licence next to it.
+`theme/fonts/` holds static copies of the three fonts, because the image renderer reads neither variable fonts nor woff2: `Unbounded-Bold.ttf` draws the site icon and the name on the link preview, `Manrope-SemiBold.ttf` the tagline and `JetBrainsMono-Medium.ttf` the role and the chips. Replace each together with its font in `theme/fonts.ts`, under the same name, with every alphabet of your languages, and keep the licence next to them.
+
+The link preview is drawn once per language at build time, at `/social/<language>.png`, from the role, name, tagline and chips of the first screen.
 
 The icon is the initials from `content/profile.ts` with a dot in the accent colour. A visitor's theme choice is remembered in the browser and applied before the first paint; without a stored choice the site opens in `defaultMode`, whatever the system setting.
 

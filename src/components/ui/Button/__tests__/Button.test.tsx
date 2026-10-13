@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 
-import { ButtonLink } from "components/ui/Button";
+import { Button, ButtonLink } from "components/ui/Button";
 
 describe("ButtonLink", () => {
     it("should link to its target", () => {
@@ -37,5 +37,20 @@ describe("ButtonLink", () => {
         expect(
             screen.getByRole("link", { name: "Get in touch" }),
         ).not.toHaveAttribute("data-magnetic");
+    });
+});
+
+describe("Button", () => {
+    it("should run its action on a click", () => {
+        const onClick = jest.fn();
+
+        render(
+            <Button variant="primary" onClick={onClick}>
+                Try again
+            </Button>,
+        );
+        fireEvent.click(screen.getByRole("button", { name: "Try again" }));
+
+        expect(onClick.mock.calls).toHaveLength(1);
     });
 });

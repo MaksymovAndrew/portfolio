@@ -149,6 +149,8 @@ export interface SeoSource {
 }
 
 export interface SystemPageSource {
+    // the browser tab
+    title: Localized;
     label: Localized;
     heading: Localized;
     text: Localized;

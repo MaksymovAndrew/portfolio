@@ -1,5 +1,6 @@
 import {
     LOCALES,
+    missingPathFor,
     pathFor,
     THEMES,
     VIEWPORT_HEIGHT,
@@ -13,21 +14,28 @@ for (const width of WIDTHS) {
 
         for (const mode of THEMES) {
             for (const locale of LOCALES) {
-                test(`should not scroll sideways in ${locale}, ${mode}`, async ({
-                    page,
-                }) => {
-                    await storeTheme(page, mode);
-                    await page.goto(pathFor(locale));
-                    await settle(page);
+                const pages = [
+                    { name: locale, path: pathFor(locale) },
+                    { name: `${locale} 404`, path: missingPathFor(locale) },
+                ];
 
-                    const overflow = await page.evaluate(
-                        () =>
-                            document.documentElement.scrollWidth -
-                            document.documentElement.clientWidth,
-                    );
+                for (const { name, path } of pages) {
+                    test(`should not scroll sideways in ${name}, ${mode}`, async ({
+                        page,
+                    }) => {
+                        await storeTheme(page, mode);
+                        await page.goto(path);
+                        await settle(page);
 
-                    expect(overflow).toBeLessThanOrEqual(0);
-                });
+                        const overflow = await page.evaluate(
+                            () =>
+                                document.documentElement.scrollWidth -
+                                document.documentElement.clientWidth,
+                        );
+
+                        expect(overflow).toBeLessThanOrEqual(0);
+                    });
+                }
             }
         }
     });

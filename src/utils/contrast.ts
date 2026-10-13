@@ -17,7 +17,7 @@ const FLARE = 0.05;
 
 type Rgb = readonly [number, number, number];
 
-const toRgb = (hex: string): Rgb => {
+export const toRgb = (hex: string): Rgb => {
     if (!HEX.test(hex)) {
         throw new Error(`Not a hex colour: ${hex}`);
     }
@@ -34,7 +34,7 @@ const toRgb = (hex: string): Rgb => {
     return [red, green, blue];
 };
 
-const toHex = (rgb: Rgb): string =>
+export const toHex = (rgb: Rgb): string =>
     `#${rgb
         .map((channel) =>
             Math.round(channel).toString(HEX_RADIX).padStart(2, "0"),

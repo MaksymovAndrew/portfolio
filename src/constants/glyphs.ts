@@ -4,6 +4,8 @@ export const GLYPHS = {
     range: "-",
     // between the place of an image and the count: "2 / 3"
     counter: "/",
+    // before a label where CSS cannot draw it, as on the preview card
+    comment: "//",
     // the terminal's prompt and home folder
     prompt: "➜",
     home: "~",

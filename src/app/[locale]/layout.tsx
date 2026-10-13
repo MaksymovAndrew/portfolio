@@ -11,6 +11,7 @@ import { body, display, mono } from "theme/fonts";
 import { theme } from "theme/theme";
 
 import { PointerEffects } from "components/effects/PointerEffects";
+import { TopBar } from "components/layout/TopBar";
 import { getContent } from "i18n/content";
 import { isLocale, LOCALES } from "i18n/locales";
 import { localePath } from "i18n/paths";
@@ -71,12 +72,14 @@ const RootLayout = async ({ children, params }: RootLayoutProps) => {
         notFound();
     }
 
-    const { ui } = getContent(locale);
+    const content = getContent(locale);
+    const { ui } = content;
     const systemMessages = {
         homeHref: localePath(locale),
         home: ui.home,
         notFound: ui.notFound,
         error: ui.error,
+        topBar: <TopBar content={content} variant="system" />,
     };
 
     return (

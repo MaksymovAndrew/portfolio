@@ -1,4 +1,6 @@
-import { localeUrl } from "i18n/paths";
+import { APP_VERSION } from "config/app";
+
+import { localeUrl, socialImagePath } from "i18n/paths";
 
 import { buildProfileJsonLd } from "utils/jsonLd";
 
@@ -40,6 +42,15 @@ describe("buildProfileJsonLd", () => {
                 "@type": "PostalAddress",
                 addressLocality: content.profile.city,
             },
+        });
+    });
+
+    it("should picture the person with the preview card of the page", () => {
+        expect(buildProfileJsonLd(content, SITE_URL).mainEntity).toMatchObject({
+            image: new URL(
+                socialImagePath(content.locale, APP_VERSION),
+                SITE_URL,
+            ).href,
         });
     });
 

@@ -29,6 +29,21 @@
     }
 }
 
+// in the page's flow above the message, without the band a sticky bar needs over scrolled content
+.top-bar--system {
+    position: static;
+    margin-inline: 0;
+    padding: max(22px, env(safe-area-inset-top)) 0 22px;
+
+    &::before {
+        content: none;
+    }
+
+    @include from(1024) {
+        display: flex;
+    }
+}
+
 :global(:root[data-scrolled]) .top-bar::before {
     border-bottom-color: var(--line);
 }

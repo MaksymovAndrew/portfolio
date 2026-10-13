@@ -1,5 +1,10 @@
 import type { UiSource } from "types/content";
 
+import { profile } from "./profile";
+
+// the tab of the 404 and error pages: what went wrong, then whose site it is
+const pageTitle = (what: string) => `${what} - ${profile.name}`;
+
 // interface words: labels for assistive technology, buttons, the 404 and error pages
 export const ui = {
     skipToContent: {
@@ -74,6 +79,11 @@ export const ui = {
         next: { en: "Next", pl: "Następny", uk: "Наступний" },
     },
     notFound: {
+        title: {
+            en: pageTitle("Page not found"),
+            pl: pageTitle("Nie znaleziono strony"),
+            uk: pageTitle("Сторінку не знайдено"),
+        },
         label: { en: "404", pl: "404", uk: "404" },
         heading: {
             en: "This page doesn't exist.",
@@ -93,6 +103,11 @@ export const ui = {
         },
     },
     error: {
+        title: {
+            en: pageTitle("Something went wrong"),
+            pl: pageTitle("Coś poszło nie tak"),
+            uk: pageTitle("Щось пішло не так"),
+        },
         label: { en: "error", pl: "błąd", uk: "помилка" },
         heading: {
             en: "Something went wrong.",

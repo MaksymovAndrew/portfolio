@@ -1,9 +1,12 @@
+import { ui } from "content/ui";
+
 import { expectAccessible } from "./support/axe";
 import {
     DEFAULT_LOCALE,
     LOCALES,
     missingPathFor,
     pathFor,
+    VIEWPORT_HEIGHT,
 } from "./support/site";
 import { expect, NOT_FOUND, test } from "./support/test";
 
@@ -69,5 +72,26 @@ for (const { path, locale } of NOT_FOUND_CASES) {
             "noindex",
         );
         await expectAccessible(page);
+    });
+}
+
+// the bar of the home page hides from 1024; the 404 page has no left column to take its place
+for (const width of [375, 1440]) {
+    test.describe(`at ${width}px`, () => {
+        test.use({ viewport: { width, height: VIEWPORT_HEIGHT } });
+
+        for (const locale of LOCALES) {
+            test(`should show the ${locale} 404 page under the top bar`, async ({
+                page,
+            }) => {
+                await page.goto(missingPathFor(locale));
+
+                await expect(page.getByRole("banner")).toBeVisible();
+                await expect(
+                    page.getByRole("heading", { level: 1 }),
+                ).toHaveText(ui.notFound.heading[locale]);
+                await expect(page).toHaveTitle(ui.notFound.title[locale]);
+            });
+        }
     });
 }
