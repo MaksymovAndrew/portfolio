@@ -64,6 +64,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - A sitemap with every language, robots rules that point to it, and a web manifest with app icons.
 - The production build requires the public site address in `NEXT_PUBLIC_SITE_URL` and stops with a clear error without it.
 - A wide preview card for shared links in the language of the page, generated at build time: role, name, tagline, status chips and initials; its address carries the version, so platforms fetch it again after a release.
+- Security headers on every response: a content security policy that keeps scripts, styles, images, fonts and connections on the site itself, HSTS, no MIME sniffing, no framing, a strict referrer policy and a closed permissions policy.
+- A security policy with a private way to report problems.
 - 404 and error pages in the site's own look, in every language: the top bar, the message, a terminal line and the way back; the error page offers to try again.
 
 ### Fixed
