@@ -39,6 +39,9 @@ describe("MissingPage", () => {
             title: ui.notFound.heading,
             description: ui.notFound.text,
             robots: { index: false },
+            alternates: null,
+            openGraph: null,
+            twitter: null,
         });
     });
 

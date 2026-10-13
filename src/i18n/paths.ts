@@ -14,6 +14,17 @@ export interface LocaleLink {
 export const localePath = (locale: Locale): string =>
     locale === DEFAULT_LOCALE ? "/" : `/${locale}`;
 
+export const localeUrl = (locale: Locale, siteUrl: URL): string =>
+    new URL(localePath(locale), siteUrl).href;
+
+// hreflang targets: every language, the page's own included, and x-default for a reader of none of them
+export const languageAlternates = (siteUrl: URL): Record<string, string> => ({
+    ...Object.fromEntries(
+        LOCALES.map((locale) => [locale, localeUrl(locale, siteUrl)]),
+    ),
+    "x-default": localeUrl(DEFAULT_LOCALE, siteUrl),
+});
+
 export const localeLinks = (current: Locale): readonly LocaleLink[] =>
     LOCALES.map((locale) => ({
         locale,

@@ -19,10 +19,13 @@ Requires Node.js 24 or newer (see `.nvmrc`).
 
 ```bash
 npm install
+cp .env.example .env.local
 npm run dev
 ```
 
 Then open <http://localhost:3000>. English lives at the root, Polish at `/pl`, Ukrainian at `/uk`.
+
+`NEXT_PUBLIC_SITE_URL` is the public origin of the site, such as `https://example.com`: no path, since every page address starts at the root. The canonical address, the language alternates, the sitemap and the structured data are built from it, so a production build without it stops with an error naming the variable. The copy of `.env.example` sets it to `http://localhost:3000` for local builds; the real address goes in at the deploy build. `npm run test:e2e` sets its own.
 
 ## Commands
 
@@ -54,7 +57,7 @@ The lint rules keep the layers apart: text in a component, a raw colour or an im
 
 Two more checks run on the production build, in real browsers:
 
-- `npm run test:e2e` - Playwright builds the site and serves it on port 3100 (a server already running there is reused). Every language answers in Chromium, WebKit and Firefox; nothing scrolls sideways from 320 to 1440 pixels and axe finds no WCAG 2.2 AA violation, in both themes; the top bar gives way to the left column at 1024 pixels, with exactly one main heading on screen; the skip link leads to the content; the first screen's entry animation ends with every block in place, and under reduced motion every skill shows once and nothing moves; the pause button stops what moves by itself, at every width, and the choice holds across a reload before any script bundle runs; a stored theme applies before any script bundle runs; the page reads and its language links work without JavaScript; no page logs an error.
+- `npm run test:e2e` - Playwright builds the site and serves it on port 3100 (a server already running there is reused). Every language answers in Chromium, WebKit and Firefox; nothing scrolls sideways from 320 to 1440 pixels and axe finds no WCAG 2.2 AA violation, in both themes; the top bar gives way to the left column at 1024 pixels, with exactly one main heading on screen; the skip link leads to the content; the first screen's entry animation ends with every block in place, and under reduced motion every skill shows once and nothing moves; the pause button stops what moves by itself, at every width, and the choice holds across a reload before any script bundle runs; a stored theme applies before any script bundle runs; the page reads and its language links work without JavaScript; the server's HTML of every language carries its canonical address, the same set of language alternates, the preview tags and the structured data, and the sitemap, robots rules and manifest answer; no page logs an error.
 - `npm run lighthouse` - Lighthouse with mobile emulation on every language of the last `npm run build`. The median of three runs must meet the thresholds in `lighthouse.config.mjs`; the HTML reports land in `lighthouse-report/`.
 
 Install the browsers once with `npx playwright install chromium webkit firefox`. On Windows with Smart App Control turned on, the unsigned WebKit build cannot start; run `npm run test:e2e -- --project=chromium --project=nojs` there - CI runs every browser.

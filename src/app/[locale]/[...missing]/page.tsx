@@ -7,6 +7,8 @@ import { NotFoundView } from "components/layout/NotFoundView";
 import { getContent } from "i18n/content";
 import { isLocale } from "i18n/locales";
 
+import { buildNotFoundMetadata } from "utils/metadata";
+
 interface MissingPageProps {
     params: Promise<{ locale: string }>;
 }
@@ -23,13 +25,7 @@ export const generateMetadata = async ({
         notFound();
     }
 
-    const { ui } = getContent(locale);
-
-    return {
-        title: ui.notFound.heading,
-        description: ui.notFound.text,
-        robots: { index: false },
-    };
+    return buildNotFoundMetadata(getContent(locale));
 };
 
 // rendered, not thrown: Next draws a thrown notFound() under the root layout only in the browser

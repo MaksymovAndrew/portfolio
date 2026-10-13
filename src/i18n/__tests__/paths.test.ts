@@ -1,5 +1,13 @@
 import { DEFAULT_LOCALE, LOCALE_META, LOCALES } from "i18n/locales";
-import { localeHref, localeLinks, localePath } from "i18n/paths";
+import {
+    languageAlternates,
+    localeHref,
+    localeLinks,
+    localePath,
+    localeUrl,
+} from "i18n/paths";
+
+const SITE_URL = new URL("https://example.com");
 
 describe("localePath", () => {
     it("should place the default language at the root", () => {
@@ -48,5 +56,32 @@ describe("localeHref", () => {
     it("should carry the current section into the address", () => {
         expect(localeHref("/", "about")).toBe("/#about");
         expect(localeHref("/de", "about")).toBe("/de#about");
+    });
+});
+
+describe("localeUrl", () => {
+    it("should give the default language the root of the site", () => {
+        expect(localeUrl(DEFAULT_LOCALE, SITE_URL)).toBe(
+            "https://example.com/",
+        );
+    });
+
+    it("should give every other language the site with its prefix", () => {
+        const others = LOCALES.filter((locale) => locale !== DEFAULT_LOCALE);
+
+        expect(others.map((locale) => localeUrl(locale, SITE_URL))).toEqual(
+            others.map((locale) => `https://example.com/${locale}`),
+        );
+    });
+});
+
+describe("languageAlternates", () => {
+    it("should name every language and send x-default to the default one", () => {
+        expect(languageAlternates(SITE_URL)).toEqual({
+            ...Object.fromEntries(
+                LOCALES.map((locale) => [locale, localeUrl(locale, SITE_URL)]),
+            ),
+            "x-default": localeUrl(DEFAULT_LOCALE, SITE_URL),
+        });
     });
 });

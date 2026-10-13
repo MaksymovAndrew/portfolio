@@ -1,14 +1,13 @@
-import { monogramImage } from "app/monogramImage";
+import { ICON_SIZES } from "constants/icons";
 
-// a browser tab asks for these
-const ICON_SIZES = [16, 32];
+import { monogramImage } from "app/monogramImage";
 
 interface IconProps {
     id: Promise<string>;
 }
 
 export const generateImageMetadata = () =>
-    ICON_SIZES.map((size) => ({
+    [...ICON_SIZES.tab, ...ICON_SIZES.app].map((size) => ({
         id: String(size),
         size: { width: size, height: size },
         contentType: "image/png",

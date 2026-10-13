@@ -3,3 +3,6 @@ export const PAGES = ["/"] as const;
 
 // the page each language prebuilds for addresses that do not exist
 export const NOT_FOUND_SEGMENT = "not-found";
+
+// where the site runs on this machine, for the addresses a development build writes
+export const DEV_SITE_URL = "http://localhost:3000";
