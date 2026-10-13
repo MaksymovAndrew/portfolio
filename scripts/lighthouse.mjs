@@ -132,10 +132,11 @@ const waitForServer = async () => {
     }
 };
 
-const runLighthouse = async (url, port) => {
-    const runs = [];
+// a run that Lighthouse itself fails to record (a lost trace on a cold browser) gets this many more tries
+const RUN_RETRIES = 2;
 
-    for (let run = 0; run < config.runs; run += 1) {
+const runOnce = async (url, port) => {
+    for (let attempt = 0; ; attempt += 1) {
         const { lhr, report } = await lighthouse(url, {
             port,
             output: "html",
@@ -143,11 +144,25 @@ const runLighthouse = async (url, port) => {
             onlyCategories: CATEGORIES,
         });
 
-        if (lhr.runtimeError) {
-            throw new Error(`${url}: ${lhr.runtimeError.message}`);
+        if (!lhr.runtimeError) {
+            return { lhr, report };
         }
 
-        runs.push({ lhr, report });
+        const message = `${url}: ${lhr.runtimeError.message}`;
+
+        if (attempt === RUN_RETRIES) {
+            throw new Error(message);
+        }
+
+        console.warn(`${message} Retrying.`);
+    }
+};
+
+const runLighthouse = async (url, port) => {
+    const runs = [];
+
+    for (let run = 0; run < config.runs; run += 1) {
+        runs.push(await runOnce(url, port));
     }
 
     return runs;
