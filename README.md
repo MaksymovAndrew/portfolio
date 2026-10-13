@@ -57,7 +57,7 @@ The lint rules keep the layers apart: text in a component, a raw colour or an im
 
 Two more checks run on the production build, in real browsers:
 
-- `npm run test:e2e` - Playwright builds the site and serves it on port 3100 (a server already running there is reused). Every language answers in Chromium, WebKit and Firefox; nothing scrolls sideways from 320 to 1440 pixels and axe finds no WCAG 2.2 AA violation, in both themes, on the home and the 404 page; the top bar gives way to the left column at 1024 pixels, with exactly one main heading on screen; the skip link leads to the content; the first screen's entry animation ends with every block in place, and under reduced motion every skill shows once and nothing moves; the pause button stops what moves by itself, at every width, and the choice holds across a reload before any script bundle runs; a stored theme applies before any script bundle runs; the page reads and its language links work without JavaScript; the server's HTML of every language carries its canonical address, the same set of language alternates, the preview tags and the structured data, every preview card answers as a 1200x630 PNG under 300 KB, and the sitemap, robots rules and manifest answer; no page logs an error.
+- `npm run test:e2e` - Playwright builds the site and serves it on port 3100 (a server already running there is reused). Every language answers in Chromium, WebKit and Firefox; nothing scrolls sideways from 320 to 1440 pixels and axe finds no WCAG 2.2 AA violation, in both themes, on the home and the 404 page; the top bar gives way to the left column at 1024 pixels, with exactly one main heading on screen; the skip link leads to the content; the first screen's entry animation ends with every block in place, and under reduced motion every skill shows once and nothing moves; the pause button stops what moves by itself, at every width, and the choice holds across a reload before any script bundle runs; a stored theme applies before any script bundle runs; the page reads and its language links work without JavaScript; the server's HTML of every language carries its canonical address, the same set of language alternates, the preview tags and the structured data, every preview card answers as a 1200x630 PNG under 300 KB, and the sitemap, robots rules and manifest answer; every kind of response carries the security headers; no page logs an error.
 - `npm run lighthouse` - Lighthouse with mobile emulation on every language of the last `npm run build`. The median of three runs must meet the thresholds in `lighthouse.config.mjs`; the HTML reports land in `lighthouse-report/`.
 
 Install the browsers once with `npx playwright install chromium webkit firefox`. On Windows with Smart App Control turned on, the unsigned WebKit build cannot start; run `npm run test:e2e -- --project=chromium --project=nojs` there - CI runs every browser.
@@ -132,6 +132,26 @@ The hero tagline, the About paragraphs, the experience bullets, the achievements
 | `\*`, `\[`, `\]`, `\)` | the character itself                                                                                                                                |
 
 Markup cannot be nested, and an address with parentheses goes under `refs`. `npm run verify` checks the content and names the field of every problem: an empty text, broken markup, an unknown `@key`, a link that is not https, mail, an anchor or a site path, a file missing from `public/`, a section listed twice, a button pointing at a section that is not on the page, a month not written as `YYYY-MM`. The same check stops the production build, and a test fails when the name, the email or a profile link from `content/profile.ts` appears in `src/`.
+
+## Security
+
+Every response carries these headers, set in `next.config.ts`:
+
+| Header                       | Value                                                                                                                                               |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Content-Security-Policy`    | scripts, styles, images, fonts, connections and the manifest only from the site itself; no plugins, no framing, forms and `<base>` only to the site |
+| `Strict-Transport-Security`  | one year, subdomains included; no preload, which would bind the whole domain to HTTPS for good                                                      |
+| `X-Content-Type-Options`     | `nosniff`                                                                                                                                           |
+| `X-Frame-Options`            | `DENY`                                                                                                                                              |
+| `Referrer-Policy`            | `strict-origin-when-cross-origin`                                                                                                                   |
+| `Permissions-Policy`         | camera, microphone, location and payment turned off                                                                                                 |
+| `Cross-Origin-Opener-Policy` | `same-origin`                                                                                                                                       |
+
+The policy allows inline scripts and styles. The pages are generated ahead of time, and Next.js puts its bootstrap data and the pre-paint theme script inline; a nonce would have to change on every request, which would make every page render on demand instead of being served as a file. The development server also gets `'unsafe-eval'` and `ws:` for its live reload. `npm run test:e2e` checks the exact values and fails on any policy violation in the console.
+
+The Node server sends these headers with every file, the build's scripts and `public/` included. A proxy or CDN that serves those files itself must send the same headers.
+
+To report a vulnerability, see [SECURITY.md](SECURITY.md).
 
 ## Licence
 
