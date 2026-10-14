@@ -17,6 +17,7 @@ lighthouse-report
 .git
 .github
 .husky
+docs
 e2e
 deploy
 

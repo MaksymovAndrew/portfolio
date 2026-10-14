@@ -1,7 +1,7 @@
 {
     "name": "portfolio",
     "version": "0.1.0",
-    "description": "Personal portfolio site that doubles as a template",
+    "description": "Personal portfolio site of Andrii Maksymov, frontend developer",
     "private": true,
     "license": "MIT",
     "type": "module",
@@ -24,6 +24,7 @@
         "test:coverage": "jest --coverage",
         "test:e2e": "playwright test",
         "lighthouse": "node scripts/lighthouse.mjs",
+        "screenshots": "node scripts/screenshots.mjs",
         "verify": "npm run format:check && npm run lint && npm run lint:sonarjs && npm run stylelint && npm run typecheck && npm run test:coverage && npm run build",
         "bump": "node scripts/release-version.mjs bump",
         "prepare": "husky"
