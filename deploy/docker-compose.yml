@@ -1,0 +1,38 @@
+name: portfolio
+
+# Lives in /srv/portfolio on the server, next to its .env. No host port: the reverse proxy
+# reaches the site over the shared external `edge` network.
+
+services:
+    web:
+        image: ${IMAGE}:${IMAGE_TAG}
+        restart: unless-stopped
+        healthcheck:
+            test:
+                [
+                    "CMD-SHELL",
+                    "wget -qO- http://127.0.0.1:8080/health | grep -q ok",
+                ]
+            interval: 15s
+            timeout: 5s
+            retries: 5
+            start_period: 20s
+        networks:
+            edge:
+                # unique on the shared network, where other projects run a `web` too
+                aliases: [portfolio-web]
+        mem_limit: 256m
+        cpus: 0.5
+        cap_drop: [ALL]
+        security_opt: ["no-new-privileges:true"]
+        # capped, so a chatty container cannot fill the disk
+        logging:
+            driver: json-file
+            options:
+                max-size: 10m
+                max-file: "3"
+
+networks:
+    edge:
+        name: edge
+        external: true

@@ -1,0 +1,30 @@
+# dependencies and build output: the image installs and builds its own
+node_modules
+.next
+*.tsbuildinfo
+next-env.d.ts
+
+# test output and reports
+coverage
+test-results
+playwright-report
+lighthouse-report
+
+*.log
+.DS_Store
+
+# not part of the build
+.git
+.github
+.husky
+e2e
+deploy
+
+# local secrets
+.env*
+
+# private working files
+orc
+.claude
+.vscode
+.idea

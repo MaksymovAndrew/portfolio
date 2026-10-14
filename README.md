@@ -4,7 +4,7 @@
 
 A personal portfolio site built with Next.js: one page, generated ahead of time for every language. It doubles as a template - everything personal lives in three folders, and the rest is framework you do not have to touch.
 
-> Work in progress: the page, its languages, themes, motion, link previews and error pages are in place; deployment and the final content are on their way.
+> Work in progress: the page, its languages, themes, motion, link previews, error pages and the deployment pipeline are in place; the final content and the first release are on their way.
 
 ## Stack
 
@@ -152,6 +152,21 @@ The policy allows inline scripts and styles. The pages are generated ahead of ti
 The Node server sends these headers with every file, the build's scripts and `public/` included. A proxy or CDN that serves those files itself must send the same headers.
 
 To report a vulnerability, see [SECURITY.md](SECURITY.md).
+
+## Deployment
+
+The site ships as a container image. The `Dockerfile` builds the pages with the public address baked in, then copies the standalone server into a small Node.js image that runs as an unprivileged user on port 8080 and answers `ok` at `/health`:
+
+```bash
+docker build --build-arg NEXT_PUBLIC_SITE_URL=https://example.com -t portfolio .
+docker run --rm -p 8080:8080 portfolio
+```
+
+A new address needs a new image: it is written into every page at build time. Every pull request builds the image, starts it without root and with every capability dropped, and checks that the health address, the page and its security headers answer.
+
+A release is a tag. Pushing `vX.Y.Z` - equal to the version in `package.json` - starts the Deploy workflow: it builds the image for ARM, publishes it to the GitHub Container Registry, and asks the server over SSH to roll it out. On the server, `deploy/deploy.sh` pulls the image, starts it with `deploy/docker-compose.yml`, waits until it is healthy, checks the site through the proxy (`deploy/Caddyfile`), and restores the previous release if any step fails; a failed first deploy has nothing to restore and leaves the server as it was. A successful tag also publishes a GitHub Release with the notes of that version from `CHANGELOG.md`. Running the workflow by hand with an older tag rolls back to it: an image already published under a tag is deployed as it is, never rebuilt, so a rollback brings back exactly what ran before.
+
+The workflow does nothing until the repository variable `SITE_DOMAIN` is set; it also needs the `production` environment with the secrets `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY` and `SSH_KNOWN_HOSTS`. The first push creates the `portfolio` package as private and the server pulls without signing in, so make the package public once and re-run the failed job. Without a container, the site runs on any Node.js 24 host as `npm run build` and `npm start`, or on a platform that builds Next.js itself, such as Vercel.
 
 ## Licence
 

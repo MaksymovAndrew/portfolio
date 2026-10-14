@@ -30,6 +30,18 @@ updates:
           - dependency-name: "@eslint/js"
             update-types: ["version-update:semver-major"]
 
+    # moves the pinned digest of the base image; its Node major follows .nvmrc and moves by hand
+    - package-ecosystem: docker
+      directory: "/"
+      schedule:
+          interval: weekly
+      commit-message:
+          prefix: chore
+          include: scope
+      ignore:
+          - dependency-name: "node"
+            update-types: ["version-update:semver-major"]
+
     # actions are pinned to commit SHAs; Dependabot moves the SHA and the version comment together
     - package-ecosystem: github-actions
       directories:

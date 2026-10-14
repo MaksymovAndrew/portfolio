@@ -67,6 +67,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Security headers on every response: a content security policy that keeps scripts, styles, images, fonts and connections on the site itself, HSTS, no MIME sniffing, no framing, a strict referrer policy and a closed permissions policy.
 - A security policy with a private way to report problems.
 - 404 and error pages in the site's own look, in every language: the top bar, the message, a terminal line and the way back; the error page offers to try again.
+- A production container image: a small Node.js runtime on a pinned base, run as an unprivileged user.
+- Every pull request builds the image for ARM, starts it with the production restrictions and checks that it answers.
+- Deployment by tag: the image is built for ARM, published, rolled out, health-checked through the proxy and, from the second release on, rolled back automatically on failure; running it again with an older tag redeploys that published image unchanged.
+- A GitHub Release with the notes of its version from this file is published for every release tag.
 
 ### Fixed
 
