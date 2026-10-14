@@ -149,10 +149,39 @@ jobs:
                   path: lighthouse-report/
                   retention-days: 14
 
+    image:
+        # the server's architecture, so its native packages are the ones checked
+        runs-on: ubuntu-24.04-arm
+        timeout-minutes: 20
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+            - name: Build the image
+              run: docker build --build-arg NEXT_PUBLIC_SITE_URL=http://127.0.0.1:8080 -t portfolio:ci .
+            - name: Start it with the production restrictions
+              run: docker run -d --name portfolio --cap-drop ALL --security-opt no-new-privileges -p 8080:8080 portfolio:ci
+            - name: Wait for the health check
+              run: |
+                  for _ in $(seq 30); do
+                      curl -fsS http://127.0.0.1:8080/health | grep -q ok && exit 0
+                      sleep 2
+                  done
+                  docker logs portfolio
+                  exit 1
+            - name: Check the page, its headers and the user
+              run: |
+                  curl -fsS http://127.0.0.1:8080/ | grep -q '<html lang="'
+                  curl -fsSI http://127.0.0.1:8080/ | grep -qi '^content-security-policy:'
+                  [ "$(docker exec portfolio id -u)" != 0 ]
+            - name: Remove the container
+              if: always()
+              run: docker rm -f portfolio
+
     ci-success:
         name: ci-success
         if: always()
-        needs: [pr-title, format, quality, build, e2e, lighthouse]
+        needs: [pr-title, format, quality, build, e2e, lighthouse, image]
         runs-on: ubuntu-latest
         timeout-minutes: 5
         steps:

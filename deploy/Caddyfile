@@ -1,0 +1,8 @@
+# Goes to /srv/edge/sites/portfolio.caddy on the server, where the shared Caddy imports every
+# file of that folder. Replace example.com with the domain; its DNS record must resolve before
+# the reload, or the certificate request fails.
+
+example.com {
+	encode zstd gzip
+	reverse_proxy portfolio-web:8080
+}

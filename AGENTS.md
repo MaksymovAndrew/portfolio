@@ -65,6 +65,8 @@ A personal portfolio site that doubles as a template. Everything personal lives 
 
 Next.js 16 (App Router, static generation per language, standalone output), React 19, TypeScript 6 strict, SCSS Modules, Node.js 24, npm. Checks: ESLint, Stylelint, Prettier, Jest, Playwright with axe, Lighthouse.
 
+Production is the `Dockerfile` image: the standalone server as user `node` on port 8080, `/health` answers `ok`, `NEXT_PUBLIC_SITE_URL` is a build argument. A `v*` tag equal to the version in `package.json` runs `.github/workflows/deploy.yml`, which rolls the image out through `deploy/deploy.sh`; the CI job `image` builds and probes it on every pull request.
+
 ## Commands
 
 | Command              | Purpose                                                    |

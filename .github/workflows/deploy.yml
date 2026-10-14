@@ -1,0 +1,161 @@
+name: Deploy
+
+on:
+    push:
+        tags: ["v*"]
+    # re-deploys a release or rolls back to an older one without a new tag
+    workflow_dispatch:
+        inputs:
+            tag:
+                description: Release tag to build and deploy, such as v1.0.0
+                required: true
+
+permissions:
+    contents: read
+
+# deploys never overlap and a running one is never cancelled; of several waiting runs only the newest is kept
+concurrency:
+    group: deploy
+    cancel-in-progress: false
+
+env:
+    RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+    # a manual run builds the tag it names, never the branch it was started from
+    SOURCE_REF: refs/tags/${{ inputs.tag || github.ref_name }}
+
+jobs:
+    check:
+        # a fork or a repository without a domain skips the whole workflow
+        if: ${{ vars.SITE_DOMAIN != '' }}
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        outputs:
+            image: ${{ steps.release.outputs.image }}
+            version: ${{ steps.release.outputs.version }}
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  ref: ${{ env.SOURCE_REF }}
+                  persist-credentials: false
+            - name: Check the tag against the package version
+              id: release
+              env:
+                  OWNER: ${{ github.repository_owner }}
+              run: |
+                  version=$(jq -r .version package.json)
+                  if [ "$RELEASE_TAG" != "v$version" ]; then
+                      echo "::error::tag $RELEASE_TAG does not match version $version in package.json"
+                      exit 1
+                  fi
+                  # registry paths are lower-case, GitHub owner names are not
+                  echo "image=ghcr.io/${OWNER,,}/portfolio" >> "$GITHUB_OUTPUT"
+                  echo "version=$version" >> "$GITHUB_OUTPUT"
+
+    build:
+        needs: check
+        # native ARM like the server: emulating it on x86 is many times slower
+        runs-on: ubuntu-24.04-arm
+        timeout-minutes: 30
+        permissions:
+            contents: read
+            packages: write
+        steps:
+            - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+            # a rollback or a re-run deploys the very image that was published, never a rebuild of it
+            - name: Look for the published image
+              id: published
+              env:
+                  IMAGE: ${{ needs.check.outputs.image }}
+              run: |
+                  if docker buildx imagetools inspect "$IMAGE:$RELEASE_TAG" >/dev/null 2>&1; then
+                      echo "found=true" >> "$GITHUB_OUTPUT"
+                      echo "::notice::$IMAGE:$RELEASE_TAG is already published, deploying it as it is"
+                  fi
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              if: ${{ steps.published.outputs.found != 'true' }}
+              with:
+                  ref: ${{ env.SOURCE_REF }}
+                  persist-credentials: false
+            - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+              if: ${{ steps.published.outputs.found != 'true' }}
+            - uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+              if: ${{ steps.published.outputs.found != 'true' }}
+              id: meta
+              with:
+                  images: ${{ needs.check.outputs.image }}
+                  # latest follows real releases only: re-deploying an older tag never moves it back
+                  tags: |
+                      type=raw,value=${{ env.RELEASE_TAG }}
+                      type=raw,value=latest,enable=${{ github.event_name == 'push' }}
+            - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+              if: ${{ steps.published.outputs.found != 'true' }}
+              with:
+                  context: .
+                  platforms: linux/arm64
+                  push: true
+                  tags: ${{ steps.meta.outputs.tags }}
+                  labels: ${{ steps.meta.outputs.labels }}
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
+                  # inlined into the pages: a new domain needs a new image
+                  build-args: NEXT_PUBLIC_SITE_URL=https://${{ vars.SITE_DOMAIN }}
+
+    deploy:
+        needs: [check, build]
+        runs-on: ubuntu-latest
+        environment: production
+        timeout-minutes: 15
+        steps:
+            # the server pins the key to its deploy script: this job can ask for a tag, never a shell
+            - name: Deploy over SSH
+              env:
+                  DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+                  DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+                  DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+                  SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+                  OWNER: ${{ github.repository_owner }}
+              run: |
+                  install -m 700 -d ~/.ssh
+                  printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+                  printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+                  chmod 600 ~/.ssh/deploy_key ~/.ssh/known_hosts
+
+                  # the owner travels with the tag: a transferred repository publishes under a new namespace
+                  ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes \
+                      -o ConnectTimeout=20 -o ServerAliveInterval=30 -o ServerAliveCountMax=4 \
+                      "$DEPLOY_USER@$DEPLOY_HOST" "${OWNER,,} $RELEASE_TAG"
+
+    release:
+        if: ${{ github.event_name == 'push' }}
+        needs: [check, deploy]
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        permissions:
+            contents: write
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  ref: ${{ env.SOURCE_REF }}
+                  persist-credentials: false
+            - name: Publish the release with its changelog notes
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  VERSION: ${{ needs.check.outputs.version }}
+              run: |
+                  node scripts/release-notes.mjs "$VERSION" > release-notes.md
+                  # a 0.x version is a preview of the site, not its first stable release
+                  prerelease=()
+                  if [[ "$VERSION" == 0.* ]]; then
+                      prerelease=(--prerelease)
+                  fi
+                  # a re-run after a successful deploy finds the release already there
+                  if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+                      gh release edit "$RELEASE_TAG" --notes-file release-notes.md
+                  else
+                      gh release create "$RELEASE_TAG" --verify-tag --title "$RELEASE_TAG" \
+                          --notes-file release-notes.md "${prerelease[@]}"
+                  fi
