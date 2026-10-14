@@ -4,7 +4,7 @@ Guidance for AI coding agents and human contributors working in this repository.
 
 ## What this is
 
-A personal portfolio site that doubles as a template. Everything personal lives in three folders; everything else is framework.
+The personal portfolio site of Andrii Maksymov: one page in three languages, generated ahead of time. Everything personal lives in three folders; everything else is the code that draws it.
 
 ## The one rule
 
@@ -48,6 +48,12 @@ A personal portfolio site that doubles as a template. Everything personal lives 
 - The section being read comes from `activeSectionStore`, with observers and no scroll listener: the topmost section in a band just above the middle of the window, the last one once it is in full view (the end of the page). A chosen `SectionNav` link marks its section at once and holds it until the reader scrolls again (wheel, touch, a scrolling key, the scrollbar); a click with a modifier is left to the browser. `SectionNav` (left column and menu sheet) marks it with `aria-current="location"`; the items come from `buildNavItems`, so a section without a `nav` label stays out. Below 1024 pixels the top bar sticks and `html` keeps `scroll-padding-top` for it; an open menu sheet closes once the window is wide enough for the left column.
 - The security headers live in `next.config.ts`, the same on every response of a build. Something blocked by the content security policy gets its one directive widened, with the reason in the README's Security section; `e2e/security.spec.ts` holds the exact values.
 - A control that works only through its island (theme, menu, copy, pause) is hidden without the `js` class and keeps its place but stays invisible until hydrated (`useHydrated`, the `waits-for-hydration` mixin), so it never shows a click that does nothing.
+
+## Recipes
+
+- **A section.** Add its id to `SECTION_IDS` in `constants/sections.ts`; its texts to a new file in `content/`, added to `source` in `content/index.ts` under the section's id; its type, extending `SectionMeta` (`label`, and `nav` - `null` keeps it out of the navigation), to `ContentSource` in `types/content.ts`, and its slice to the fixture in `test/fixtures/content`; the component to `components/sections/<Name>/` and to `SECTIONS`; then list the id in `site.sections`. The type of `SECTIONS` fails until the component is there.
+- **A language.** Add it to `LOCALES` and `LOCALE_META` in `content/locales.ts`; the type check then lists every `Localized` field still missing it. The static fonts of `theme/fonts/` must cover its alphabet, as they draw the previews; add it to `subsets` in `theme/fonts.ts` only when its letters should be preloaded. Routing, metadata, the sitemap, the previews and the tests follow `LOCALES` by themselves.
+- **A field.** Add it to the type in `types/content.ts`, the value to its `content/` file and to the fixture; a field with markup also goes to `richFields` in `i18n/fields.ts`, a link, file, month, period or refs object to `linkFields`, `fileFields`, `monthFields`, `periodFields` or `refsFields`, so `validateContent` checks it. The component reads it from its `content` slice.
 
 ## Working rules
 

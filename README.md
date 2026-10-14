@@ -1,10 +1,25 @@
 # Portfolio
 
-[![CI](https://github.com/MaksymovAndrew/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/MaksymovAndrew/portfolio/actions/workflows/ci.yml)
+[![CI](https://github.com/MaksymovAndrew/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/MaksymovAndrew/portfolio/actions/workflows/ci.yml) [![Licence: MIT](https://img.shields.io/badge/licence-MIT-blue.svg)](LICENSE)
 
-A personal portfolio site built with Next.js: one page, generated ahead of time for every language. It doubles as a template - everything personal lives in three folders, and the rest is framework you do not have to touch.
+The personal site of Andrii Maksymov, frontend developer: one page in English, Polish and Ukrainian, generated ahead of time with Next.js.
 
-> Work in progress: the page, its languages, themes, motion, link previews, error pages and the deployment pipeline are in place; the final content and the first release are on their way.
+<picture>
+    <source media="(prefers-color-scheme: light)" srcset="docs/screenshots/light.png">
+    <img src="docs/screenshots/dark.png" alt="The first screen of the site: the language and theme controls, the role, the name, the tagline and the section links on the left; a short summary, status chips, two buttons and two rows of skills on the right" width="1440">
+</picture>
+
+> The first public release is on its way.
+
+## What is inside
+
+- **Static pages.** Every language is a page built ahead of time and served as a file; the icons and the link previews are drawn at build time too. At request time the server only picks the language page for the address.
+- **Three languages, one address each.** English at `/`, Polish at `/pl`, Ukrainian at `/uk`, each with its own title, description, canonical address, language alternates, structured data and link preview.
+- **Two themes.** Dark and light, remembered and applied before the first paint, switched with a circle growing from the button.
+- **Accessibility.** WCAG 2.2 AA in both themes: keyboard, visible focus, checked contrast, reduced motion, a pause for everything that moves by itself, and a page that reads without JavaScript. See [ACCESSIBILITY.md](ACCESSIBILITY.md).
+- **Motion that stays out of the way.** An entry animation, scroll reveals and, with a mouse only, a soft light, a custom cursor and magnetic buttons; touch devices never download that code.
+- **Checks on every change.** Linting, type checks, unit tests, browser tests with axe in Chromium and a smoke run in WebKit and Firefox, and Lighthouse budgets on every pull request.
+- **Tag-driven deployment.** A container image built for ARM, rolled out by a release tag, health-checked through the proxy and rolled back to the previous release on failure.
 
 ## Stack
 
@@ -12,8 +27,9 @@ A personal portfolio site built with Next.js: one page, generated ahead of time 
 - React 19, TypeScript 6 in strict mode
 - SCSS Modules
 - Node.js 24, npm
+- Jest with React Testing Library, Playwright with axe, Lighthouse
 
-## Getting started
+## Quick start
 
 Requires Node.js 24 or newer (see `.nvmrc`).
 
@@ -23,19 +39,22 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Then open <http://localhost:3000>. English lives at the root, Polish at `/pl`, Ukrainian at `/uk`.
+Then open <http://localhost:3000>.
 
 `NEXT_PUBLIC_SITE_URL` is the public origin of the site, such as `https://example.com`: no path, since every page address starts at the root. The canonical address, the language alternates, the sitemap and the structured data are built from it, so a production build without it stops with an error naming the variable. The copy of `.env.example` sets it to `http://localhost:3000` for local builds; the real address goes in at the deploy build. `npm run test:e2e` sets its own.
 
 ## Commands
 
-| Command             | What it does                                                |
-| ------------------- | ----------------------------------------------------------- |
-| `npm run dev`       | Development server with hot reload                          |
-| `npm run build`     | Production build: every page is generated ahead of time     |
-| `npm start`         | Serves the production build with the same server that ships |
-| `npm run typecheck` | Type check of the whole project                             |
-| `npm run bump`      | Sets the release version in `package.json` and the lockfile |
+| Command               | What it does                                                |
+| --------------------- | ----------------------------------------------------------- |
+| `npm run dev`         | Development server with hot reload                          |
+| `npm run build`       | Production build: every page is generated ahead of time     |
+| `npm start`           | Serves the production build with the same server that ships |
+| `npm run verify`      | Every check of the next section, then the production build  |
+| `npm run test:e2e`    | Browser tests on the production build                       |
+| `npm run lighthouse`  | Lighthouse thresholds on the last production build          |
+| `npm run screenshots` | Draws the screenshots above from the last production build  |
+| `npm run bump`        | Sets the release version in `package.json` and the lockfile |
 
 `npm start` needs a build first and listens on port 3000 of every interface: `localhost` on this machine, and the printed address on a phone connected to the same network (Windows asks once whether Node.js may accept connections: allow private networks). Set `PORT` or `SERVE_HOST` to change that. `npm run dev` opens on a phone the same way, at the `Network` address it prints. Use a host name or `0.0.0.0`, never a loopback address such as `127.0.0.1` or `::1`: Next calls those `localhost` inside the proxy, and its rewrites stop finding the server.
 
@@ -45,7 +64,6 @@ Then open <http://localhost:3000>. English lives at the root, Polish at `/pl`, U
 
 | Command                 | What it checks                                                                |
 | ----------------------- | ----------------------------------------------------------------------------- |
-| `npm run verify`        | Everything below, then the production build                                   |
 | `npm run format:check`  | Formatting (Prettier); `npm run format` fixes it                              |
 | `npm run lint`          | ESLint: types, imports, accessibility, the layer rules                        |
 | `npm run lint:sonarjs`  | Code smells and cognitive complexity                                          |
@@ -53,7 +71,7 @@ Then open <http://localhost:3000>. English lives at the root, Polish at `/pl`, U
 | `npm run typecheck`     | Types of the app, the unit and browser tests and the TypeScript configs       |
 | `npm run test:coverage` | Unit tests (Jest, React Testing Library) with an 80% coverage threshold       |
 
-The lint rules keep the layers apart: text in a component, a raw colour or an import of `content/` from `src/` anywhere but `src/i18n/` and `src/guards/` fails the check.
+`npm run verify` runs all of them, then the production build. The lint rules keep the layers apart: text in a component, a raw colour or an import of `content/` from `src/` anywhere but `src/i18n/` and `src/guards/` fails the check.
 
 Two more checks run on the production build, in real browsers:
 
@@ -64,22 +82,26 @@ Install the browsers once with `npx playwright install chromium webkit firefox`.
 
 Git hooks are installed by `npm install`. A commit fixes and formats the staged files and runs the type check; a commit message must follow [Conventional Commits](https://www.conventionalcommits.org/) with a header of at most 72 characters; a direct push to `main` is refused.
 
-All of these checks run on GitHub Actions for every pull request and every push to `main`, together with a check that the pull request title follows Conventional Commits. One check, `ci-success`, sums them up: make it the required status check of `main`. Dependabot proposes dependency updates once a week: minor and patch npm updates arrive as one pull request, workflow actions as another, major versions one by one.
+All of these checks run on GitHub Actions for every pull request and every push to `main`, together with a check that the pull request title follows Conventional Commits and a build of the container image. One check, `ci-success`, sums them up and is the required status check of `main`. Dependabot proposes dependency updates once a week: minor and patch npm updates arrive as one pull request, workflow actions as another, major versions one by one.
 
-## Project layout
+## How it is built
 
-| Folder     | Holds                                         |
-| ---------- | --------------------------------------------- |
-| `content/` | Words, facts, links and the list of languages |
-| `theme/`   | Colours and fonts                             |
-| `public/`  | The CV and images                             |
-| `src/`     | Behaviour and layout - the framework          |
+### Layers
 
-To make the site your own, change `content/`, `theme/` and `public/`. `src/` holds no personal data, no raw colours and no user-facing text.
+| Folder     | Holds                                                      |
+| ---------- | ---------------------------------------------------------- |
+| `content/` | Every word, fact and link, with all languages side by side |
+| `theme/`   | Both palettes and the fonts                                |
+| `public/`  | The CV and images                                          |
+| `src/`     | Behaviour and layout                                       |
 
-The languages are listed in `content/locales.ts`.
+`src/` holds no personal data, no raw colours and no user-facing text: a component receives the strings of one language through its props, and a page asks for them with `getContent(locale)`. Only `src/i18n/` and `src/guards/` read `content/`; the lint rules and a test hold that line.
 
-## Addresses and languages
+### Components
+
+Components are server components by default, so the page arrives as HTML. A client component appears only where the browser has work to do: the theme and pause buttons, the language links that keep the section being read, the section navigation, the phone menu, the back-to-top button and the top bar's scroll line, the copy button, the image viewer and its dialog, the terminal and the clock, the scroll reveal and the pointer effects, and the 404 and error views. The theme, the pause and the section being read live on `<html>` (`data-theme`, `data-motion`) and in small stores rather than in a context provider; an inline script restores the stored theme and pause before the first paint.
+
+### Addresses and languages
 
 | Address                                 | What it shows                                          |
 | --------------------------------------- | ------------------------------------------------------ |
@@ -91,22 +113,7 @@ The languages are listed in `content/locales.ts`.
 
 An unknown address that looks like a file - a dot in it, as in `/old.pdf` - skips this and gets the framework's plain 404. The languages and the default one come from `content/locales.ts`; the addresses follow them. The site never picks a language for the visitor and sets no cookies: the address alone decides.
 
-## Changing the look
-
-Two files hold the look:
-
-- `theme/theme.ts` - both palettes, dark and light, with their tints, the two glow colours and the card radius. `defaultMode` is the theme a first visit opens in; `social.mode` is the one images of the site, such as link previews, are drawn in. The site writes these as CSS variables, so every colour on the page comes from here.
-- `theme/fonts.ts` - the three fonts, loaded with `next/font/google`: downloaded at build time and served by the site itself, never from Google. A page fetches only the alphabets its text uses; the Latin files of all three and the Cyrillic file of the body font are preloaded, so the running text of the first screen is drawn in its own font from the start.
-
-`theme/fonts/` holds static copies of the three fonts, because the image renderer reads neither variable fonts nor woff2: `Unbounded-Bold.ttf` draws the site icon and the name on the link preview, `Manrope-SemiBold.ttf` the tagline and `JetBrainsMono-Medium.ttf` the role and the chips. Replace each together with its font in `theme/fonts.ts`, under the same name, with every alphabet of your languages, and keep the licence next to them.
-
-The link preview is drawn once per language at build time, at `/social/<language>.png`, from the role, name, tagline and chips of the first screen.
-
-The icon is the initials from `content/profile.ts` with a dot in the accent colour. A visitor's theme choice is remembered in the browser and applied before the first paint; without a stored choice the site opens in `defaultMode`, whatever the system setting.
-
-`npm run verify` checks the contrast of both palettes: every text colour on its backgrounds must reach 4.5:1, and a failure names the pair and its ratio.
-
-## Editing content
+### Content
 
 Every word on the site lives in `content/`, one file per part of the page, with all languages side by side:
 
@@ -118,20 +125,13 @@ tagline: {
 },
 ```
 
-A text missing in one of the languages fails the type check. Names, technologies, links and numbers that read the same everywhere are written once.
+A text missing in one of the languages fails the type check. `sections` in `content/site.ts` decides which sections the page shows and in what order.
 
-`sections` in `content/site.ts` decides which sections the page shows and in what order: move a line to move a section, delete it to hide one. The same file holds the footer's credit line and the technologies listed next to the version.
+The longer texts accept a small markup - `**bold**`, `*accent*`, `[label](target)` - rendered by one component without raw HTML and stripped for meta tags and images. The build checks the content and names the field of every problem, among others: an empty text, broken markup, an unknown link reference, a link that is not https, mail, an anchor or a site path, a file missing from `public/`, a section listed twice, a button pointing at a section that is not on the page, a month not written as `YYYY-MM`, a period that ends before it starts.
 
-The hero tagline, the About paragraphs, the experience bullets, the achievements and the project story and bullets accept a small markup; every other field shows its text exactly as written.
+### Look
 
-| Write                  | Get                                                                                                                                                 |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `**words**`            | bold                                                                                                                                                |
-| `*words*`              | accent                                                                                                                                              |
-| `[label](target)`      | a link to `https://...`, `mailto:...`, `#section`, `/path`, or `@key` - an address written once under `refs` of the About section or of the project |
-| `\*`, `\[`, `\]`, `\)` | the character itself                                                                                                                                |
-
-Markup cannot be nested, and an address with parentheses goes under `refs`. `npm run verify` checks the content and names the field of every problem: an empty text, broken markup, an unknown `@key`, a link that is not https, mail, an anchor or a site path, a file missing from `public/`, a section listed twice, a button pointing at a section that is not on the page, a month not written as `YYYY-MM`. The same check stops the production build, and a test fails when the name, the email or a profile link from `content/profile.ts` appears in `src/`.
+`theme/theme.ts` holds both palettes; the root layout turns them into CSS variables, so every colour on the page comes from there, and a test checks that every text colour reaches 4.5:1 on its backgrounds in both themes. `theme/fonts.ts` loads the three fonts through `next/font/google`: downloaded at build time and served by the site itself, never from Google, with only the alphabets a page uses. `theme/fonts/` holds static copies for the images drawn at build time: the site icon and one link preview per language at `/social/<language>.png`.
 
 ## Security
 
@@ -168,6 +168,10 @@ A release is a tag. Pushing `vX.Y.Z` - equal to the version in `package.json` - 
 
 The workflow does nothing until the repository variable `SITE_DOMAIN` is set; it also needs the `production` environment with the secrets `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY` and `SSH_KNOWN_HOSTS`. The first push creates the `portfolio` package as private and the server pulls without signing in, so make the package public once and re-run the failed job. Without a container, the site runs on any Node.js 24 host as `npm run build` and `npm start`, or on a platform that builds Next.js itself, such as Vercel.
 
+## Accessibility
+
+The site targets WCAG 2.2 AA. What it supports, how it is tested, its known limits and how to report a problem: [ACCESSIBILITY.md](ACCESSIBILITY.md).
+
 ## Licence
 
-The code is released under the [MIT licence](LICENSE). The personal content in `content/` and `public/` - texts, images, the CV - is not part of that grant: replace it with your own.
+The code is released under the [MIT licence](LICENSE). The personal content in `content/` and `public/` - the texts, the images and the CV - is not part of that grant and may not be reused.
