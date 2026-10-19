@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-19
+
+### Changed
+
+- Version 1.0.0: the first stable release, checked on the live site.
+- The CV links the portfolio site.
+
 ## [0.9.0] - 2026-10-19
 
 ### Added
