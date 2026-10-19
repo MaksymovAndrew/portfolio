@@ -112,6 +112,38 @@ for (const viewport of [DESKTOP, SHORT_LAPTOP]) {
     });
 }
 
+// an image that has arrived and decoded has a width of its own
+const loadedWidth = (image: ReturnType<Page["locator"]>) => () =>
+    image.evaluate((element: HTMLImageElement) => element.naturalWidth);
+
+for (const shot of screenshots) {
+    const index = screenshots.indexOf(shot);
+
+    test(`should load the thumbnail and the full image of screenshot ${String(index + 1)}`, async ({
+        page,
+    }) => {
+        await page.setViewportSize(DESKTOP);
+        await page.goto(pathFor(DEFAULT_LOCALE));
+        await thumbnail(page, index).scrollIntoViewIfNeeded();
+
+        await expect
+            .poll(loadedWidth(thumbnail(page, index).locator("img")))
+            .toBeGreaterThan(0);
+
+        await thumbnail(page, index).click();
+
+        const image = viewer(page, index).getByRole("img", {
+            name: shot.image.alt[DEFAULT_LOCALE],
+        });
+
+        await expect(image).toBeVisible();
+        // much wider than a thumbnail: the viewer asks for a larger file
+        await expect
+            .poll(loadedWidth(image))
+            .toBeGreaterThan(DESKTOP.width / 2);
+    });
+}
+
 test("should keep the page still under the open viewer", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
     await page.goto(pathFor(DEFAULT_LOCALE));

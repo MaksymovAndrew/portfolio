@@ -42,6 +42,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Experience section: role, period, company, summary, responsibilities and technologies.
 - Achievements shown as a diff file with six shipped results.
 - Featured project card: description, screenshots, the story of the project, key facts, technologies and links.
+- Three screenshots of the featured project, with a caption and a description in every language.
+- Three Anthropic certificates with their images, completion months and verification links.
+- The CV as a PDF download in the left column, the top bar and the contact section.
 - Image viewer: opens from a thumbnail, arrows and keyboard arrows switch images, Escape closes it.
 - Placeholders where an image is not available yet.
 - Certifications list; each certificate opens in the viewer with its credential ID and links to its verification page.

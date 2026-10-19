@@ -20,7 +20,7 @@ export const profile = {
         {
             id: "linkedin",
             label: "LinkedIn",
-            href: "https://www.linkedin.com/in/andrewmaksymov",
+            href: "https://www.linkedin.com/in/andrew-maksymov",
         },
         {
             id: "telegram",
@@ -28,8 +28,7 @@ export const profile = {
             href: "https://t.me/Andrew_Maksymov",
         },
     ],
-    // with public/cv.pdf in place: { href: "/cv.pdf", label: "CV" }
-    cv: null,
+    cv: { href: "/Andrii_Maksymov_CV.pdf", label: "CV" },
     languages: [
         {
             code: "en",

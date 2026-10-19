@@ -18,7 +18,7 @@ export const education = {
                 pl: "studia inżynierskie",
                 uk: "ступінь інженера",
             },
-            period: { start: "2024-10", end: null },
+            period: null,
         },
     ],
 } satisfies EducationSource;

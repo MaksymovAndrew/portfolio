@@ -3,7 +3,7 @@ import type { AchievementsSource } from "types/content";
 export const achievements = {
     label: {
         en: "what I've shipped",
-        pl: "co dostarczyłem",
+        pl: "co wdrożyłem",
         uk: "мої здобутки",
     },
     nav: { en: "Shipped", pl: "Osiągnięcia", uk: "Здобутки" },
@@ -11,13 +11,13 @@ export const achievements = {
     items: [
         {
             en: "Built **PostHog product analytics from scratch** across registration and deposit funnels - 10+ key user events, first-ever visibility into drop-off points",
-            pl: "Wdrożyłem od zera **analitykę produktową PostHog** dla lejków rejestracji i wpłat - ponad 10 kluczowych zdarzeń i pełny obraz punktów odpływu użytkowników",
-            uk: "Впровадив з нуля **продуктову аналітику PostHog** для воронок реєстрації та депозитів - 10+ ключових подій і повна картина точок відтоку користувачів",
+            pl: "Wdrożyłem od zera **analitykę produktową PostHog** w lejkach rejestracji i wpłat - ponad 10 kluczowych zdarzeń i po raz pierwszy jasny obraz tego, gdzie użytkownicy rezygnują",
+            uk: "Впровадив з нуля **продуктову аналітику PostHog** для воронок реєстрації та депозитів - 10+ ключових подій і вперше чітка картина того, де саме користувачі залишають воронку",
         },
         {
             en: "Migrated a production codebase from **~20% to ~70% TypeScript coverage**, unblocking CI quality gates for the team",
-            pl: "Zmigrowałem produkcyjny kod z **~20% do ~70% pokrycia TypeScriptem**, odblokowując quality gates w CI dla zespołu",
-            uk: "Мігрував продакшн-кодову базу з **~20% до ~70% покриття TypeScript**, розблокувавши quality gates у CI для команди",
+            pl: "Zwiększyłem pokrycie TypeScriptem produkcyjnego kodu **z ~20% do ~70%**, co odblokowało zespołowi quality gates w CI",
+            uk: "Розширив покриття TypeScript у продакшн-коді **з ~20% до ~70%**, що розблокувало для команди quality gates у CI",
         },
         {
             en: "Raised unit test coverage to **~80%** across critical frontend components (Jest + SonarQube)",
@@ -26,8 +26,8 @@ export const achievements = {
         },
         {
             en: "Refactored mobile scroll architecture - recovering **up to 10% of visible screen space** on mobile",
-            pl: "Przebudowałem architekturę przewijania na mobile - odzyskując **do 10% widocznej przestrzeni ekranu**",
-            uk: "Переробив архітектуру мобільного скролу - звільнив **до 10% видимої площі екрана** на мобільних",
+            pl: "Przebudowałem przewijanie w wersji mobilnej, odzyskując **do 10% widocznej powierzchni ekranu**",
+            uk: "Переробив скрол у мобільній версії - звільнив **до 10% видимої площі екрана**",
         },
         {
             en: "Implemented **Google OAuth & multi-step registration** with correct redirects across 100% of auth scenarios",
@@ -37,7 +37,7 @@ export const achievements = {
         {
             en: "Enhanced deposit-flow UX with real-time timers and **alternative payment-method fallback** on transaction failures",
             pl: "Ulepszyłem UX przepływu wpłat: liczniki w czasie rzeczywistym i **przełączanie na alternatywną metodę płatności** przy błędach transakcji",
-            uk: "Покращив UX депозитного флоу: таймери в реальному часі та **перехід на альтернативний метод оплати** при збоях транзакцій",
+            uk: "Покращив UX поповнення рахунку: таймери в реальному часі та **перехід на альтернативний метод оплати** при збоях транзакцій",
         },
     ],
 } satisfies AchievementsSource;
