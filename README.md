@@ -9,7 +9,7 @@ The personal site of Andrii Maksymov, frontend developer: one page in English, P
     <img src="docs/screenshots/dark.png" alt="The first screen of the site: the language and theme controls, the role, the name, the tagline and the section links on the left; a short summary, status chips, two buttons and two rows of skills on the right" width="1440">
 </picture>
 
-> The first public release is on its way.
+Live at <https://andrii-maksymov.tech>.
 
 ## What is inside
 
