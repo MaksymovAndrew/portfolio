@@ -108,8 +108,8 @@ export const periodFields = ({
     ...experience.entries.map((entry, index) =>
         at(`experience.entries[${index}].period`, entry.period),
     ),
-    ...education.entries.map((entry, index) =>
-        at(`education.entries[${index}].period`, entry.period),
+    ...education.entries.flatMap((entry, index) =>
+        optional(`education.entries[${index}].period`, entry.period),
     ),
 ];
 

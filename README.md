@@ -131,7 +131,7 @@ The longer texts accept a small markup - `**bold**`, `*accent*`, `[label](target
 
 ### Look
 
-`theme/theme.ts` holds both palettes; the root layout turns them into CSS variables, so every colour on the page comes from there, and a test checks that every text colour reaches 4.5:1 on its backgrounds in both themes. `theme/fonts.ts` loads the three fonts through `next/font/google`: downloaded at build time and served by the site itself, never from Google, with only the alphabets a page uses. `theme/fonts/` holds static copies for the images drawn at build time: the site icon and one link preview per language at `/social/<language>.png`.
+`theme/theme.ts` holds both palettes; the root layout turns them into CSS variables, so every colour on the page comes from there, and a test checks that every text colour reaches 4.5:1 on its backgrounds in both themes. `theme/fonts.ts` loads the three fonts from `theme/fonts/web/` through `next/font/local`, served by the site itself and preloaded: one file per font, with only the weights the styles use and the letters of every language. `node scripts/web-fonts.mjs <directory>` builds them again from a directory holding the three variable `[wght].ttf` sources of [Google Fonts](https://github.com/google/fonts) (Python with `fonttools` and `brotli`; `PYTHON` picks the interpreter, `py` on Windows and `python3` elsewhere); a new language adds its letters there, a new weight widens its font's range. `theme/fonts/` also holds static copies for the images drawn at build time: the site icon and one link preview per language at `/social/<language>.png`.
 
 ## Security
 

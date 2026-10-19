@@ -10,6 +10,12 @@ import { content } from "test/fixtures/content";
 
 const { education, locale, ui } = content;
 
+type EducationEntry = (typeof education.entries)[number];
+
+// the period as the section prints it; an entry without one prints nothing
+const periodOf = (entry: EducationEntry) =>
+    entry.period === null ? "" : formatPeriod(entry.period, locale, ui.present);
+
 describe("Education", () => {
     it("should head the section with its label", () => {
         render(<Education content={content} />);
@@ -26,11 +32,27 @@ describe("Education", () => {
             expect(
                 screen.getByRole("heading", { level: 3, name: entry.field }),
             ).toBeInTheDocument();
+            expect(screen.getByText(periodOf(entry))).toBeInTheDocument();
+        }
+    });
+
+    it("should leave out the period of an entry without one", () => {
+        const entries = education.entries.map((entry) => ({
+            ...entry,
+            period: null,
+        }));
+
+        render(
+            <Education
+                content={{ ...content, education: { ...education, entries } }}
+            />,
+        );
+
+        for (const entry of education.entries) {
             expect(
-                screen.getByText(
-                    formatPeriod(entry.period, locale, ui.present),
-                ),
+                screen.getByRole("heading", { level: 3, name: entry.field }),
             ).toBeInTheDocument();
+            expect(() => screen.getByText(periodOf(entry))).toThrow();
         }
     });
 

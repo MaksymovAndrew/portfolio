@@ -28,7 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Unknown addresses answer 404 with a page in the language of the address, readable without JavaScript.
 - Dark and light themes; the choice is remembered and applied before the first paint.
 - One file with both palettes: every colour on the site comes from it.
-- Three self-hosted fonts with Polish and Ukrainian letters; a page loads only the letters it uses, and the Latin letters of all three and the Cyrillic of the running text are preloaded.
+- Three self-hosted fonts, trimmed to the weights the page uses and the letters of English, Polish and Ukrainian: one small preloaded file each, the same on every language.
 - A site icon generated from the initials and the accent colour.
 - An automatic contrast check: every text colour passes WCAG AA in both themes.
 - Two-column layout from 1024 pixels with a sticky left column; a top bar on tablets and phones.
@@ -42,6 +42,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Experience section: role, period, company, summary, responsibilities and technologies.
 - Achievements shown as a diff file with six shipped results.
 - Featured project card: description, screenshots, the story of the project, key facts, technologies and links.
+- Three screenshots of the featured project, with a caption and a description in every language.
+- Three Anthropic certificates with their images, completion months and verification links.
+- The CV as a PDF download in the left column, the top bar and the contact section.
 - Image viewer: opens from a thumbnail, arrows and keyboard arrows switch images, Escape closes it.
 - Placeholders where an image is not available yet.
 - Certifications list; each certificate opens in the viewer with its credential ID and links to its verification page.

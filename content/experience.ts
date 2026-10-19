@@ -16,13 +16,13 @@ export const experience = {
             text: {
                 en: "Built and maintained UI features for a production-scale iGaming platform with React, TypeScript and SCSS.",
                 pl: "Tworzyłem i utrzymywałem funkcje UI produkcyjnej platformy iGaming w React, TypeScript i SCSS.",
-                uk: "Розробляв і підтримував UI-функціонал продакшн-платформи iGaming на React, TypeScript і SCSS.",
+                uk: "Розробляв і підтримував UI великої iGaming-платформи на React, TypeScript і SCSS.",
             },
             bullets: [
                 {
                     en: "REST APIs and **WebSocket** connections for real-time data synchronization",
                     pl: "REST API i połączenia **WebSocket** do synchronizacji danych w czasie rzeczywistym",
-                    uk: "REST API та **WebSocket**-зʼєднання для синхронізації даних у реальному часі",
+                    uk: "REST API та **WebSocket**-з’єднання для синхронізації даних у реальному часі",
                 },
                 {
                     en: "Unit tests with **Jest**, components documented in **Storybook**",
@@ -42,7 +42,7 @@ export const experience = {
                 {
                     en: "Code reviews, sprint planning, task estimation and internal developer docs",
                     pl: "Code review, planowanie sprintów, estymacja zadań i wewnętrzna dokumentacja",
-                    uk: "Код-ревʼю, планування спринтів, оцінювання задач і внутрішня документація",
+                    uk: "Код-рев’ю, планування спринтів, оцінювання задач і внутрішня документація",
                 },
             ],
             tags: [

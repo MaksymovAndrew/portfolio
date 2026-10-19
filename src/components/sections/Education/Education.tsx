@@ -17,9 +17,13 @@ export const Education = ({ content }: EducationProps) => {
         <Section id="education" label={education.label}>
             {education.entries.map((entry) => (
                 <Entry
-                    key={`${entry.organisation} ${entry.period.start}`}
+                    key={`${entry.organisation} ${entry.field}`}
                     title={entry.field}
-                    period={formatPeriod(entry.period, locale, ui.present)}
+                    period={
+                        entry.period === null
+                            ? null
+                            : formatPeriod(entry.period, locale, ui.present)
+                    }
                     organisation={entry.organisation}
                     meta={null}
                     detail={`${entry.faculty} ${GLYPHS.separator} ${entry.degree}`}

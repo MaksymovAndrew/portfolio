@@ -9,12 +9,12 @@ export const hero = {
     tagline: {
         en: "I build *fast, tested, production-grade* web interfaces.",
         pl: "Tworzę *szybkie, dokładnie przetestowane* interfejsy webowe gotowe na produkcję.",
-        uk: "Я створюю *швидкі, ретельно протестовані* вебінтерфейси production-рівня.",
+        uk: "Створюю *швидкі, ретельно протестовані* вебінтерфейси, готові до продакшну.",
     },
     sub: {
         en: "2 years of commercial experience shipping UI for a production-scale iGaming platform. Based in Wrocław, Poland - open to remote opportunities.",
-        pl: "2 lata komercyjnego doświadczenia w budowaniu UI dla produkcyjnej platformy iGaming. Mieszkam we Wrocławiu - szukam pracy w pełni zdalnej.",
-        uk: "2 роки комерційного досвіду розробки UI для продакшн-платформи iGaming. Живу у Вроцлаві, Польща - розглядаю лише віддалену роботу.",
+        pl: "2 lata komercyjnego doświadczenia w tworzeniu UI dużej platformy iGaming. Mieszkam we Wrocławiu - szukam pracy w pełni zdalnej.",
+        uk: "2 роки комерційного досвіду розробки UI для великої iGaming-платформи. Живу у Вроцлаві, Польща - розглядаю лише віддалену роботу.",
     },
     chips: ["tests passing", "types strict", "CI green"],
     actions: [
@@ -31,7 +31,7 @@ export const hero = {
             label: {
                 en: "Get in touch",
                 pl: "Napisz do mnie",
-                uk: "Звʼязатися",
+                uk: "Зв’язатися",
             },
             target: "contact",
             variant: "ghost",

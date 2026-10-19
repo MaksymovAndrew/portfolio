@@ -129,7 +129,8 @@ export interface EducationSource extends SectionMeta {
         organisation: string;
         faculty: string;
         degree: Localized;
-        period: Period;
+        // null leaves the dates out
+        period: Period | null;
     }[];
 }
 

@@ -23,17 +23,40 @@ export const settle = async (page: Page): Promise<void> => {
     await page.waitForLoadState("networkidle");
     await page.evaluate(async () => {
         await document.fonts.ready;
-        // the marquee, the pulse and the glow never end; a cancelled animation counts as done
-        await Promise.allSettled(
+
+        // without JavaScript nothing starts late, and no frame callback would ever run
+        const scripted = document.documentElement.classList.contains("js");
+        const twoFrames = () =>
+            new Promise((resolve) => {
+                requestAnimationFrame(() => requestAnimationFrame(resolve));
+            });
+        // the marquee, the pulse and the glow never end
+        const finite = () =>
             document
                 .getAnimations()
                 .filter(
                     (animation) =>
                         animation.effect?.getComputedTiming().iterations !==
                         Infinity,
-                )
-                .map((animation) => animation.finished),
-        );
+                );
+
+        // the reveal sends blocks below the fold away a frame or two after hydration, so wait for those transitions too
+        if (scripted) {
+            await twoFrames();
+        }
+
+        for (let running = finite(); running.length > 0; running = finite()) {
+            // a cancelled animation counts as done
+            await Promise.allSettled(
+                running.map((animation) => animation.finished),
+            );
+
+            if (!scripted) {
+                break;
+            }
+
+            await twoFrames();
+        }
     });
 };
 
