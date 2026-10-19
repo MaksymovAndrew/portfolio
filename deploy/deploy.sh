@@ -2,7 +2,7 @@
 # Rolls out one release. The deploy workflow calls it over SSH with a key the server pins to this
 # script, so the request arrives in SSH_ORIGINAL_COMMAND as "<owner> <tag>".
 #
-# Installed at /srv/bin/deploy-portfolio.sh
+# Installed at /srv/portfolio/bin/deploy-portfolio.sh
 set -euo pipefail
 
 STACK_DIR=/srv/portfolio

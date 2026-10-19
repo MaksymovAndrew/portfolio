@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-19
+
 ### Added
 
 - Statically generated pages for English, Polish and Ukrainian.
@@ -74,6 +76,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Every pull request builds the image for ARM, starts it with the production restrictions and checks that it answers.
 - Deployment by tag: the image is built for ARM, published, rolled out, health-checked through the proxy and, from the second release on, rolled back automatically on failure; running it again with an older tag redeploys that published image unchanged.
 - A GitHub Release with the notes of its version from this file is published for every release tag.
+- The `www` address redirects permanently to the site's main address.
 - An accessibility statement: what the site supports, how it is tested, its known limits and how to report a problem.
 - Screenshots of the first screen in both themes, drawn from the production build by `npm run screenshots`.
 
