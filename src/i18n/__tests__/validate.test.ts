@@ -187,6 +187,21 @@ describe("validateContent", () => {
         expect(issuePaths(source)).toEqual([path]);
     });
 
+    it("should accept an education entry without a period", () => {
+        const source = {
+            ...contentSource,
+            education: {
+                ...contentSource.education,
+                entries: contentSource.education.entries.map((entry) => ({
+                    ...entry,
+                    period: null,
+                })),
+            },
+        };
+
+        expect(issuePaths(source)).toEqual([]);
+    });
+
     it("should report refs whose keys are the language codes", () => {
         const refs = Object.fromEntries(
             LOCALES.map((code) => [code, "https://example.com"]),

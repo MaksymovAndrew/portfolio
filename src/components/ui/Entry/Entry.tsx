@@ -6,7 +6,7 @@ import styles from "./Entry.module.scss";
 
 export interface EntryProps {
     title: string;
-    period: string;
+    period: string | null;
     organisation: string;
     meta: string | null;
     detail?: string;
@@ -24,7 +24,9 @@ export const Entry = ({
     <article className={styles.entry}>
         <div className={styles.entry__head}>
             <h3 className={styles.entry__title}>{title}</h3>
-            <span className={styles.entry__period}>{period}</span>
+            {period === null ? null : (
+                <span className={styles.entry__period}>{period}</span>
+            )}
         </div>
         <p className={styles.entry__organisation}>
             <b>{organisation}</b>
