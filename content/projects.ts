@@ -69,12 +69,12 @@ export const projects = {
                 ),
             ],
             story: {
-                en: "Started as a duo project with [Milana](@milana) - later I rebuilt it on my own: full redesign, deep refactor, complete test suite and end-to-end CI/CD.",
-                pl: "Projekt powstał w duecie z [Milaną](@milana) - później przebudowałem go samodzielnie: pełny redesign, gruntowna refaktoryzacja, komplet testów i pełne CI/CD.",
-                uk: "Проєкт ми починали вдвох із [Міланою](@milana) - згодом я перебудував його самотужки: повний редизайн, глибокий рефакторинг, повний набір тестів і повноцінний CI/CD.",
+                en: "Started as a duo project with [Milana](@milana), who made key product decisions and helped with the design. Later I led the rebuild: full redesign, deep refactor, complete test suite and end-to-end CI/CD.",
+                pl: "Projekt powstał w duecie z [Milaną](@milana), która podejmowała kluczowe decyzje i pomagała przy designie. Później poprowadziłem przebudowę: pełny redesign, gruntowna refaktoryzacja, komplet testów i pełne CI/CD.",
+                uk: "Проєкт ми починали вдвох із [Міланою](@milana) - вона ухвалювала ключові рішення й допомагала з дизайном. Згодом я очолив перебудову: повний редизайн, глибокий рефакторинг, повний набір тестів і повноцінний CI/CD.",
             },
             // addresses for [text](@key) links in the story and the bullets
-            refs: { milana: "https://github.com/PershynaMilana" },
+            refs: { milana: "https://www.linkedin.com/in/milana-pershyna" },
             bullets: [
                 {
                     en: "**2,800+ tests** in 500+ files: Jest on both sides, Playwright e2e and a real-Postgres suite - 95%+ coverage, 80% gate in CI",
