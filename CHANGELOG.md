@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-20
+
+### Fixed
+
+- The featured project credits Milana for key decisions and design help, and links her LinkedIn profile.
+
 ## [1.0.0] - 2026-10-19
 
 ### Changed
