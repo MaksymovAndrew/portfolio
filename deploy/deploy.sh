@@ -3,6 +3,7 @@
 # script, so the request arrives in SSH_ORIGINAL_COMMAND as "<owner> <tag>".
 #
 # Installed at /srv/portfolio/bin/deploy-portfolio.sh
+# The image is private: the server's one-time `docker login ghcr.io` (read:packages) lets it pull.
 set -euo pipefail
 
 STACK_DIR=/srv/portfolio

@@ -6,11 +6,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
-## [1.0.1] - 2026-10-20
+## [1.1.0] - 2026-10-23
+
+### Added
+
+- Addresses outside every language, such as the files bots probe for, get the site's own 404 page instead of the framework's.
+- An error in the page frame shows the site's own error page.
+- The production image reports its own health to Docker.
+
+### Changed
+
+- The terminal and the error pages draw their check, cross and prompt marks as icons, the same on every system.
+- The pause in the footer applies in every open tab of the site, as the theme already did.
+- Shared building blocks for stores, images, dialogs, styles, browser tests and scripts; the page looks and behaves as before.
+- The deploy notes say the server pulls the private image with its own registry login.
 
 ### Fixed
 
 - The featured project credits Milana for key decisions and design help, and links her LinkedIn profile.
+- Each language in the About section stays on one line with its level.
+- With a classic scrollbar, the strip it leaves while the image viewer is open darkens with the rest of the page.
+- Image thumbnails show without JavaScript and become buttons once the viewer works, instead of ignoring clicks while the page loads.
 
 ## [1.0.0] - 2026-10-19
 
