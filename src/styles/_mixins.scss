@@ -210,13 +210,19 @@
         border-color $dur-base,
         transform $dur-base;
 
-    @include hover {
-        border-color: color-mix(
-            in srgb,
-            var(--accent) var(--t-card-line),
-            transparent
-        );
-        transform: $lift;
+    &:disabled {
+        cursor: default;
+    }
+
+    &:not(:disabled) {
+        @include hover {
+            border-color: color-mix(
+                in srgb,
+                var(--accent) var(--t-card-line),
+                transparent
+            );
+            transform: $lift;
+        }
     }
 }
 

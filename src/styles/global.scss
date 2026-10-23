@@ -14,11 +14,10 @@ $scrollbar-thumb: color-mix(
     padding: 0;
 }
 
-// the only background: the page, the scrollbar gutter and the overscroll change colour together
+// the page's background, the scrollbar gutter and the overscroll included; it changes at once, as the theme does without a view transition
 html {
     background: var(--bg);
     scrollbar-gutter: stable;
-    transition: background-color $dur-theme;
 
     // below 1024 the sticky bar covers the top of the window: a jump or a focused element lands below it
     @include until(1024) {
@@ -85,9 +84,18 @@ html {
     }
 }
 
-// the page stays put under an open dialog; the stable gutter keeps it from shifting
+// the page stays put under an open dialog; the root paints its gutter in the backdrop's tint, the body keeps the page colour
 html:has(dialog[open]) {
     overflow: hidden;
+
+    // only a classic scrollbar leaves a gutter; a touch screen keeps its overscroll untinted
+    @media (pointer: fine) {
+        background: color-mix(in srgb, var(--scrim) var(--t-scrim), var(--bg));
+
+        body {
+            background: var(--bg);
+        }
+    }
 }
 
 body {

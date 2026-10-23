@@ -38,9 +38,16 @@ describe("About", () => {
     it("should build the languages line from the profile", () => {
         render(<About content={content} />);
 
-        expect(
-            screen.getByText(`English C2 ${GLYPHS.separator} German B2`),
-        ).toBeInTheDocument();
+        expect(screen.getAllByRole("paragraph").at(-1)).toHaveTextContent(
+            `English C2 ${GLYPHS.separator} German B2`,
+        );
+    });
+
+    it("should keep each language with its level", () => {
+        render(<About content={content} />);
+
+        expect(screen.getByText("English C2")).toBeInTheDocument();
+        expect(screen.getByText("German B2")).toBeInTheDocument();
     });
 
     it("should leave the languages line out when the profile lists none", () => {

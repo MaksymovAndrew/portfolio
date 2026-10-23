@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import { GLYPHS } from "constants/glyphs";
 import type { Content } from "types/content";
 
@@ -26,9 +28,14 @@ export const About = ({ content }: AboutProps) => {
             ))}
             {profile.languages.length === 0 ? null : (
                 <p className={styles.about__languages}>
-                    {profile.languages
-                        .map(({ name, level }) => `${name} ${level}`)
-                        .join(` ${GLYPHS.separator} `)}
+                    {profile.languages.map(({ name, level }, index) => (
+                        <Fragment key={`${name} ${level}`}>
+                            {index === 0 ? null : ` ${GLYPHS.separator} `}
+                            <span className={styles.about__language}>
+                                {`${name} ${level}`}
+                            </span>
+                        </Fragment>
+                    ))}
                 </p>
             )}
         </Section>

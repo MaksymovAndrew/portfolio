@@ -4,7 +4,7 @@ import { source } from "content";
 import { LOCALE_META } from "content/locales";
 import { theme } from "theme/theme";
 
-import { themeButton } from "./support/controls";
+import { themeButton, thumbnail } from "./support/controls";
 import {
     DEFAULT_LOCALE,
     localePath,
@@ -137,4 +137,13 @@ test("should show every block fully without JavaScript", async ({ page }) => {
 
     expect(opacities).not.toHaveLength(0);
     expect(new Set(opacities)).toEqual(new Set(["1"]));
+});
+
+test("should show the thumbnails as pictures that open nothing without JavaScript", async ({
+    page,
+}) => {
+    await page.goto(localePath(DEFAULT_LOCALE));
+
+    await expect(thumbnail(page, 0)).toBeVisible();
+    await expect(thumbnail(page, 0)).toBeDisabled();
 });
