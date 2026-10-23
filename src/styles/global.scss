@@ -1,5 +1,11 @@
 @use "styles/abstracts" as *;
 
+$scrollbar-thumb: color-mix(
+    in srgb,
+    var(--muted) var(--t-scrollbar),
+    transparent
+);
+
 *,
 *::before,
 *::after {
@@ -13,10 +19,8 @@ html {
     background: var(--bg);
     scrollbar-gutter: stable;
     transition: background-color $dur-theme;
-}
 
-// below 1024 the sticky bar covers the top of the window: a jump or a focused element lands below it
-html {
+    // below 1024 the sticky bar covers the top of the window: a jump or a focused element lands below it
     @include until(1024) {
         scroll-padding-top: calc($top-bar-height + env(safe-area-inset-top));
     }
@@ -112,12 +116,7 @@ svg {
 
 // a thin scrollbar in the colours of the theme; every scroll area inherits the colours
 :root {
-    scrollbar-color: color-mix(
-            in srgb,
-            var(--muted) var(--t-scrollbar),
-            transparent
-        )
-        transparent;
+    scrollbar-color: $scrollbar-thumb transparent;
 }
 
 * {
@@ -138,12 +137,7 @@ svg {
     ::-webkit-scrollbar-thumb {
         border: 3px solid transparent;
         border-radius: $radius-pill;
-        background: color-mix(
-                in srgb,
-                var(--muted) var(--t-scrollbar),
-                transparent
-            )
-            padding-box;
+        background: $scrollbar-thumb padding-box;
     }
 }
 

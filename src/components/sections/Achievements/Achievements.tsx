@@ -15,11 +15,11 @@ export const Achievements = ({ content }: AchievementsProps) => {
 
     return (
         <Section id="achievements" label={achievements.label}>
-            <div className={styles.diff}>
+            <div className={styles.achievements}>
                 <WindowBar title={achievements.fileName} />
-                <ul className={styles.diff__list}>
+                <ul className={styles.achievements__list}>
                     {achievements.items.map((item) => (
-                        <li key={item} className={styles.diff__item}>
+                        <li key={item} className={styles.achievements__item}>
                             <span>
                                 <RichText
                                     text={item}

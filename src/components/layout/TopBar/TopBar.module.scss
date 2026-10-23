@@ -19,7 +19,7 @@
         inset: 0;
         z-index: $z-behind;
         border-bottom: 1px solid transparent;
-        background: color-mix(in srgb, var(--bg) 84%, transparent);
+        background: color-mix(in srgb, var(--bg) var(--t-bar), transparent);
         backdrop-filter: blur(14px);
         transition: border-color $dur-base;
     }

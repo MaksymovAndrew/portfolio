@@ -1,28 +1,22 @@
 @use "styles/abstracts" as *;
 
-.diff {
-    overflow: hidden;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--surface);
+.achievements {
+    @include card-frame;
 }
 
-.diff__list {
+.achievements__list {
     list-style: none;
 }
 
-.diff__item {
+.achievements__item {
     display: flex;
     gap: 14px;
     padding: 15px 18px;
-    border-bottom: 1px solid var(--line);
     color: var(--muted);
     font-size: 15px;
     transition: background-color $dur-base;
 
-    &:last-child {
-        border-bottom: none;
-    }
+    @include divided-rows;
 
     &::before {
         content: "+" / "";
@@ -33,6 +27,10 @@
     }
 
     @include hover {
-        background-color: color-mix(in srgb, var(--ok) 4.5%, transparent);
+        background-color: color-mix(
+            in srgb,
+            var(--ok) var(--t-row-ok),
+            transparent
+        );
     }
 }

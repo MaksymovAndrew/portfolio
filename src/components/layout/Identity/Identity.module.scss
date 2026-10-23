@@ -3,14 +3,8 @@
 
 .identity__eyebrow {
     margin-bottom: 18px;
-    color: var(--accent);
-    font-family: $font-mono;
-    font-size: 13px;
-    letter-spacing: 0.04em;
 
-    &::before {
-        content: "// " / "";
-    }
+    @include eyebrow;
 }
 
 // as narrow as its longest word, so every part of the name gets its own line

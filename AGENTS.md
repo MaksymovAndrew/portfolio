@@ -27,7 +27,7 @@ The personal portfolio site of Andrii Maksymov: one page in three languages, gen
 
 ## Theme
 
-- `theme/theme.ts` holds both palettes; `buildThemeCss` turns them into CSS variables in the root layout. Components use `var(--token)` and the SCSS tokens of `styles/abstracts` (`$font-*`, `$dur-*`, `$delay-*`, `$ease-*`, `$z-*`, `$radius-*`, the breakpoint mixins); Stylelint rejects raw colours, z-indexes, radii, font families, durations, delays and easings. Only `src/app/`, `src/components/social/` and `src/guards/` import `theme/`.
+- `theme/theme.ts` holds both palettes; `buildThemeCss` turns them into CSS variables in the root layout. Components use `var(--token)` and the SCSS tokens of `styles/abstracts` (`$font-*`, `$dur-*`, `$delay-*`, `$ease-*`, `$z-*`, `$radius-*`, the breakpoint mixins); Stylelint rejects raw colours, z-indexes, radii, font families, durations, delays and easings, and a width or height media query outside the breakpoint mixins. Only `src/app/`, `src/components/social/` and `src/guards/` import `theme/`.
 - The theme lives in `data-theme` on `<html>`: the inline pre-paint script sets it from storage, `themeStore` changes it later. A component shows a per-theme part through CSS (`:global(:root[data-theme="light"])`), never by reading the mode while rendering.
 - Storage goes through `utils/storage`: a blocked storage keeps the feature working for the visit.
 

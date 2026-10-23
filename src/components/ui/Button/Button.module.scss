@@ -33,17 +33,17 @@
 
 .button--primary {
     background: var(--accent);
-    color: var(--btn-ink);
+    color: var(--button-ink);
 
     @media (hover: hover) {
         &:hover {
             box-shadow: 0 10px 30px -8px
                 color-mix(
                     in srgb,
-                    var(--accent) var(--t-btn-shadow),
+                    var(--accent) var(--t-button-shadow),
                     transparent
                 );
-            transform: translateY(-2px);
+            transform: $lift;
         }
     }
 }
@@ -57,7 +57,7 @@
         &:hover {
             border-color: var(--accent);
             color: var(--accent);
-            transform: translateY(-2px);
+            transform: $lift;
         }
     }
 }

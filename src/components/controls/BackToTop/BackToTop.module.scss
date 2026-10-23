@@ -2,12 +2,9 @@
 
 // 90% down the first screen
 .back-to-top__marker {
-    position: absolute;
     top: 90vh;
-    left: 0;
-    width: 1px;
-    height: 1px;
-    pointer-events: none;
+
+    @include sentinel;
 }
 
 .back-to-top {
@@ -21,7 +18,7 @@
     height: 44px;
     border: 1px solid var(--line);
     border-radius: 50%;
-    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    background: color-mix(in srgb, var(--surface) var(--t-glass), transparent);
     color: var(--accent);
     cursor: pointer;
     backdrop-filter: blur(10px);
@@ -29,14 +26,11 @@
         border-color $dur-base,
         transform $dur-fast;
 
-    svg {
-        width: 16px;
-        height: 16px;
-    }
+    @include icon-size(16px);
 
     @include hover {
         border-color: var(--accent);
-        transform: translateY(-2px);
+        transform: $lift;
     }
 
     @include from(1024) {

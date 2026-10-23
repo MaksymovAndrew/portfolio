@@ -27,17 +27,15 @@
     @include until(360) {
         padding: 6px;
     }
+
+    // without JavaScript a click could not switch anything
+    @include needs-js;
 }
 
 .theme-toggle__sun,
 .theme-toggle__moon {
     width: 16px;
     height: 16px;
-}
-
-// without JavaScript a click could not switch anything
-:global(html:not(.js)) .theme-toggle {
-    display: none;
 }
 
 // the icon of the theme a click switches to

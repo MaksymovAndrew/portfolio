@@ -16,7 +16,7 @@ export interface Palette {
     shadow: string;
 }
 
-// percent: how much of a colour a mix takes; grain and glow are the opacity of their layer
+// percent: how much of a colour a mix takes; grainOpacity and glowOpacity are the opacity of their layer
 export interface Tints {
     soft: number;
     tagLine: number;
@@ -28,8 +28,17 @@ export interface Tints {
     scrollbar: number;
     scrim: number;
     shadow: number;
-    grain: number;
-    glow: number;
+    row: number;
+    rowOk: number;
+    glass: number;
+    bar: number;
+    glare: number;
+    spot: number;
+    ring: number;
+    dotGlow: number;
+    stripe: number;
+    grainOpacity: number;
+    glowOpacity: number;
 }
 
 export interface Theme {

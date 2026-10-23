@@ -21,10 +21,10 @@
         color-mix(in srgb, var(--glow-2) 3.5%, transparent) 35%,
         transparent 65%
     );
-    opacity: var(--glow-o);
+    opacity: var(--glow-opacity);
     animation: drift $dur-drift $ease-in-out infinite alternate;
 
-    :global(:root[data-motion="off"]) & {
+    @include when-paused {
         animation-play-state: paused;
     }
 }
@@ -44,5 +44,5 @@
     position: absolute;
     inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    opacity: var(--grain-o);
+    opacity: var(--grain-opacity);
 }

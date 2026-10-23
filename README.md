@@ -62,14 +62,14 @@ Then open <http://localhost:3000>.
 
 ## Quality checks
 
-| Command                 | What it checks                                                                |
-| ----------------------- | ----------------------------------------------------------------------------- |
-| `npm run format:check`  | Formatting (Prettier); `npm run format` fixes it                              |
-| `npm run lint`          | ESLint: types, imports, accessibility, the layer rules                        |
-| `npm run lint:sonarjs`  | Code smells and cognitive complexity                                          |
-| `npm run stylelint`     | Styles: no raw colours; radii, layers, fonts and timings come from the tokens |
-| `npm run typecheck`     | Types of the app, the unit and browser tests and the TypeScript configs       |
-| `npm run test:coverage` | Unit tests (Jest, React Testing Library) with an 80% coverage threshold       |
+| Command                 | What it checks                                                                                                                |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `npm run format:check`  | Formatting (Prettier); `npm run format` fixes it                                                                              |
+| `npm run lint`          | ESLint: types, imports, accessibility, the layer rules                                                                        |
+| `npm run lint:sonarjs`  | Code smells and cognitive complexity                                                                                          |
+| `npm run stylelint`     | Styles: no raw colours; radii, layers, fonts and timings come from the tokens; width queries go through the breakpoint mixins |
+| `npm run typecheck`     | Types of the app, the unit and browser tests and the TypeScript configs                                                       |
+| `npm run test:coverage` | Unit tests (Jest, React Testing Library) with an 80% coverage threshold                                                       |
 
 `npm run verify` runs all of them, then the production build. The lint rules keep the layers apart: text in a component, a raw colour or an import of `content/` from `src/` anywhere but `src/i18n/` and `src/guards/` fails the check.
 

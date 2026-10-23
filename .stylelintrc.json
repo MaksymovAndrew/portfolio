@@ -1,12 +1,12 @@
 {
     "extends": ["stylelint-config-standard-scss"],
     "rules": {
-        "keyframes-name-pattern": "^([a-z][a-zA-Z0-9]*)(-[a-z0-9]+)*$",
+        "keyframes-name-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
         "selector-class-pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*(__[a-z0-9]+(-[a-z0-9]+)*)?(--[a-z0-9]+(-[a-z0-9]+)*)?$",
         "selector-no-vendor-prefix": [
             true,
             {
-                "ignoreSelectors": ["/-webkit-/", "/-moz-/"]
+                "ignoreSelectors": ["/-webkit-/"]
             }
         ],
         "property-no-vendor-prefix": [
@@ -73,13 +73,25 @@
             }
         ],
         "declaration-block-single-line-max-declarations": 1,
-        "font-weight-notation": "numeric"
+        "font-weight-notation": "numeric",
+        "media-feature-name-disallowed-list": [
+            ["/^(min-|max-)?(device-)?(width|height)$/"],
+            {
+                "message": "Use the from(), until() and short() mixins of styles/_breakpoints.scss"
+            }
+        ]
     },
     "overrides": [
         {
             "files": ["src/components/**/*.scss"],
             "rules": {
                 "declaration-no-important": true
+            }
+        },
+        {
+            "files": ["src/styles/_breakpoints.scss"],
+            "rules": {
+                "media-feature-name-disallowed-list": null
             }
         }
     ]

@@ -27,7 +27,7 @@ $heights: (859, 759, 639);
 }
 
 @mixin short($height) {
-    @media (width >= 1024px) and (height <= #{-px($height, $heights, "height")}) {
+    @media (width >= #{-px(1024, $widths, "width")}) and (height <= #{-px($height, $heights, "height")}) {
         @content;
     }
 }

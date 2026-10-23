@@ -73,7 +73,7 @@ export const MenuSheet = ({ items, labels, children }: MenuSheetProps) => {
             <button
                 ref={button}
                 type="button"
-                className={styles["menu-button"]}
+                className={styles["menu-sheet__trigger"]}
                 aria-label={labels.open}
                 aria-haspopup="dialog"
                 data-ready={hydrated || undefined}
