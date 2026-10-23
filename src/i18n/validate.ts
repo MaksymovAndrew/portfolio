@@ -15,7 +15,7 @@ import { isLocale, LOCALES } from "i18n/locales";
 
 import { InlineMarkupError, isSafeHref, parseInline } from "utils/inline";
 
-export interface ContentIssue {
+interface ContentIssue {
     path: string;
     message: string;
 }
@@ -25,6 +25,9 @@ export interface PublicFiles {
 }
 
 const MONTH = /^\d{4}-(?:0[1-9]|1[0-2])$/;
+
+const issueAt = (path: string, message: string | null): ContentIssue[] =>
+    message ? [{ path, message }] : [];
 
 // an object built by a helper escapes the excess property check, so a stray language shows up only here
 const languageIssues = (record: Tree, path: string): ContentIssue[] =>
@@ -74,11 +77,9 @@ const markupProblem = (text: string, refs: Refs): string | null => {
 
 const markupIssues = (source: ContentSource): ContentIssue[] =>
     richFields(source).flatMap(({ path, value, refs }) =>
-        LOCALES.flatMap((locale) => {
-            const message = markupProblem(value[locale], refs);
-
-            return message ? [{ path: `${path}.${locale}`, message }] : [];
-        }),
+        LOCALES.flatMap((locale) =>
+            issueAt(`${path}.${locale}`, markupProblem(value[locale], refs)),
+        ),
     );
 
 // a refs object keyed by the language codes would be folded like a translated text
@@ -114,11 +115,9 @@ const fileIssues = (
     source: ContentSource,
     files: PublicFiles,
 ): ContentIssue[] =>
-    fileFields(source).flatMap(({ path, value }) => {
-        const message = fileProblem(value, files);
-
-        return message ? [{ path, message }] : [];
-    });
+    fileFields(source).flatMap(({ path, value }) =>
+        issueAt(path, fileProblem(value, files)),
+    );
 
 const sectionIssues = ({ site, hero }: ContentSource): ContentIssue[] => [
     ...site.sections

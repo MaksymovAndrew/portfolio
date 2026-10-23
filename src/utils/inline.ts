@@ -193,7 +193,7 @@ export const toPlainText = (text: string): string =>
         .map((token) => token.value)
         .join("");
 
-export const format = (
+export const fillTemplate = (
     template: string,
     values: Readonly<Record<string, string>>,
 ): string =>

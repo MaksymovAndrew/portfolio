@@ -5,14 +5,14 @@ export interface Point {
     y: number;
 }
 
-export interface Box {
+interface Box {
     left: number;
     top: number;
     width: number;
     height: number;
 }
 
-export interface TiltPose {
+interface TiltPose {
     rotateX: number;
     rotateY: number;
     glareX: number;

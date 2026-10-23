@@ -1,6 +1,6 @@
 @use "styles/abstracts" as *;
 
-// above the background glow; cuts the full-window top bar where a classic scrollbar takes part of the window, as the body's clip passes to the viewport as scrollable
+// above the glow; clips the full-width top bar where a classic scrollbar takes its width
 .shell {
     position: relative;
     z-index: $z-content;

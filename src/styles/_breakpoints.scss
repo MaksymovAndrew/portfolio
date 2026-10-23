@@ -26,12 +26,6 @@ $heights: (859, 759, 639);
     }
 }
 
-@mixin between($from, $until) {
-    @media (#{-px($from, $widths, "width")} <= width < #{-px($until, $widths, "width")}) {
-        @content;
-    }
-}
-
 @mixin short($height) {
     @media (width >= 1024px) and (height <= #{-px($height, $heights, "height")}) {
         @content;

@@ -21,12 +21,8 @@
     color: var(--faint);
 }
 
-.terminal--ok .terminal__output {
+.terminal__output {
     color: var(--ok);
-}
-
-.terminal--bad .terminal__output {
-    color: var(--muted);
 }
 
 .terminal__caret {

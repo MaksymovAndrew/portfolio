@@ -6,7 +6,7 @@ export interface Found<T> {
     value: T;
 }
 
-export interface RichField extends Found<Localized> {
+interface RichField extends Found<Localized> {
     refs: Refs;
 }
 

@@ -4,7 +4,7 @@ import { source } from "content";
 
 import type { Locale } from "i18n/locales";
 
-import { format } from "utils/inline";
+import { fillTemplate } from "utils/inline";
 
 import { expectAccessible } from "./support/axe";
 import {
@@ -39,7 +39,7 @@ const trackPlayState = (page: Page) =>
 
 const thumbnail = (page: Page) =>
     page.getByRole("button", {
-        name: format(source.ui.viewer.openScreenshot[DEFAULT_LOCALE], {
+        name: fillTemplate(source.ui.viewer.openScreenshot[DEFAULT_LOCALE], {
             index: "1",
         }),
     });

@@ -1,5 +1,7 @@
 import type { CertificationsSource } from "types/content";
 
+import { profile } from "./profile";
+
 // a Skilljar certificate: its code is the credential id and the end of the verify address
 const certificate = (
     title: string,
@@ -18,9 +20,9 @@ const certificate = (
         width: 1600,
         height: 1212,
         alt: {
-            en: `Anthropic certificate of completion: ${title}, issued to Andrii Maksymov`,
-            pl: `Certyfikat ukończenia kursu Anthropic: ${title}, wystawiony na nazwisko Andrii Maksymov`,
-            uk: `Сертифікат Anthropic про проходження курсу ${title}, виданий на ім’я Andrii Maksymov`,
+            en: `Anthropic certificate of completion: ${title}, issued to ${profile.name}`,
+            pl: `Certyfikat ukończenia kursu Anthropic: ${title}, wystawiony na nazwisko ${profile.name}`,
+            uk: `Сертифікат Anthropic про проходження курсу ${title}, виданий на ім’я ${profile.name}`,
         },
     },
 });

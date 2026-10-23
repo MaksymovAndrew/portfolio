@@ -1,6 +1,6 @@
 import {
-    HOLD_MS,
     OUTPUT_DELAY_MS,
+    RESULT_HOLD_MS,
     TYPE_DELAY_MAX_MS,
     TYPE_DELAY_MIN_MS,
 } from "constants/timing";
@@ -54,7 +54,7 @@ describe("typewriterFrames", () => {
         expect(shown).toEqual({
             typed: "ls",
             output: "two files",
-            delay: HOLD_MS,
+            delay: RESULT_HOLD_MS,
         });
     });
 

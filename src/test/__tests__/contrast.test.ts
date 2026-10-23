@@ -1,4 +1,4 @@
-import { contrastRatio, mixHex } from "utils/contrast";
+import { contrastRatio, mixHex } from "test/contrast";
 
 // to two decimals, as WCAG states ratios
 const rounded = (ratio: number) => Math.round(ratio * 100) / 100;

@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { cx } from "utils/cx";
+
 import styles from "./Button.module.scss";
 
 export interface ButtonProps {
@@ -16,7 +18,7 @@ export interface ButtonLinkProps {
 }
 
 const buttonClass = (variant: ButtonProps["variant"]) =>
-    [styles.button, styles[`button--${variant}`]].join(" ");
+    cx(styles.button, styles[`button--${variant}`]);
 
 export const Button = ({ variant, onClick, children }: ButtonProps) => (
     <button type="button" className={buttonClass(variant)} onClick={onClick}>

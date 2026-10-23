@@ -1,28 +1,28 @@
 import type { ReactNode } from "react";
 
+import { cx } from "utils/cx";
+
 import styles from "./WindowBar.module.scss";
 
 export interface WindowBarProps {
     title: string;
     titleId?: string;
-    compact?: boolean;
+    variant?: "regular" | "compact";
     children?: ReactNode;
 }
 
-// the title takes the free width, so whatever comes in as children sits on the right; compact leaves room for a button there
+// children sit on the right; the compact variant leaves room for a button there
 export const WindowBar = ({
     title,
     titleId,
-    compact = false,
+    variant = "regular",
     children,
 }: WindowBarProps) => (
     <div
-        className={[
+        className={cx(
             styles["window-bar"],
-            compact ? styles["window-bar--compact"] : null,
-        ]
-            .filter(Boolean)
-            .join(" ")}
+            variant === "compact" ? styles["window-bar--compact"] : null,
+        )}
     >
         <span className={styles["window-bar__dots"]} aria-hidden="true">
             <span className={styles["window-bar__dot"]} />

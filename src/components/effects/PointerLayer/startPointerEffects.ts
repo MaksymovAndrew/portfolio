@@ -6,13 +6,13 @@ import { createCursor } from "./cursor";
 import { createMagnet } from "./magnet";
 import { createTilt } from "./tilt";
 
-export interface PointerParts extends CursorParts {
+interface PointerParts extends CursorParts {
     layer: HTMLElement;
 }
 
 const PASSIVE = { passive: true };
 
-// the top layer stacks in opening order, so the cursor opens again after every modal; without the API the system cursor returns inside dialogs
+// the top layer stacks in opening order, so the cursor reopens after every modal
 const raiseAbove = (layer: HTMLElement) => {
     if (typeof layer.showPopover !== "function") {
         return;

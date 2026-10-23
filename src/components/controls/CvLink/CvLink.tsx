@@ -2,6 +2,8 @@ import type { Content } from "types/content";
 
 import { ArrowDown } from "components/icons/ArrowDown";
 
+import { cx } from "utils/cx";
+
 import styles from "./CvLink.module.scss";
 
 export interface CvLinkProps {
@@ -15,12 +17,10 @@ export const CvLink = ({ cv, variant = "compact" }: CvLinkProps) =>
         <a
             href={cv.href}
             download
-            className={[
+            className={cx(
                 styles["cv-link"],
                 variant === "social" ? styles["cv-link--social"] : null,
-            ]
-                .filter(Boolean)
-                .join(" ")}
+            )}
         >
             {cv.label}
             <ArrowDown className={styles["cv-link__arrow"]} />

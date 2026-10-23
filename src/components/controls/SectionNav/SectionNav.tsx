@@ -8,6 +8,8 @@ import type { SectionId } from "types/content";
 import { useActiveSection } from "hooks/useActiveSection";
 
 import { activeSectionStore } from "utils/activeSectionStore";
+import { cx } from "utils/cx";
+import { hasModifier } from "utils/modifiers";
 import type { NavItem } from "utils/navItems";
 
 import styles from "./SectionNav.module.scss";
@@ -21,7 +23,7 @@ export interface SectionNavProps {
 
 // a click with a modifier opens the link elsewhere, so this page stays as it is
 const opensElsewhere = (event: MouseEvent): boolean =>
-    event.ctrlKey || event.metaKey || event.shiftKey || event.altKey;
+    hasModifier(event) || event.shiftKey;
 
 // plain anchors, so the links work before and without JavaScript; the store only marks the current one
 export const SectionNav = ({
@@ -36,12 +38,10 @@ export const SectionNav = ({
     return (
         <nav
             aria-label={label}
-            className={[
+            className={cx(
                 styles["section-nav"],
                 variant === "sheet" ? styles["section-nav--sheet"] : null,
-            ]
-                .filter(Boolean)
-                .join(" ")}
+            )}
         >
             {items.map((item) => (
                 <a

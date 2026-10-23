@@ -9,7 +9,6 @@ import { intersectAll } from "test/shims/intersectionObserver";
 const COMMAND = "npm test";
 const RESULT = "all tests passed";
 const COMMANDS = [{ command: COMMAND, result: RESULT }];
-const MISSING = [{ command: "cd /missing", result: "no such page" }];
 const LONG_WAIT_MS = 10_000;
 
 const renderShown = (onScreen: boolean) => {
@@ -62,22 +61,6 @@ describe("Terminal", () => {
 
         expect(container).toHaveTextContent(COMMAND);
         expect(container).toHaveTextContent(RESULT);
-    });
-
-    it("should keep a still block on its command and result", () => {
-        const { container } = render(
-            <Terminal commands={MISSING} tone="bad" animated={false} />,
-        );
-
-        act(() => {
-            intersectAll(true);
-        });
-        act(() => {
-            jest.advanceTimersByTime(LONG_WAIT_MS);
-        });
-
-        expect(container).toHaveTextContent("cd /missing");
-        expect(container).toHaveTextContent("no such page");
     });
 
     it("should render nothing without commands", () => {

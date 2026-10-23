@@ -1,11 +1,11 @@
-export interface LocaleRoutingConfig {
+interface LocaleRoutingConfig {
     locales: readonly string[];
     defaultLocale: string;
     pages: readonly string[];
     notFoundSegment: string;
 }
 
-export type LocaleRoute =
+type LocaleRoute =
     | { kind: "pass" }
     | { kind: "rewrite"; pathname: string }
     | { kind: "redirect"; pathname: string }

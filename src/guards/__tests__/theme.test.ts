@@ -2,7 +2,7 @@ import type { Palette, ThemeMode } from "types/theme";
 
 import { theme } from "theme/theme";
 
-import { contrastRatio, mixHex } from "utils/contrast";
+import { contrastRatio, mixHex } from "test/contrast";
 
 // WCAG 2.2 AA for normal text
 const MIN_CONTRAST = 4.5;

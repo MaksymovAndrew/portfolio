@@ -5,7 +5,7 @@ import { GLYPHS } from "constants/glyphs";
 import { Certifications } from "components/sections/Certifications";
 
 import { formatMonth } from "utils/formatPeriod";
-import { format } from "utils/inline";
+import { fillTemplate } from "utils/inline";
 import { placeholderLabel } from "utils/placeholderLabel";
 
 import { content } from "test/fixtures/content";
@@ -16,7 +16,7 @@ const { certifications, locale, ui } = content;
 const [full, bare] = certifications.items;
 
 const thumbnailLabel = (title = "") =>
-    format(ui.viewer.openCertificate, { title });
+    fillTemplate(ui.viewer.openCertificate, { title });
 
 const verifyName = `${certifications.verifyLabel} ${ui.external}`;
 
@@ -78,7 +78,7 @@ describe("Certifications", () => {
         expect(
             screen.getByRole("dialog", { name: full?.title }),
         ).toHaveTextContent(
-            format(certifications.credentialLabel, {
+            fillTemplate(certifications.credentialLabel, {
                 id: full?.credentialId ?? "",
             }),
         );

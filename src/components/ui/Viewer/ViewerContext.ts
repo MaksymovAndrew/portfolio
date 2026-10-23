@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 
-export interface ViewerControls {
+interface ViewerControls {
     open: (index: number, trigger: HTMLElement) => void;
 }
 

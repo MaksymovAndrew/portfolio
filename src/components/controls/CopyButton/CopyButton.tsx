@@ -8,6 +8,8 @@ import { useHydrated } from "hooks/useHydrated";
 import { Check } from "components/icons/Check";
 import { Copy } from "components/icons/Copy";
 
+import { cx } from "utils/cx";
+
 import styles from "./CopyButton.module.scss";
 
 export interface CopyButtonProps {
@@ -25,12 +27,10 @@ export const CopyButton = ({ value, targetId, labels }: CopyButtonProps) => {
         <>
             <button
                 type="button"
-                className={[
+                className={cx(
                     styles["copy-button"],
                     copied ? styles["copy-button--done"] : null,
-                ]
-                    .filter(Boolean)
-                    .join(" ")}
+                )}
                 aria-label={labels.label}
                 title={labels.label}
                 data-ready={hydrated || undefined}

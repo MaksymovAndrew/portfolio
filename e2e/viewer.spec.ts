@@ -6,7 +6,7 @@ import { source } from "content";
 
 import type { Locale } from "i18n/locales";
 
-import { format } from "utils/inline";
+import { fillTemplate } from "utils/inline";
 
 import { expectAccessible } from "./support/axe";
 import {
@@ -38,7 +38,7 @@ const thumbnail = (
     locale: Locale = DEFAULT_LOCALE,
 ) =>
     page.getByRole("button", {
-        name: format(source.ui.viewer.openScreenshot[locale], {
+        name: fillTemplate(source.ui.viewer.openScreenshot[locale], {
             index: String(index + 1),
         }),
     });
@@ -87,9 +87,12 @@ for (const viewport of [DESKTOP, SHORT_LAPTOP]) {
         await page.goto(pathFor(DEFAULT_LOCALE));
         await page
             .getByRole("button", {
-                name: format(source.ui.viewer.openCertificate[DEFAULT_LOCALE], {
-                    title: certificate?.title ?? "",
-                }),
+                name: fillTemplate(
+                    source.ui.viewer.openCertificate[DEFAULT_LOCALE],
+                    {
+                        title: certificate?.title ?? "",
+                    },
+                ),
             })
             .click();
 

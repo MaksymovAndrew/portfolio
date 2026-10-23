@@ -1,4 +1,4 @@
-import { toHex, toRgb } from "utils/contrast";
+import { toHex, toRgb } from "utils/color";
 
 const PERCENT = 100;
 const CHANNEL_MAX = 255;

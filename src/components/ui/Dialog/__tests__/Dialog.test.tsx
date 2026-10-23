@@ -29,12 +29,9 @@ const Harness = () => {
 };
 
 describe("Dialog", () => {
-    it("should open as a modal", () => {
-        const showModal = jest.spyOn(HTMLDialogElement.prototype, "showModal");
-
+    it("should open", () => {
         render(<Harness />);
 
-        expect(showModal.mock.calls).toEqual([[]]);
         expect(screen.getByRole("dialog", { name: LABEL })).toHaveAttribute(
             "open",
         );

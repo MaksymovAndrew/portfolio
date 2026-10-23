@@ -7,6 +7,7 @@ import { ThemeToggle } from "components/controls/ThemeToggle";
 import { StatusLine } from "components/decor/StatusLine";
 import { localeLinks, localePath } from "i18n/paths";
 
+import { cx } from "utils/cx";
 import { buildNavItems } from "utils/navItems";
 
 import styles from "./TopBar.module.scss";
@@ -23,12 +24,10 @@ export const TopBar = ({ content, variant = "page" }: TopBarProps) => {
 
     return (
         <header
-            className={[
+            className={cx(
                 styles["top-bar"],
                 variant === "system" ? styles["top-bar--system"] : null,
-            ]
-                .filter(Boolean)
-                .join(" ")}
+            )}
             aria-label={ui.topBar}
         >
             <a href={localePath(locale)} className={styles["top-bar__logo"]}>
