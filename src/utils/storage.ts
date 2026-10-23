@@ -8,3 +8,20 @@ export const writeStorage = (key: string, value: string): boolean => {
         return false;
     }
 };
+
+export const onStorageChange = (
+    key: string,
+    listener: (value: string | null) => void,
+): (() => void) => {
+    const onStorage = (event: StorageEvent) => {
+        if (event.key === key) {
+            listener(event.newValue);
+        }
+    };
+
+    window.addEventListener("storage", onStorage);
+
+    return () => {
+        window.removeEventListener("storage", onStorage);
+    };
+};

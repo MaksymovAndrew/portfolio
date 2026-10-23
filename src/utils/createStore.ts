@@ -1,22 +1,19 @@
+import type { Start } from "utils/signal";
+import { createSignal } from "utils/signal";
+
 export interface Store<T> {
-    subscribe(listener: () => void): () => void;
-    getSnapshot(): T;
-    set(value: T): void;
+    subscribe: (listener: () => void) => () => void;
+    getSnapshot: () => T;
+    set: (value: T) => void;
 }
 
 // the shape useSyncExternalStore reads; shared state without a provider
-export const createStore = <T>(initial: T): Store<T> => {
+export const createStore = <T>(initial: T, start?: Start): Store<T> => {
     let value = initial;
-    const listeners = new Set<() => void>();
+    const signal = createSignal(start);
 
     return {
-        subscribe: (listener) => {
-            listeners.add(listener);
-
-            return () => {
-                listeners.delete(listener);
-            };
-        },
+        subscribe: signal.subscribe,
         getSnapshot: () => value,
         set: (next) => {
             if (Object.is(next, value)) {
@@ -24,9 +21,7 @@ export const createStore = <T>(initial: T): Store<T> => {
             }
 
             value = next;
-            listeners.forEach((listener) => {
-                listener();
-            });
+            signal.notify();
         },
     };
 };

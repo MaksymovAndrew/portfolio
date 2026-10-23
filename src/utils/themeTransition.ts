@@ -1,5 +1,4 @@
-import { REDUCED_MOTION_QUERY } from "constants/motion";
-
+import { prefersReducedMotion } from "utils/media";
 import type { Point } from "utils/pointer";
 import { circleRadius } from "utils/pointer";
 
@@ -24,8 +23,7 @@ export const runThemeTransition = (
 ): void => {
     // older browsers have no such method, whatever the types say
     const canTransition = typeof document.startViewTransition === "function";
-    const reduced = window.matchMedia(REDUCED_MOTION_QUERY).matches;
-    const instant = !canTransition || reduced || origin === null;
+    const instant = !canTransition || prefersReducedMotion() || origin === null;
 
     if (instant) {
         apply();

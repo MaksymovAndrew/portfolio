@@ -7,7 +7,6 @@ import type { SectionId } from "types/content";
 
 import { createStore } from "utils/createStore";
 
-const store = createStore<SectionId | null>(null);
 const watched = new Map<Element, SectionId>();
 const inBand = new Set<Element>();
 let bandObserver: IntersectionObserver | null = null;
@@ -15,8 +14,6 @@ let endObserver: IntersectionObserver | null = null;
 let lastSection: Element | null = null;
 let lastInView = false;
 let held = false;
-let subscribers = 0;
-let stopListening: (() => void) | null = null;
 
 // sections are siblings, never nested, so the position is plainly before or after
 const byPageOrder = (first: Element, second: Element): number =>
@@ -158,6 +155,16 @@ const forget = () => {
     store.set(null);
 };
 
+// the reader's own scrolling listens only while a navigation watches
+const store = createStore<SectionId | null>(null, () => {
+    const stopListening = listen();
+
+    return () => {
+        stopListening();
+        forget();
+    };
+});
+
 // the sections a navigation lists; when none crosses the band the last one stays, unless the reader went back to the first screen
 export const activeSectionStore = {
     subscribe: (
@@ -168,20 +175,7 @@ export const activeSectionStore = {
 
         watch(ids);
 
-        stopListening ??= listen();
-
-        subscribers += 1;
-
-        return () => {
-            unsubscribe();
-            subscribers -= 1;
-
-            if (subscribers === 0) {
-                stopListening?.();
-                stopListening = null;
-                forget();
-            }
-        };
+        return unsubscribe;
     },
     getSnapshot: (): SectionId | null => store.getSnapshot(),
     getServerSnapshot: (): null => null,

@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 import { useHydrated } from "hooks/useHydrated";
 import { useReducedMotion } from "hooks/useReducedMotion";
 
@@ -18,6 +20,9 @@ export interface MotionToggleProps {
 export const MotionToggle = ({ labels }: MotionToggleProps) => {
     const reduced = useReducedMotion();
     const hydrated = useHydrated();
+
+    // CSS draws the state; the subscription only keeps a choice made in another tab in step
+    useEffect(() => motionStore.subscribe(() => undefined), []);
 
     if (reduced) {
         return null;
