@@ -61,6 +61,10 @@
     color: var(--accent);
 }
 
+.system-page__mark {
+    @include text-mark;
+}
+
 .system-page__home {
     color: var(--faint);
 }

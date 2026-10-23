@@ -17,6 +17,10 @@
     color: var(--accent);
 }
 
+.terminal__mark {
+    @include text-mark;
+}
+
 .terminal__home {
     color: var(--faint);
 }

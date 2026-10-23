@@ -23,7 +23,7 @@ const UNICODES = [
     "U+0104-0107,U+0118-0119,U+0141-0144,U+015A-015B,U+0179-017C", // Polish
     "U+02BC,U+0404,U+0406-0407,U+0410-044F,U+0454,U+0456-0457,U+0490-0491", // Ukrainian
     "U+2010-2027,U+2030-203A,U+20AC,U+20B4,U+2116,U+2122", // punctuation and signs
-    "U+2190-2199,U+25B8,U+25C7,U+2713,U+2717,U+279C", // arrows and the symbols the page draws
+    "U+2190-2199,U+25B8,U+25C7", // arrows and the symbols the page draws
 ].join(",");
 
 // the weights the styles use; a new weight in a stylesheet widens its range here

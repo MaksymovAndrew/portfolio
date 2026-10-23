@@ -256,6 +256,14 @@
     }
 }
 
+// an icon that stands in a line of text like one more letter
+@mixin text-mark {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+}
+
 // the title and the meta line of an image's caption, in a list or in the viewer
 @mixin caption-title {
     color: var(--text);
