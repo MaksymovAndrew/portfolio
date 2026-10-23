@@ -1,48 +1,20 @@
-import "styles/global.scss";
-
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { SITE_URL } from "config/site";
-import { STORAGE_KEYS } from "constants/storage";
 
-import { body, display, mono } from "theme/fonts";
-import { theme } from "theme/theme";
-
-import { PointerEffects } from "components/effects/PointerEffects";
-import { TopBar } from "components/layout/TopBar";
 import { getContent } from "i18n/content";
 import { isLocale, LOCALES } from "i18n/locales";
-import { localePath } from "i18n/paths";
-import { SystemMessagesProvider } from "i18n/SystemMessages";
 
-import { buildThemeCss } from "utils/buildThemeCss";
-import { buildInitScript } from "utils/initScript";
 import { buildMetadata } from "utils/metadata";
+
+import { RootDocument } from "app/RootDocument";
 
 interface RootLayoutProps {
     children: ReactNode;
     params: Promise<{ locale: string }>;
 }
-
-const THEME_CSS = buildThemeCss(theme);
-
-const DEFAULT_BACKGROUND = theme.modes[theme.defaultMode].palette.bg;
-
-const INIT_SCRIPT = buildInitScript({
-    themeKey: STORAGE_KEYS.theme,
-    motionKey: STORAGE_KEYS.motion,
-    defaultMode: theme.defaultMode,
-    backgrounds: {
-        dark: theme.modes.dark.palette.bg,
-        light: theme.modes.light.palette.bg,
-    },
-});
-
-const FONT_VARIABLES = [display.variable, body.variable, mono.variable].join(
-    " ",
-);
 
 // a language outside the list answers 404 instead of rendering on demand
 export const dynamicParams = false;
@@ -64,7 +36,6 @@ export const generateMetadata = async ({
 // no themeColor here: hydration would put the tag back next to the one the pre-paint script wrote
 export const viewport: Viewport = { viewportFit: "cover" };
 
-// suppressHydrationWarning: the pre-paint script sets data-theme, data-motion and the js class before React hydrates; safe while these props never change on the client, so React never rewrites them
 const RootLayout = async ({ children, params }: RootLayoutProps) => {
     const { locale } = await params;
 
@@ -72,38 +43,7 @@ const RootLayout = async ({ children, params }: RootLayoutProps) => {
         notFound();
     }
 
-    const content = getContent(locale);
-    const { ui } = content;
-    const systemMessages = {
-        homeHref: localePath(locale),
-        home: ui.home,
-        notFound: ui.notFound,
-        error: ui.error,
-        topBar: <TopBar content={content} variant="system" />,
-    };
-
-    return (
-        <html
-            lang={locale}
-            data-theme={theme.defaultMode}
-            className={FONT_VARIABLES}
-            suppressHydrationWarning
-        >
-            <head>
-                <style dangerouslySetInnerHTML={{ __html: THEME_CSS }} />
-                <script dangerouslySetInnerHTML={{ __html: INIT_SCRIPT }} />
-                <noscript>
-                    <meta name="theme-color" content={DEFAULT_BACKGROUND} />
-                </noscript>
-            </head>
-            <body>
-                <SystemMessagesProvider value={systemMessages}>
-                    {children}
-                </SystemMessagesProvider>
-                <PointerEffects />
-            </body>
-        </html>
-    );
+    return <RootDocument locale={locale}>{children}</RootDocument>;
 };
 
 export default RootLayout;

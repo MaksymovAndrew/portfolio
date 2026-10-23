@@ -28,9 +28,7 @@
     }
 
     // without JavaScript nothing could be paused; under reduced motion nothing moves
-    :global(html:not(.js)) & {
-        display: none;
-    }
+    @include needs-js;
 
     @media (prefers-reduced-motion: reduce) {
         display: none;
@@ -38,11 +36,16 @@
 }
 
 // the icon and the words of what a click does next
-.motion-toggle__play,
-:global(:root[data-motion="off"]) .motion-toggle__pause {
+.motion-toggle__play {
     display: none;
+
+    @include when-paused {
+        display: revert;
+    }
 }
 
-:global(:root[data-motion="off"]) .motion-toggle__play {
-    display: revert;
+.motion-toggle__pause {
+    @include when-paused {
+        display: none;
+    }
 }

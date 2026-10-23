@@ -4,7 +4,7 @@ import type { Content } from "types/content";
 
 import { MotionToggle } from "components/controls/MotionToggle";
 
-import { format } from "utils/inline";
+import { fillTemplate } from "utils/inline";
 
 import styles from "./Footer.module.scss";
 
@@ -20,7 +20,9 @@ export const Footer = ({ content }: FooterProps) => {
     return (
         <footer className={styles.footer}>
             <div className={styles.footer__row}>
-                <span>{format(site.footerCredit, { name: profile.name })}</span>
+                <span>
+                    {fillTemplate(site.footerCredit, { name: profile.name })}
+                </span>
                 <span className={styles.footer__meta}>
                     <MotionToggle labels={ui.motion} />
                     <span>

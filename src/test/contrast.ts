@@ -1,8 +1,7 @@
-const HEX = /^#(?:[\da-f]{3}|[\da-f]{6})$/i;
-const SHORT_HEX_LENGTH = 4;
+import { toHex, toRgb } from "utils/color";
+
 const CHANNEL_MAX = 255;
 const PERCENT = 100;
-const HEX_RADIX = 16;
 
 // WCAG 2.2 relative luminance
 const LINEAR_THRESHOLD = 0.04045;
@@ -14,33 +13,6 @@ const RED_WEIGHT = 0.2126;
 const GREEN_WEIGHT = 0.7152;
 const BLUE_WEIGHT = 0.0722;
 const FLARE = 0.05;
-
-type Rgb = readonly [number, number, number];
-
-export const toRgb = (hex: string): Rgb => {
-    if (!HEX.test(hex)) {
-        throw new Error(`Not a hex colour: ${hex}`);
-    }
-
-    // "#abc" is "#aabbcc"
-    const digits =
-        hex.length === SHORT_HEX_LENGTH
-            ? hex.slice(1).replace(/./g, "$&$&")
-            : hex.slice(1);
-    const [red = 0, green = 0, blue = 0] = (digits.match(/../g) ?? []).map(
-        (pair) => Number.parseInt(pair, HEX_RADIX),
-    );
-
-    return [red, green, blue];
-};
-
-export const toHex = (rgb: Rgb): string =>
-    `#${rgb
-        .map((channel) =>
-            Math.round(channel).toString(HEX_RADIX).padStart(2, "0"),
-        )
-        .join("")
-        .toUpperCase()}`;
 
 const linear = (channel: number): number => {
     const value = channel / CHANNEL_MAX;

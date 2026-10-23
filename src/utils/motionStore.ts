@@ -1,33 +1,41 @@
 import { STORAGE_KEYS } from "constants/storage";
 
-import { createStore } from "utils/createStore";
-import { writeStorage } from "utils/storage";
-
-// null until the first choice, so that choice always reaches the listeners
-const store = createStore<boolean | null>(null);
+import { createSignal } from "utils/signal";
+import { onStorageChange, writeStorage } from "utils/storage";
 
 // the pre-paint script sets the flag from storage, so the page itself holds the choice
 const readPaused = (): boolean =>
     document.documentElement.dataset.motion === "off";
 
+const apply = (paused: boolean) => {
+    const root = document.documentElement;
+
+    if (paused) {
+        root.dataset.motion = "off";
+    } else {
+        delete root.dataset.motion;
+    }
+
+    signal.notify();
+};
+
+// a choice made in another tab applies here too
+const signal = createSignal(() =>
+    onStorageChange(STORAGE_KEYS.motion, (value) => {
+        if (value === "on" || value === "off") {
+            apply(value === "off");
+        }
+    }),
+);
+
 // true means paused: what moves by itself stands still
 export const motionStore = {
-    subscribe: (listener: () => void): (() => void) =>
-        store.subscribe(listener),
+    subscribe: signal.subscribe,
     getSnapshot: readPaused,
     getServerSnapshot: (): false => false,
     set: (paused: boolean): void => {
-        const root = document.documentElement;
-
         writeStorage(STORAGE_KEYS.motion, paused ? "off" : "on");
-
-        if (paused) {
-            root.dataset.motion = "off";
-        } else {
-            delete root.dataset.motion;
-        }
-
-        store.set(paused);
+        apply(paused);
     },
     toggle: (): void => {
         motionStore.set(!readPaused());

@@ -9,8 +9,8 @@
     max-width: 720px;
     min-height: 100dvh;
     margin: 0 auto;
-    padding: 0 max(24px, env(safe-area-inset-right)) 0
-        max(24px, env(safe-area-inset-left));
+
+    @include page-gutter(24px);
 }
 
 .system-page__main {
@@ -23,14 +23,8 @@
 
 .system-page__label {
     margin-bottom: 18px;
-    color: var(--accent);
-    font-family: $font-mono;
-    font-size: 13px;
-    letter-spacing: 0.04em;
 
-    &::before {
-        content: "// " / "";
-    }
+    @include eyebrow;
 }
 
 .system-page__heading {
@@ -65,6 +59,10 @@
 
 .system-page__prompt {
     color: var(--accent);
+}
+
+.system-page__mark {
+    @include text-mark;
 }
 
 .system-page__home {

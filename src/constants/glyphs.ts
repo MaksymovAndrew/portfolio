@@ -6,8 +6,7 @@ export const GLYPHS = {
     counter: "/",
     // before a label where CSS cannot draw it, as on the preview card
     comment: "//",
-    // the terminal's prompt and home folder
-    prompt: "➜",
+    // the terminal's home folder
     home: "~",
     // the clock before the browser knows the time
     clock: "--:--",

@@ -14,25 +14,30 @@ import {
 const root = document.documentElement;
 const ORIGIN = { x: 40, y: 30 };
 
-// what the page looks like at the moment the new theme is applied
+// applies the light theme and notes what the page looks like at that moment
 const witness = () => {
     const seen: { vt?: string; x?: string; r?: string } = {};
-    const apply = jest.fn(() => {
+    const apply = () => {
         seen.vt = root.dataset.vt;
         seen.x = root.style.getPropertyValue("--vt-x");
         seen.r = root.style.getPropertyValue("--vt-r");
-    });
+        root.dataset.theme = "light";
+    };
 
     return { seen, apply };
 };
 
 describe("runThemeTransition", () => {
+    beforeEach(() => {
+        root.dataset.theme = "dark";
+    });
+
     it("should apply the theme at once without view transitions", () => {
         const { seen, apply } = witness();
 
         runThemeTransition(ORIGIN, apply);
 
-        expect(apply).toHaveBeenCalledTimes(1);
+        expect(root.dataset.theme).toBe("light");
         expect(seen.vt).toBeUndefined();
     });
 
@@ -42,7 +47,7 @@ describe("runThemeTransition", () => {
 
         runThemeTransition(ORIGIN, apply);
 
-        expect(apply).toHaveBeenCalledTimes(1);
+        expect(root.dataset.theme).toBe("light");
         expect(seen.vt).toBe("circle");
         expect(seen.x).toBe(`${ORIGIN.x}px`);
         expect(seen.r).toBe(
@@ -105,7 +110,7 @@ describe("runThemeTransition", () => {
 
         runThemeTransition(ORIGIN, apply);
 
-        expect(apply).toHaveBeenCalledTimes(1);
+        expect(root.dataset.theme).toBe("light");
         expect(seen.vt).toBeUndefined();
     });
 
@@ -115,7 +120,7 @@ describe("runThemeTransition", () => {
 
         runThemeTransition(null, apply);
 
-        expect(apply).toHaveBeenCalledTimes(1);
+        expect(root.dataset.theme).toBe("light");
         expect(seen.vt).toBeUndefined();
     });
 });

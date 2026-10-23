@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 
-import { REDUCED_MOTION_QUERY } from "constants/motion";
-
 import { useScrolledPast } from "hooks/useScrolledPast";
 
 import { ArrowUp } from "components/icons/ArrowUp";
+
+import { prefersReducedMotion } from "utils/media";
 
 import styles from "./BackToTop.module.scss";
 
@@ -20,9 +20,7 @@ const scrollToTop = (targetId: string) => {
     document.getElementById(targetId)?.focus({ preventScroll: true });
     window.scrollTo({
         top: 0,
-        behavior: window.matchMedia(REDUCED_MOTION_QUERY).matches
-            ? "auto"
-            : "smooth",
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
     });
 };
 

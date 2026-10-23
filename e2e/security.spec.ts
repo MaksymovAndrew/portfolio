@@ -1,8 +1,8 @@
 import {
     DEFAULT_LOCALE,
+    localePath,
     LOCALES,
     missingPathFor,
-    pathFor,
 } from "./support/site";
 import { expect, NOT_FOUND, test } from "./support/test";
 
@@ -23,8 +23,9 @@ const OK = 200;
 
 // pages, the 404 rewrite, route handlers and the files the proxy leaves alone
 const ADDRESSES = [
-    ...LOCALES.map((locale) => ({ path: pathFor(locale), status: OK })),
+    ...LOCALES.map((locale) => ({ path: localePath(locale), status: OK })),
     { path: missingPathFor(DEFAULT_LOCALE), status: NOT_FOUND },
+    { path: "/wp-login.php", status: NOT_FOUND },
     { path: "/health", status: OK },
     { path: `/social/${DEFAULT_LOCALE}.png`, status: OK },
     { path: "/icon/32", status: OK },
@@ -48,7 +49,7 @@ for (const { path, status } of ADDRESSES) {
 test("should send the security headers with the build's own files", async ({
     request,
 }) => {
-    const page = await (await request.get(pathFor(DEFAULT_LOCALE))).text();
+    const page = await (await request.get(localePath(DEFAULT_LOCALE))).text();
     const [script = ""] = SCRIPT_FILE.exec(page) ?? [];
     const response = await request.get(script);
 

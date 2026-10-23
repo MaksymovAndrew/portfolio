@@ -36,6 +36,30 @@ const riseAroundFocus = (event: FocusEvent) => {
     }
 };
 
+// the first report sorts a block: on screen it stays, below it waits; a later entry rises
+const onEntry = (
+    { target, isIntersecting, boundingClientRect }: IntersectionObserverEntry,
+    observer: IntersectionObserver,
+    reported: WeakSet<Element>,
+) => {
+    if (!reported.has(target)) {
+        reported.add(target);
+
+        if (boundingClientRect.top < window.innerHeight) {
+            observer.unobserve(target);
+        } else {
+            target.setAttribute(FLAG, "");
+        }
+
+        return;
+    }
+
+    if (isIntersecting) {
+        observer.unobserve(target);
+        rise(target);
+    }
+};
+
 // blocks out of view at load wait below their place and rise once they enter; without the js class nothing is hidden
 export const Reveal = () => {
     const reduced = useReducedMotion();
@@ -47,30 +71,10 @@ export const Reveal = () => {
 
         const targets = [...document.querySelectorAll(TARGETS)];
         const reported = new WeakSet<Element>();
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(
-                ({ target, isIntersecting, boundingClientRect }) => {
-                    const first = !reported.has(target);
-
-                    reported.add(target);
-
-                    if (first) {
-                        // anything already on screen at load stays as the server drew it
-                        if (boundingClientRect.top < window.innerHeight) {
-                            observer.unobserve(target);
-                        } else {
-                            target.setAttribute(FLAG, "");
-                        }
-
-                        return;
-                    }
-
-                    if (isIntersecting) {
-                        observer.unobserve(target);
-                        rise(target);
-                    }
-                },
-            );
+        const observer = new IntersectionObserver((entries, self) => {
+            entries.forEach((entry) => {
+                onEntry(entry, self, reported);
+            });
         }, REVEAL);
 
         targets.forEach((target) => {

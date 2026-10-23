@@ -2,15 +2,12 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 
+import { fail } from "./lib/fail.mjs";
+
 const VERSION_FILES = ["package.json", "package-lock.json"];
 const RELEASE_BRANCH = /^chore\/release-(\d+\.\d+\.\d+)$/;
 const VERSION = /^\d+\.\d+\.\d+$/;
 const USAGE = "Usage: npm run bump [-- X.Y.Z]";
-
-const fail = (message) => {
-    console.error(message);
-    process.exit(1);
-};
 
 // undefined outside a repository and on every branch that is not a release branch
 const readBranchVersion = () => {

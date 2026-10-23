@@ -29,8 +29,17 @@ const tints: Tints = {
     scrollbar: 12,
     scrim: 7,
     shadow: 8,
-    grain: 9,
-    glow: 50,
+    row: 13,
+    rowOk: 14,
+    glass: 15,
+    bar: 16,
+    glare: 17,
+    spot: 18,
+    ring: 19,
+    dotGlow: 20,
+    stripe: 21,
+    grainOpacity: 9,
+    glowOpacity: 50,
 };
 
 const theme: Theme = {
@@ -69,7 +78,7 @@ describe("buildThemeCss", () => {
         const root = block(buildThemeCss(theme), ":root");
 
         expect(root).toContain("--surface-2:#EE0003");
-        expect(root).toContain("--btn-ink:#EE0009");
+        expect(root).toContain("--button-ink:#EE0009");
         expect(root).toContain("--shadow:#EE000D");
         expect(root.split(":#EE00").length - 1).toBe(13);
     });
@@ -78,11 +87,12 @@ describe("buildThemeCss", () => {
         const root = block(buildThemeCss(theme), ":root");
 
         expect(root).toContain("--t-soft:1%");
-        expect(root).toContain("--t-btn-shadow:6%");
+        expect(root).toContain("--t-button-shadow:6%");
         expect(root).toContain("--t-selection:11%");
         expect(root).toContain("--t-scrollbar:12%");
-        expect(root).toContain("--grain-o:0.09");
-        expect(root).toContain("--glow-o:0.5");
+        expect(root).toContain("--t-row-ok:14%");
+        expect(root).toContain("--grain-opacity:0.09");
+        expect(root).toContain("--glow-opacity:0.5");
     });
 
     it("should share the glow, the radius and the soft accent between modes", () => {

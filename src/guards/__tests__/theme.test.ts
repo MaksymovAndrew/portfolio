@@ -2,7 +2,7 @@ import type { Palette, ThemeMode } from "types/theme";
 
 import { theme } from "theme/theme";
 
-import { contrastRatio, mixHex } from "utils/contrast";
+import { contrastRatio, mixHex } from "test/contrast";
 
 // WCAG 2.2 AA for normal text
 const MIN_CONTRAST = 4.5;
@@ -19,16 +19,13 @@ const GLOW_CENTRE_PERCENT = 7;
 // the project card fades from surface2 at the top to surface at the bottom; its tags never start above 78% of its height
 const CARD_UNDER_TAGS_SURFACE_PERCENT = 75;
 
-// the accent tint of a hovered certificate row (Certifications.module.scss)
-const CERTIFICATE_HOVER_ACCENT_PERCENT = 4;
-
 // every pair of text and background the site paints
 const pairsOf = (mode: ThemeMode) => {
     const { palette, tints } = theme.modes[mode];
     const glowCentre = mixHex(
         theme.glow[0],
         palette.bg,
-        (GLOW_CENTRE_PERCENT * tints.glow) / 100,
+        (GLOW_CENTRE_PERCENT * tints.glowOpacity) / 100,
     );
     const cardUnderTags = mixHex(
         palette.surface,
@@ -57,11 +54,7 @@ const pairsOf = (mode: ThemeMode) => {
         // the date of a certificate under the pointer
         on(
             "faint",
-            mixHex(
-                palette.accent,
-                palette.surface,
-                CERTIFICATE_HOVER_ACCENT_PERCENT,
-            ),
+            mixHex(palette.accent, palette.surface, tints.row),
             "a hovered certificate row",
         ),
         // the soft accent fill behind tags and the current language

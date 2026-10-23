@@ -5,9 +5,9 @@ import { profile } from "content/profile";
 
 import {
     DEFAULT_LOCALE,
+    localePath,
     LOCALES,
     missingPathFor,
-    pathFor,
 } from "./support/site";
 import { expect, test } from "./support/test";
 
@@ -43,13 +43,13 @@ for (const locale of LOCALES) {
         page,
         baseURL,
     }) => {
-        await page.goto(pathFor(locale));
+        await page.goto(localePath(locale));
 
         const canonical = page.locator('head link[rel="canonical"]');
 
         await expect(canonical).toHaveCount(1);
         expect(normalize((await canonical.getAttribute("href")) ?? "")).toBe(
-            absolute(pathFor(locale), baseURL),
+            absolute(localePath(locale), baseURL),
         );
 
         for (const property of OPEN_GRAPH) {
@@ -70,7 +70,7 @@ for (const locale of LOCALES) {
     test(`should describe the person behind the ${locale} page`, async ({
         page,
     }) => {
-        await page.goto(pathFor(locale));
+        await page.goto(localePath(locale));
 
         // in the body, next to the content it describes; crawlers read it anywhere
         const script = page.locator('script[type="application/ld+json"]');
@@ -106,7 +106,7 @@ test("should give every page the same set of language alternates", async ({
     const sets: string[][] = [];
 
     for (const locale of LOCALES) {
-        await page.goto(pathFor(locale));
+        await page.goto(localePath(locale));
         sets.push(
             (await alternatesOf(page))
                 .map(({ hreflang, href }) => `${hreflang} ${normalize(href)}`)
@@ -118,7 +118,7 @@ test("should give every page the same set of language alternates", async ({
 
     expect(first.map((entry) => entry.split(" ")[0]).sort()).toEqual(HREFLANGS);
     expect(first).toContain(
-        `x-default ${absolute(pathFor(DEFAULT_LOCALE), baseURL)}`,
+        `x-default ${absolute(localePath(DEFAULT_LOCALE), baseURL)}`,
     );
 
     for (const set of sets) {
@@ -146,7 +146,7 @@ test("should list every language in the sitemap with its alternates", async ({
     );
 
     expect(addresses).toEqual(
-        LOCALES.map((locale) => absolute(pathFor(locale), baseURL)),
+        LOCALES.map((locale) => absolute(localePath(locale), baseURL)),
     );
     expect(sitemap.match(/<xhtml:link /g)).toHaveLength(
         LOCALES.length * HREFLANGS.length,

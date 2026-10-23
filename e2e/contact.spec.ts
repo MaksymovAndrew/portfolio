@@ -6,13 +6,13 @@ import type { Locale } from "i18n/locales";
 
 import {
     DEFAULT_LOCALE,
+    DESKTOP,
+    localePath,
     LOCALES,
-    pathFor,
     VIEWPORT_HEIGHT,
 } from "./support/site";
 import { expect, test } from "./support/test";
 
-const DESKTOP = { width: 1440, height: VIEWPORT_HEIGHT };
 // the narrow phones, where the address shrinks and may break before its "@"
 const NARROW_WIDTHS = [320, 360, 375] as const;
 
@@ -35,7 +35,7 @@ test.describe("on a phone", () => {
                 page,
             }) => {
                 await page.setViewportSize({ width, height: VIEWPORT_HEIGHT });
-                await page.goto(pathFor(locale));
+                await page.goto(localePath(locale));
                 await expect(address(page)).toBeVisible();
                 await expect(copyButton(page, locale)).toBeVisible();
 
@@ -61,7 +61,7 @@ test.describe("on a phone", () => {
                     "clipboard-write",
                 ]);
                 await page.setViewportSize({ width, height: VIEWPORT_HEIGHT });
-                await page.goto(pathFor(locale));
+                await page.goto(localePath(locale));
                 await copyButton(page, locale).click();
                 await expect(
                     page.locator("#contact").getByRole("status"),
@@ -85,7 +85,7 @@ test.describe("on a phone", () => {
 test("should copy the address and say so", async ({ page, context }) => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
     await page.setViewportSize(DESKTOP);
-    await page.goto(pathFor(DEFAULT_LOCALE));
+    await page.goto(localePath(DEFAULT_LOCALE));
     await copyButton(page, DEFAULT_LOCALE).click();
 
     await expect(page.locator("#contact").getByRole("status")).toHaveText(
@@ -101,7 +101,7 @@ for (const action of source.hero.actions) {
         page,
     }) => {
         await page.setViewportSize(DESKTOP);
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await page
             .getByRole("link", { name: action.label[DEFAULT_LOCALE] })
             .click();

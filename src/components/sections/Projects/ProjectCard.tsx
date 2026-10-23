@@ -1,19 +1,16 @@
-import Image from "next/image";
-
 import { IMAGE_SIZES } from "constants/images";
 import type { Content } from "types/content";
 
-import { Placeholder } from "components/decor/Placeholder";
 import { BulletList } from "components/ui/BulletList";
 import { Chip } from "components/ui/Chip";
+import { Picture } from "components/ui/Picture";
 import { RichText } from "components/ui/RichText";
 import { TagList } from "components/ui/TagList";
 import { TextLink } from "components/ui/TextLink";
 import type { ViewerItem, ViewerLabels } from "components/ui/Viewer";
 import { ViewerRoot, ViewerTrigger } from "components/ui/Viewer";
 
-import { format } from "utils/inline";
-import { placeholderLabel } from "utils/placeholderLabel";
+import { fillTemplate } from "utils/inline";
 
 import styles from "./ProjectCard.module.scss";
 
@@ -57,27 +54,17 @@ export const ProjectCard = ({
                         <li key={shot.name}>
                             <ViewerTrigger
                                 index={index}
-                                label={format(ui.viewer.openScreenshot, {
+                                label={fillTemplate(ui.viewer.openScreenshot, {
                                     index: String(index + 1),
                                 })}
                                 className={styles["project-card__shot"]}
                             >
-                                {shot.image ? (
-                                    <Image
-                                        className={
-                                            styles["project-card__picture"]
-                                        }
-                                        src={shot.image.src}
-                                        width={shot.image.width}
-                                        height={shot.image.height}
-                                        alt=""
-                                        sizes={IMAGE_SIZES.thumbnail}
-                                    />
-                                ) : (
-                                    <Placeholder
-                                        label={placeholderLabel(shot.name)}
-                                    />
-                                )}
+                                <Picture
+                                    image={shot.image}
+                                    name={shot.name}
+                                    sizes={IMAGE_SIZES.thumbnail}
+                                    className={styles["project-card__picture"]}
+                                />
                             </ViewerTrigger>
                         </li>
                     ))}

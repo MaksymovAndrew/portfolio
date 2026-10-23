@@ -11,3 +11,8 @@
     font-family: $font-mono;
     font-size: 12.5px;
 }
+
+// a language and its level never part across lines; the separators between them may
+.about__language {
+    white-space: nowrap;
+}

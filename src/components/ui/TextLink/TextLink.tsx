@@ -2,12 +2,14 @@ import type { ReactNode } from "react";
 
 import { ArrowUpRight } from "components/icons/ArrowUpRight";
 
+import { cx } from "utils/cx";
+
 import styles from "./TextLink.module.scss";
 
 export interface TextLinkProps {
     href: string;
     externalHint: string;
-    small?: boolean;
+    variant?: "regular" | "small";
     className?: string;
     children: ReactNode;
 }
@@ -16,7 +18,7 @@ export interface TextLinkProps {
 export const TextLink = ({
     href,
     externalHint,
-    small = false,
+    variant = "regular",
     className,
     children,
 }: TextLinkProps) => (
@@ -24,13 +26,11 @@ export const TextLink = ({
         href={href}
         target="_blank"
         rel="noreferrer"
-        className={[
+        className={cx(
             styles["text-link"],
-            small ? styles["text-link--small"] : null,
+            variant === "small" ? styles["text-link--small"] : null,
             className,
-        ]
-            .filter(Boolean)
-            .join(" ")}
+        )}
     >
         {children}
         <ArrowUpRight className={styles["text-link__arrow"]} />

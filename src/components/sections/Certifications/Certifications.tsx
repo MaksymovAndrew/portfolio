@@ -1,11 +1,9 @@
-import Image from "next/image";
-
 import { GLYPHS } from "constants/glyphs";
 import { IMAGE_SIZES } from "constants/images";
 import type { Content } from "types/content";
 
-import { Placeholder } from "components/decor/Placeholder";
 import { Section } from "components/sections/Section";
+import { Picture } from "components/ui/Picture";
 import { TextLink } from "components/ui/TextLink";
 import type { ViewerItem } from "components/ui/Viewer";
 import {
@@ -15,8 +13,7 @@ import {
 } from "components/ui/Viewer";
 
 import { formatMonth } from "utils/formatPeriod";
-import { format } from "utils/inline";
-import { placeholderLabel } from "utils/placeholderLabel";
+import { fillTemplate } from "utils/inline";
 
 import styles from "./Certifications.module.scss";
 
@@ -43,7 +40,7 @@ export const Certifications = ({ content }: CertificationsProps) => {
             metaOf(item),
             item.credentialId === null
                 ? null
-                : format(credentialLabel, { id: item.credentialId }),
+                : fillTemplate(credentialLabel, { id: item.credentialId }),
         ]),
         image: item.image,
         verifyHref: item.verifyHref,
@@ -75,33 +72,28 @@ export const Certifications = ({ content }: CertificationsProps) => {
                                 </div>
                                 <ViewerTrigger
                                     index={index}
-                                    label={format(ui.viewer.openCertificate, {
-                                        title: item.title,
-                                    })}
+                                    label={fillTemplate(
+                                        ui.viewer.openCertificate,
+                                        {
+                                            title: item.title,
+                                        },
+                                    )}
                                     className={styles.certifications__thumb}
                                 >
-                                    {item.image ? (
-                                        <Image
-                                            className={
-                                                styles.certifications__picture
-                                            }
-                                            src={item.image.src}
-                                            width={item.image.width}
-                                            height={item.image.height}
-                                            alt=""
-                                            sizes={IMAGE_SIZES.certificate}
-                                        />
-                                    ) : (
-                                        <Placeholder
-                                            label={placeholderLabel(item.name)}
-                                        />
-                                    )}
+                                    <Picture
+                                        image={item.image}
+                                        name={item.name}
+                                        sizes={IMAGE_SIZES.certificate}
+                                        className={
+                                            styles.certifications__picture
+                                        }
+                                    />
                                 </ViewerTrigger>
                                 {item.verifyHref === null ? null : (
                                     <TextLink
                                         href={item.verifyHref}
                                         externalHint={ui.external}
-                                        small
+                                        variant="small"
                                         className={styles.certifications__link}
                                     >
                                         {verifyLabel}

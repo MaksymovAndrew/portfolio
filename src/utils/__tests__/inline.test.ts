@@ -1,5 +1,5 @@
 import {
-    format,
+    fillTemplate,
     InlineMarkupError,
     isSafeHref,
     parseInline,
@@ -173,14 +173,14 @@ describe("isSafeHref", () => {
     });
 });
 
-describe("format", () => {
+describe("fillTemplate", () => {
     it("should fill the placeholders", () => {
-        expect(format("Built by {name}", { name: "Jane" })).toBe(
+        expect(fillTemplate("Built by {name}", { name: "Jane" })).toBe(
             "Built by Jane",
         );
     });
 
     it("should throw on a missing value", () => {
-        expect(() => format("Built by {name}", {})).toThrow("{name}");
+        expect(() => fillTemplate("Built by {name}", {})).toThrow("{name}");
     });
 });

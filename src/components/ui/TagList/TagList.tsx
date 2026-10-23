@@ -1,3 +1,5 @@
+import { cx } from "utils/cx";
+
 import styles from "./TagList.module.scss";
 
 export interface TagListProps {
@@ -8,11 +10,7 @@ export interface TagListProps {
 // no outer margin: the parent spaces the list
 export const TagList = ({ tags, className }: TagListProps) =>
     tags.length === 0 ? null : (
-        <ul
-            className={[styles["tag-list"], className]
-                .filter(Boolean)
-                .join(" ")}
-        >
+        <ul className={cx(styles["tag-list"], className)}>
             {tags.map((tag) => (
                 <li key={tag} className={styles["tag-list__item"]}>
                     {tag}

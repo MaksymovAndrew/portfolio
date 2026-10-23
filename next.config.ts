@@ -63,6 +63,8 @@ const nextConfig: NextConfig = {
     // without it a lockfile upstream makes Next guess the root and trace the wrong tree
     turbopack: { root: rootDir },
     outputFileTracingRoot: rootDir,
+    // an address outside every language gets the site's own 404 page, not the framework's
+    experimental: { globalNotFound: true },
     env: { APP_VERSION: appVersion },
     // the root tsconfig.json only lists the projects, so the editor finds the right one for every file
     typescript: { tsconfigPath: "tsconfig.app.json" },

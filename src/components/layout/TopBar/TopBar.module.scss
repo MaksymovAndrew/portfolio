@@ -1,6 +1,6 @@
 @use "styles/abstracts" as *;
 
-// sticks to the top of the window and spans it edge to edge, its content kept in the column; it gets a line once the page scrolls
+// sticky and edge to edge, its content in the column; a line appears once the page scrolls
 .top-bar {
     position: sticky;
     top: 0;
@@ -19,7 +19,7 @@
         inset: 0;
         z-index: $z-behind;
         border-bottom: 1px solid transparent;
-        background: color-mix(in srgb, var(--bg) 84%, transparent);
+        background: color-mix(in srgb, var(--bg) var(--t-bar), transparent);
         backdrop-filter: blur(14px);
         transition: border-color $dur-base;
     }

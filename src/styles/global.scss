@@ -1,5 +1,11 @@
 @use "styles/abstracts" as *;
 
+$scrollbar-thumb: color-mix(
+    in srgb,
+    var(--muted) var(--t-scrollbar),
+    transparent
+);
+
 *,
 *::before,
 *::after {
@@ -8,15 +14,12 @@
     padding: 0;
 }
 
-// the only background: the page, the scrollbar gutter and the overscroll change colour together
+// the page's background, the scrollbar gutter and the overscroll included; it changes at once, as the theme does without a view transition
 html {
     background: var(--bg);
     scrollbar-gutter: stable;
-    transition: background-color $dur-theme;
-}
 
-// below 1024 the sticky bar covers the top of the window: a jump or a focused element lands below it
-html {
+    // below 1024 the sticky bar covers the top of the window: a jump or a focused element lands below it
     @include until(1024) {
         scroll-padding-top: calc($top-bar-height + env(safe-area-inset-top));
     }
@@ -81,9 +84,18 @@ html {
     }
 }
 
-// the page stays put under an open dialog; the stable gutter keeps it from shifting
+// the page stays put under an open dialog; the root paints its gutter in the backdrop's tint, the body keeps the page colour
 html:has(dialog[open]) {
     overflow: hidden;
+
+    // only a classic scrollbar leaves a gutter; a touch screen keeps its overscroll untinted
+    @media (pointer: fine) {
+        background: color-mix(in srgb, var(--scrim) var(--t-scrim), var(--bg));
+
+        body {
+            background: var(--bg);
+        }
+    }
 }
 
 body {
@@ -112,12 +124,7 @@ svg {
 
 // a thin scrollbar in the colours of the theme; every scroll area inherits the colours
 :root {
-    scrollbar-color: color-mix(
-            in srgb,
-            var(--muted) var(--t-scrollbar),
-            transparent
-        )
-        transparent;
+    scrollbar-color: $scrollbar-thumb transparent;
 }
 
 * {
@@ -138,12 +145,7 @@ svg {
     ::-webkit-scrollbar-thumb {
         border: 3px solid transparent;
         border-radius: $radius-pill;
-        background: color-mix(
-                in srgb,
-                var(--muted) var(--t-scrollbar),
-                transparent
-            )
-            padding-box;
+        background: $scrollbar-thumb padding-box;
     }
 }
 

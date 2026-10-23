@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 
 import { usePointerEffects } from "hooks/usePointerEffects";
 
-// the layer arrives with the first move of a mouse, so the page loads without it and a touch device never downloads it;
-// it goes away with the mouse or once motion is reduced
+// the layer loads on the first mouse move, so a touch device never downloads it
 export const PointerEffects = () => {
     const enabled = usePointerEffects();
     const [moved, setMoved] = useState(false);

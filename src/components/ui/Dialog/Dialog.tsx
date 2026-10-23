@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 
 import { useHydrated } from "hooks/useHydrated";
 
+import { cx } from "utils/cx";
 import { topLayer } from "utils/topLayer";
 
 import styles from "./Dialog.module.scss";
@@ -20,8 +21,7 @@ export type DialogProps = DialogName & {
     children: ReactNode;
 };
 
-// showModal() brings Escape, the focus trap and the return of focus; every way of closing ends in the close event.
-// The dialog lives at the end of the body, so hovering it never hovers the section that opened it
+// portalled to the end of the body, so hovering it never hovers the section that opened it
 export const Dialog = ({
     open,
     onClose,
@@ -49,7 +49,7 @@ export const Dialog = ({
         }
     }, [open, isClient]);
 
-    // the pointer's way out; the keyboard has Escape. A press inside that ends on the backdrop is a selection, not a dismissal
+    // a press on the backdrop closes; one that started inside is a text selection
     useEffect(() => {
         const dialog = ref.current;
 
@@ -80,9 +80,7 @@ export const Dialog = ({
         ? createPortal(
               <dialog
                   ref={ref}
-                  className={[styles.dialog, styles[`dialog--${variant}`]].join(
-                      " ",
-                  )}
+                  className={cx(styles.dialog, styles[`dialog--${variant}`])}
                   aria-labelledby={labelledBy}
                   aria-label={label}
                   onClose={onClose}

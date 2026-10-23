@@ -3,6 +3,8 @@ import type { ReactNode, Ref } from "react";
 import { GLYPHS } from "constants/glyphs";
 
 import { Atmosphere } from "components/decor/Atmosphere";
+import { ArrowRight } from "components/icons/ArrowRight";
+import { Close } from "components/icons/Close";
 
 import styles from "./SystemPage.module.scss";
 
@@ -49,15 +51,20 @@ export const SystemPage = ({
                     aria-hidden="true"
                 >
                     <div>
-                        <span
-                            className={styles["system-page__prompt"]}
-                        >{`${GLYPHS.prompt} `}</span>
+                        <span className={styles["system-page__prompt"]}>
+                            <ArrowRight
+                                className={styles["system-page__mark"]}
+                            />{" "}
+                        </span>
                         <span
                             className={styles["system-page__home"]}
                         >{`${GLYPHS.home} `}</span>
                         {command}
                     </div>
-                    <div>{result}</div>
+                    <div>
+                        <Close className={styles["system-page__mark"]} />{" "}
+                        {result}
+                    </div>
                 </div>
                 <div className={styles["system-page__actions"]}>{children}</div>
             </main>

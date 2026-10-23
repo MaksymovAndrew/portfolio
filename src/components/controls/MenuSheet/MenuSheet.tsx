@@ -14,6 +14,7 @@ import { Menu } from "components/icons/Menu";
 import { Dialog } from "components/ui/Dialog";
 import { SectionLabel } from "components/ui/SectionLabel";
 
+import { matchesMedia, onMediaChange } from "utils/media";
 import type { NavItem } from "utils/navItems";
 
 import styles from "./MenuSheet.module.scss";
@@ -39,18 +40,11 @@ export const MenuSheet = ({ items, labels, children }: MenuSheetProps) => {
             return undefined;
         }
 
-        const column = window.matchMedia(COLUMN_QUERY);
-        const closeOnColumn = () => {
-            if (column.matches) {
+        return onMediaChange([COLUMN_QUERY], () => {
+            if (matchesMedia(COLUMN_QUERY)) {
                 setOpen(false);
             }
-        };
-
-        column.addEventListener("change", closeOnColumn);
-
-        return () => {
-            column.removeEventListener("change", closeOnColumn);
-        };
+        });
     }, [open]);
 
     const close = () => {
@@ -79,7 +73,7 @@ export const MenuSheet = ({ items, labels, children }: MenuSheetProps) => {
             <button
                 ref={button}
                 type="button"
-                className={styles["menu-button"]}
+                className={styles["menu-sheet__trigger"]}
                 aria-label={labels.open}
                 aria-haspopup="dialog"
                 data-ready={hydrated || undefined}

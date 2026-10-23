@@ -53,4 +53,36 @@ describe("motionStore", () => {
 
         expect(root.dataset.motion).toBe("off");
     });
+
+    it("should follow a change made in another tab", () => {
+        const seen: boolean[] = [];
+        const unsubscribe = motionStore.subscribe(() =>
+            seen.push(motionStore.getSnapshot()),
+        );
+
+        window.dispatchEvent(
+            new StorageEvent("storage", {
+                key: STORAGE_KEYS.motion,
+                newValue: "off",
+            }),
+        );
+        unsubscribe();
+
+        expect(root.dataset.motion).toBe("off");
+        expect(seen).toEqual([true]);
+    });
+
+    it("should stop listening to other tabs once nobody subscribes", () => {
+        const unsubscribe = motionStore.subscribe(() => undefined);
+
+        unsubscribe();
+        window.dispatchEvent(
+            new StorageEvent("storage", {
+                key: STORAGE_KEYS.motion,
+                newValue: "off",
+            }),
+        );
+
+        expect(root).not.toHaveAttribute("data-motion");
+    });
 });

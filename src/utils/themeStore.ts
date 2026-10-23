@@ -1,14 +1,11 @@
 import { STORAGE_KEYS } from "constants/storage";
 import type { ThemeMode } from "types/theme";
 
-import { createStore } from "utils/createStore";
-import { writeStorage } from "utils/storage";
+import { createSignal } from "utils/signal";
+import { onStorageChange, writeStorage } from "utils/storage";
 
 const isThemeMode = (value: string | null | undefined): value is ThemeMode =>
     value === "dark" || value === "light";
-
-const store = createStore<ThemeMode | null>(null);
-let subscribers = 0;
 
 // the pre-paint script and the server both set it, so the page itself holds the theme
 const readTheme = (): ThemeMode | null => {
@@ -36,34 +33,20 @@ const apply = (mode: ThemeMode) => {
     root.dataset.theme = mode;
     // the colours live in the CSS the theme wrote, so this file never reads theme/
     replaceThemeColor(getComputedStyle(root).getPropertyValue("--bg").trim());
-    store.set(mode);
+    signal.notify();
 };
 
-const onStorage = (event: StorageEvent) => {
-    if (event.key === STORAGE_KEYS.theme && isThemeMode(event.newValue)) {
-        apply(event.newValue);
-    }
-};
+// a choice made in another tab applies here too
+const signal = createSignal(() =>
+    onStorageChange(STORAGE_KEYS.theme, (value) => {
+        if (isThemeMode(value)) {
+            apply(value);
+        }
+    }),
+);
 
 export const themeStore = {
-    subscribe: (listener: () => void): (() => void) => {
-        const unsubscribe = store.subscribe(listener);
-
-        if (subscribers === 0) {
-            window.addEventListener("storage", onStorage);
-        }
-
-        subscribers += 1;
-
-        return () => {
-            unsubscribe();
-            subscribers -= 1;
-
-            if (subscribers === 0) {
-                window.removeEventListener("storage", onStorage);
-            }
-        };
-    },
+    subscribe: signal.subscribe,
     getSnapshot: readTheme,
     getServerSnapshot: (): null => null,
     set: (mode: ThemeMode): void => {

@@ -1,27 +1,24 @@
-import Image from "next/image";
-import { useEffect } from "react";
-
-import { GLYPHS } from "constants/glyphs";
 import { IMAGE_SIZES } from "constants/images";
-import type { Content } from "types/content";
 
-import { Placeholder } from "components/decor/Placeholder";
-import { ArrowLeft } from "components/icons/ArrowLeft";
-import { ArrowRight } from "components/icons/ArrowRight";
+import { useArrowKeys } from "hooks/useArrowKeys";
+
 import { Close } from "components/icons/Close";
+import type { PictureProps } from "components/ui/Picture";
+import { Picture } from "components/ui/Picture";
 import { TextLink } from "components/ui/TextLink";
 import { WindowBar } from "components/ui/WindowBar";
 
-import { placeholderLabel } from "utils/placeholderLabel";
+import { cx } from "utils/cx";
 
 import styles from "./Viewer.module.scss";
+import { ViewerPager } from "./ViewerPager";
 
 export interface ViewerItem {
     kind: "screenshot" | "certificate";
     name: string;
     title: string;
     meta: string | null;
-    image: Content["projects"]["items"][number]["screenshots"][number]["image"];
+    image: PictureProps["image"];
     verifyHref: string | null;
 }
 
@@ -42,7 +39,7 @@ interface ViewerProps {
     onClose: () => void;
 }
 
-// the inside of the open dialog; the arrow keys work wherever the focus is while it is open
+// the inside of the open dialog
 export const Viewer = ({
     items,
     index,
@@ -54,30 +51,7 @@ export const Viewer = ({
     const item = items[index];
     const hasPager = items.length > 1;
 
-    useEffect(() => {
-        const stepByKey = (event: KeyboardEvent) => {
-            // Alt+Left is the browser's Back, Ctrl and Cmd with an arrow move by words or lines elsewhere
-            const isShortcut = event.altKey || event.ctrlKey || event.metaKey;
-
-            if (isShortcut) {
-                return;
-            }
-
-            if (event.key === "ArrowRight") {
-                onStep(1);
-            }
-
-            if (event.key === "ArrowLeft") {
-                onStep(-1);
-            }
-        };
-
-        document.addEventListener("keydown", stepByKey);
-
-        return () => {
-            document.removeEventListener("keydown", stepByKey);
-        };
-    }, [onStep]);
+    useArrowKeys(onStep);
 
     if (!item) {
         return null;
@@ -85,7 +59,7 @@ export const Viewer = ({
 
     return (
         <>
-            <WindowBar title={item.name} compact>
+            <WindowBar title={item.name} variant="compact">
                 <button
                     type="button"
                     className={styles.viewer__close}
@@ -97,27 +71,20 @@ export const Viewer = ({
             </WindowBar>
             <div className={styles.viewer__stage}>
                 <div
-                    className={[
+                    className={cx(
                         styles.viewer__image,
                         item.kind === "certificate"
                             ? styles["viewer__image--certificate"]
                             : null,
-                    ]
-                        .filter(Boolean)
-                        .join(" ")}
-                >
-                    {item.image ? (
-                        <Image
-                            className={styles.viewer__picture}
-                            src={item.image.src}
-                            width={item.image.width}
-                            height={item.image.height}
-                            alt={item.image.alt}
-                            sizes={IMAGE_SIZES.viewer}
-                        />
-                    ) : (
-                        <Placeholder label={placeholderLabel(item.name)} />
                     )}
+                >
+                    <Picture
+                        image={item.image}
+                        name={item.name}
+                        sizes={IMAGE_SIZES.viewer}
+                        className={styles.viewer__picture}
+                        decorative={false}
+                    />
                 </div>
             </div>
             <div className={styles.viewer__foot}>
@@ -140,29 +107,12 @@ export const Viewer = ({
                             </TextLink>
                         )}
                         {hasPager ? (
-                            <div className={styles.viewer__pager}>
-                                <button
-                                    type="button"
-                                    className={styles.viewer__step}
-                                    aria-label={labels.previous}
-                                    onClick={() => {
-                                        onStep(-1);
-                                    }}
-                                >
-                                    <ArrowLeft />
-                                </button>
-                                <span>{`${String(index + 1)} ${GLYPHS.counter} ${String(items.length)}`}</span>
-                                <button
-                                    type="button"
-                                    className={styles.viewer__step}
-                                    aria-label={labels.next}
-                                    onClick={() => {
-                                        onStep(1);
-                                    }}
-                                >
-                                    <ArrowRight />
-                                </button>
-                            </div>
+                            <ViewerPager
+                                index={index}
+                                count={items.length}
+                                labels={labels}
+                                onStep={onStep}
+                            />
                         ) : null}
                     </div>
                 )}

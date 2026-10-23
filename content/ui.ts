@@ -97,9 +97,9 @@ export const ui = {
         },
         command: "cd /this-page",
         result: {
-            en: "✗ no such file or directory",
-            pl: "✗ nie ma takiego pliku ani katalogu",
-            uk: "✗ немає такого файлу або каталогу",
+            en: "no such file or directory",
+            pl: "nie ma takiego pliku ani katalogu",
+            uk: "немає такого файлу або каталогу",
         },
     },
     error: {
@@ -121,9 +121,9 @@ export const ui = {
         },
         command: "npm start",
         result: {
-            en: "✗ unexpected error",
-            pl: "✗ nieoczekiwany błąd",
-            uk: "✗ неочікувана помилка",
+            en: "unexpected error",
+            pl: "nieoczekiwany błąd",
+            uk: "неочікувана помилка",
         },
         retry: {
             en: "Try again",

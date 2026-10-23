@@ -7,6 +7,8 @@ import {
     REDUCED_MOTION_QUERY,
 } from "constants/motion";
 
+import { matchesMedia, onMediaChange } from "utils/media";
+
 const BLOCKING_QUERIES = [
     REDUCED_MOTION_QUERY,
     FORCED_COLORS_QUERY,
@@ -15,23 +17,12 @@ const BLOCKING_QUERIES = [
 
 const QUERIES = [FINE_POINTER_QUERY, ...BLOCKING_QUERIES];
 
-const subscribe = (listener: () => void): (() => void) => {
-    const lists = QUERIES.map((query) => window.matchMedia(query));
-
-    lists.forEach((list) => {
-        list.addEventListener("change", listener);
-    });
-
-    return () => {
-        lists.forEach((list) => {
-            list.removeEventListener("change", listener);
-        });
-    };
-};
+const subscribe = (listener: () => void): (() => void) =>
+    onMediaChange(QUERIES, listener);
 
 const getSnapshot = (): boolean =>
-    window.matchMedia(FINE_POINTER_QUERY).matches &&
-    !BLOCKING_QUERIES.some((query) => window.matchMedia(query).matches);
+    matchesMedia(FINE_POINTER_QUERY) &&
+    !BLOCKING_QUERIES.some((query) => matchesMedia(query));
 
 const getServerSnapshot = (): boolean => false;
 

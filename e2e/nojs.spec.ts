@@ -4,11 +4,12 @@ import { source } from "content";
 import { LOCALE_META } from "content/locales";
 import { theme } from "theme/theme";
 
+import { themeButton, thumbnail } from "./support/controls";
 import {
     DEFAULT_LOCALE,
+    localePath,
     LOCALES,
     missingPathFor,
-    pathFor,
     VIEWPORT_HEIGHT,
 } from "./support/site";
 import { expect, NOT_FOUND, settle, test } from "./support/test";
@@ -17,7 +18,7 @@ for (const locale of LOCALES) {
     test(`should show the ${locale} content without JavaScript`, async ({
         page,
     }) => {
-        await page.goto(pathFor(locale));
+        await page.goto(localePath(locale));
 
         const main = page.getByRole("main");
 
@@ -35,20 +36,22 @@ for (const locale of LOCALES) {
         await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
         await expect(page.getByRole("main").getByRole("link")).toHaveAttribute(
             "href",
-            pathFor(locale),
+            localePath(locale),
         );
     });
 }
 
 for (const locale of LOCALES.filter((other) => other !== DEFAULT_LOCALE)) {
     test(`should switch to ${locale} without JavaScript`, async ({ page }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await page
             .getByRole("group", { name: source.ui.languages[DEFAULT_LOCALE] })
             .getByRole("link", { name: LOCALE_META[locale].name })
             .click();
 
-        await expect(page).toHaveURL((url) => url.pathname === pathFor(locale));
+        await expect(page).toHaveURL(
+            (url) => url.pathname === localePath(locale),
+        );
         await expect(page.locator("html")).toHaveAttribute("lang", locale);
     });
 }
@@ -56,11 +59,9 @@ for (const locale of LOCALES.filter((other) => other !== DEFAULT_LOCALE)) {
 test("should hide the theme switch and keep the default colours without JavaScript", async ({
     page,
 }) => {
-    await page.goto(pathFor(DEFAULT_LOCALE));
+    await page.goto(localePath(DEFAULT_LOCALE));
 
-    await expect(
-        page.getByRole("button", { name: source.ui.theme[DEFAULT_LOCALE] }),
-    ).toBeHidden();
+    await expect(themeButton(page)).toBeHidden();
     await expect(page.locator("html")).toHaveAttribute(
         "data-theme",
         theme.defaultMode,
@@ -74,7 +75,7 @@ test("should hide the theme switch and keep the default colours without JavaScri
 test("should hide the copy button and keep the mail link without JavaScript", async ({
     page,
 }) => {
-    await page.goto(pathFor(DEFAULT_LOCALE));
+    await page.goto(localePath(DEFAULT_LOCALE));
 
     await expect(
         page.getByRole("button", {
@@ -91,7 +92,7 @@ test("should link every section from the left column without JavaScript", async 
 }) => {
     // the left column, where the section links live
     await page.setViewportSize({ width: 1440, height: VIEWPORT_HEIGHT });
-    await page.goto(pathFor(DEFAULT_LOCALE));
+    await page.goto(localePath(DEFAULT_LOCALE));
 
     const links = page
         .getByRole("navigation", { name: source.ui.sections[DEFAULT_LOCALE] })
@@ -110,7 +111,7 @@ test("should hide the pause and show the terminal at rest without JavaScript", a
     page,
 }) => {
     await page.setViewportSize({ width: 1440, height: VIEWPORT_HEIGHT });
-    await page.goto(pathFor(DEFAULT_LOCALE));
+    await page.goto(localePath(DEFAULT_LOCALE));
 
     await expect(
         page.getByRole("button", {
@@ -124,7 +125,7 @@ test("should hide the pause and show the terminal at rest without JavaScript", a
 });
 
 test("should show every block fully without JavaScript", async ({ page }) => {
-    await page.goto(pathFor(DEFAULT_LOCALE));
+    await page.goto(localePath(DEFAULT_LOCALE));
     // the first screen's own entry has ended; nothing else may be waiting
     await settle(page);
 
@@ -136,4 +137,13 @@ test("should show every block fully without JavaScript", async ({ page }) => {
 
     expect(opacities).not.toHaveLength(0);
     expect(new Set(opacities)).toEqual(new Set(["1"]));
+});
+
+test("should show the thumbnails as pictures that open nothing without JavaScript", async ({
+    page,
+}) => {
+    await page.goto(localePath(DEFAULT_LOCALE));
+
+    await expect(thumbnail(page, 0)).toBeVisible();
+    await expect(thumbnail(page, 0)).toBeDisabled();
 });

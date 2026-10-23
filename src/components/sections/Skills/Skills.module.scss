@@ -2,7 +2,7 @@
 @include rise-keyframes;
 
 // the edges fade out; only the mask's opacity matters, not its colour
-.marquee {
+.skills {
     padding: 10px 0 8px;
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
@@ -18,27 +18,27 @@
     @include rise(6);
 }
 
-.marquee__row {
+.skills__row {
     display: flex;
     overflow: hidden;
 
-    &:nth-of-type(even) .marquee__track {
+    &:nth-of-type(even) .skills__track {
         animation-duration: $dur-marquee-reverse;
         animation-direction: reverse;
     }
 
     @media (hover: hover) {
-        &:hover .marquee__track {
+        &:hover .skills__track {
             animation-play-state: paused;
         }
     }
 
-    &:active .marquee__track {
+    &:active .skills__track {
         animation-play-state: paused;
     }
 }
 
-.marquee__track {
+.skills__track {
     display: flex;
     flex-shrink: 0;
     justify-content: space-around;
@@ -47,7 +47,7 @@
     animation: scroll $dur-marquee linear infinite;
 
     // paused, the rows stop where they are
-    :global(:root[data-motion="off"]) & {
+    @include when-paused {
         animation-play-state: paused;
     }
 }
@@ -58,7 +58,7 @@
     }
 }
 
-.marquee__token {
+.skills__token {
     padding: 12px 18px;
     color: var(--muted);
     font-family: $font-mono;
@@ -86,11 +86,11 @@
 
 // nothing moves: the rows wrap and show every skill once
 @media (prefers-reduced-motion: reduce) {
-    .marquee {
+    .skills {
         mask-image: none;
     }
 
-    .marquee__track {
+    .skills__track {
         flex-shrink: 1;
         flex-wrap: wrap;
         justify-content: flex-start;
@@ -100,7 +100,7 @@
         }
     }
 
-    .marquee__token {
+    .skills__token {
         padding-block: 5px;
     }
 }

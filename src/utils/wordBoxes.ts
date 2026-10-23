@@ -1,6 +1,6 @@
 import type { InlineNode } from "utils/inline";
 
-export interface WordPiece {
+interface WordPiece {
     text: string;
     accent: boolean;
 }

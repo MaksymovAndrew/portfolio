@@ -5,7 +5,7 @@ export const COPY_RESET_MS = 2200;
 export const TYPE_DELAY_MIN_MS = 55;
 export const TYPE_DELAY_MAX_MS = 125;
 export const OUTPUT_DELAY_MS = 400;
-export const HOLD_MS = 2600;
+export const RESULT_HOLD_MS = 2600;
 
 // the status line shows minutes, so half a minute keeps it at most that far behind
 export const CLOCK_TICK_MS = 30_000;

@@ -6,7 +6,6 @@ WORKDIR /app
 ARG NEXT_PUBLIC_SITE_URL
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV HUSKY=0
 
 COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts
@@ -31,6 +30,9 @@ COPY --from=builder --chown=node:node /app/.next/static ./.next/static
 COPY --from=builder --chown=node:node /app/public ./public
 
 EXPOSE 8080
+
+# the probe and timings of the server's compose file; busybox wget ships with alpine
+HEALTHCHECK --interval=15s --timeout=5s --start-period=20s --retries=5     CMD wget -qO- http://127.0.0.1:8080/health | grep -q ok || exit 1
 
 USER node
 

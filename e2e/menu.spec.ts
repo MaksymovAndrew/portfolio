@@ -9,10 +9,9 @@ import {
     scrollToSection,
     sheet,
 } from "./support/nav";
-import { DEFAULT_LOCALE, pathFor, VIEWPORT_HEIGHT } from "./support/site";
+import { DEFAULT_LOCALE, localePath, PHONE } from "./support/site";
 import { expect, test } from "./support/test";
 
-const PHONE = { width: 375, height: VIEWPORT_HEIGHT };
 // enough presses to walk the whole page down, then back up: going up, elements enter under the bar
 const TAB_PRESSES = 80;
 const TAB_WALK = [
@@ -28,7 +27,7 @@ test.describe("on a phone", () => {
     test("should line the top bar once the page scrolls", async ({ page }) => {
         const root = page.locator("html");
 
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await expect(root).not.toHaveAttribute("data-scrolled");
 
         await scrollToSection(page, FIRST_ITEM.id);
@@ -51,7 +50,7 @@ test.describe("on a phone", () => {
     test("should open the menu and follow a chosen section", async ({
         page,
     }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await menuButton(page).click();
         await expect(sheet(page)).toBeVisible();
 
@@ -63,7 +62,7 @@ test.describe("on a phone", () => {
     });
 
     test("should go on from the chosen section with Tab", async ({ page }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await expect(menuButton(page)).toBeVisible();
         await menuButton(page).focus();
         await page.keyboard.press("Enter");
@@ -88,7 +87,7 @@ test.describe("on a phone", () => {
     });
 
     test("should mark the current section in the menu", async ({ page }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await scrollToSection(page, FIRST_ITEM.id);
         // a click would first scroll the sticky button to its place in the flow, far above the section
         await expect(menuButton(page)).toBeVisible();
@@ -106,7 +105,7 @@ test.describe("on a phone", () => {
     }) => {
         // an instant scroll, so a jump would already show when the focus has moved
         await page.emulateMedia({ reducedMotion: "reduce" });
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await scrollToSection(page, LAST_ITEM.id);
 
         const positions = await page.evaluate(() =>
@@ -130,7 +129,7 @@ test.describe("on a phone", () => {
     test("should return the focus to the menu button on Escape", async ({
         page,
     }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await menuButton(page).click();
         await expect(sheet(page)).toBeVisible();
         await page.keyboard.press("Escape");
@@ -143,7 +142,7 @@ test.describe("on a phone", () => {
         page,
     }) => {
         await page.emulateMedia({ reducedMotion: "reduce" });
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await menuButton(page).click();
 
         // no waiting: an entry animation would still be at its first frame, below the window
@@ -158,7 +157,7 @@ test.describe("on a phone", () => {
     test("should offer a way back to the top after the first screen", async ({
         page,
     }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await expect(backToTop(page)).toBeHidden();
 
         await scrollToSection(page, LAST_ITEM.id);
@@ -174,7 +173,7 @@ test.describe("on a phone", () => {
     }) => {
         // the property under test is where focus lands, not how the page glides there
         await page.emulateMedia({ reducedMotion: "reduce" });
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
 
         const stops: (string | null)[] = [];
 

@@ -1,7 +1,6 @@
 // Lighthouse (mobile) on every language of the production build, held to lighthouse.config.mjs.
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { setTimeout as delay } from "node:timers/promises";
 import { fileURLToPath } from "node:url";
 
 import { chromium } from "@playwright/test";
@@ -10,6 +9,7 @@ import lighthouse from "lighthouse";
 
 import { DEFAULT_LOCALE, LOCALES } from "../content/locales.ts";
 import config from "../lighthouse.config.mjs";
+import { answers, waitForServer } from "./lib/server.mjs";
 import { startServer } from "./serve.mjs";
 
 const rootDir = path.resolve(
@@ -21,8 +21,6 @@ const reportDir = path.join(rootDir, "lighthouse-report");
 // not 3000: the development servers take it; not 3100: the browser tests do
 const PORT = 3101;
 const BASE_URL = `http://localhost:${PORT}`;
-const SERVER_START_TIMEOUT_MS = 30_000;
-const POLL_INTERVAL_MS = 250;
 const BYTES_PER_KB = 1024;
 const DECIMALS = 1000;
 
@@ -32,7 +30,7 @@ const RESOURCE_TYPES = { script: "Script", font: "Font", total: null };
 // performance always runs: it holds the layout-shift and network audits the checks read
 const CATEGORIES = [...new Set(["performance", ...Object.keys(config.scores)])];
 
-// the rule of e2e/support/site.ts, which this script cannot import
+// the rule of localePath in src/i18n/paths.ts, which plain Node cannot import through its aliases
 const pathFor = (locale) => (locale === DEFAULT_LOCALE ? "/" : `/${locale}`);
 
 const median = (values) =>
@@ -78,18 +76,6 @@ const CHECKS = [
     })),
 ];
 
-const answers = (url) =>
-    fetch(url).then(
-        () => true,
-        () => false,
-    );
-
-const isUp = (url) =>
-    fetch(url).then(
-        (response) => response.ok,
-        () => false,
-    );
-
 const checkSetup = async () => {
     const unknownBudgets = Object.keys(config.budgets).filter(
         (budget) => !Object.hasOwn(RESOURCE_TYPES, budget),
@@ -117,18 +103,6 @@ const checkSetup = async () => {
         throw new Error(
             `Port ${PORT} is taken: stop the server running there.`,
         );
-    }
-};
-
-const waitForServer = async () => {
-    const deadline = Date.now() + SERVER_START_TIMEOUT_MS;
-
-    while (!(await isUp(`${BASE_URL}/health`))) {
-        if (Date.now() > deadline) {
-            throw new Error(`The server did not answer on ${BASE_URL}.`);
-        }
-
-        await delay(POLL_INTERVAL_MS);
     }
 };
 
@@ -234,7 +208,7 @@ const main = async () => {
     const server = startServer({ port: PORT });
 
     try {
-        await waitForServer();
+        await waitForServer(BASE_URL);
         mkdirSync(reportDir, { recursive: true });
 
         const rows = await auditAll();

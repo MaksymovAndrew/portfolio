@@ -49,7 +49,7 @@ export const cardStyles = (
             height: SOCIAL_IMAGE.height,
             padding: "64px 76px 58px",
             backgroundColor: palette.bg,
-            backgroundImage: glowGradient(glow, tints.glow),
+            backgroundImage: glowGradient(glow, tints.glowOpacity),
             color: palette.text,
             fontFamily: SOCIAL_FONTS.body,
         },

@@ -1,6 +1,6 @@
 import {
-    HOLD_MS,
     OUTPUT_DELAY_MS,
+    RESULT_HOLD_MS,
     TYPE_DELAY_MAX_MS,
     TYPE_DELAY_MIN_MS,
 } from "constants/timing";
@@ -32,7 +32,7 @@ export function* typewriterFrames(
             }
 
             yield { typed: command, output: null, delay: OUTPUT_DELAY_MS };
-            yield { typed: command, output: result, delay: HOLD_MS };
+            yield { typed: command, output: result, delay: RESULT_HOLD_MS };
         }
     }
 }

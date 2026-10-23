@@ -11,9 +11,9 @@ import { Experience } from "components/sections/Experience";
 import { Projects } from "components/sections/Projects";
 import { Skills } from "components/sections/Skills";
 
-export type SectionComponent = (props: { content: Content }) => ReactNode;
+type SectionComponent = (props: { content: Content }) => ReactNode;
 
-export type SectionRegistry = Record<SectionId, SectionComponent>;
+type SectionRegistry = Record<SectionId, SectionComponent>;
 
 // the component of each section; content/site.ts decides which of them appear and in what order
 export const SECTIONS: SectionRegistry = {

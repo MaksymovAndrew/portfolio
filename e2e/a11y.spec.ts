@@ -1,8 +1,8 @@
 import { expectAccessible } from "./support/axe";
 import {
+    localePath,
     LOCALES,
     missingPathFor,
-    pathFor,
     THEMES,
     VIEWPORT_HEIGHT,
 } from "./support/site";
@@ -18,7 +18,7 @@ for (const width of AUDITED_WIDTHS) {
         for (const mode of THEMES) {
             for (const locale of LOCALES) {
                 const pages = [
-                    { name: locale, path: pathFor(locale) },
+                    { name: locale, path: localePath(locale) },
                     { name: `${locale} 404`, path: missingPathFor(locale) },
                 ];
 

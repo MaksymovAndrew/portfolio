@@ -1,4 +1,4 @@
-import { writeStorage } from "utils/storage";
+import { onStorageChange, writeStorage } from "utils/storage";
 
 describe("writeStorage", () => {
     it("should store the value", () => {
@@ -12,5 +12,23 @@ describe("writeStorage", () => {
         });
 
         expect(writeStorage("key", "value")).toBe(false);
+    });
+});
+
+describe("onStorageChange", () => {
+    const write = (key: string, newValue: string) => {
+        window.dispatchEvent(new StorageEvent("storage", { key, newValue }));
+    };
+
+    it("should pass on what another tab wrote under its key", () => {
+        const seen: (string | null)[] = [];
+        const stop = onStorageChange("key", (value) => seen.push(value));
+
+        write("other", "skipped");
+        write("key", "value");
+        stop();
+        write("key", "late");
+
+        expect(seen).toEqual(["value"]);
     });
 });

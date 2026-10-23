@@ -2,6 +2,8 @@ import type { Refs } from "types/content";
 
 import { RichText } from "components/ui/RichText";
 
+import { cx } from "utils/cx";
+
 import styles from "./BulletList.module.scss";
 
 export interface BulletListProps {
@@ -19,11 +21,7 @@ export const BulletList = ({
     className,
 }: BulletListProps) =>
     items.length === 0 ? null : (
-        <ul
-            className={[styles["bullet-list"], className]
-                .filter(Boolean)
-                .join(" ")}
-        >
+        <ul className={cx(styles["bullet-list"], className)}>
             {items.map((item) => (
                 <li key={item} className={styles["bullet-list__item"]}>
                     <span>

@@ -1,14 +1,12 @@
-import { source } from "content";
 import { theme } from "theme/theme";
 
-import { DEFAULT_LOCALE, pathFor, THEMES } from "./support/site";
+import { themeButton } from "./support/controls";
+import type { THEMES } from "./support/site";
+import { DEFAULT_LOCALE, localePath, OTHER_MODE } from "./support/site";
 import { expect, settle, storeTheme, test } from "./support/test";
 
 const THEME_COLOR = 'meta[name="theme-color"]';
 const THEME_ATTRIBUTE = "data-theme";
-
-const OTHER_MODE =
-    THEMES.find((mode) => mode !== theme.defaultMode) ?? theme.defaultMode;
 
 const backgroundOf = (mode: (typeof THEMES)[number]) =>
     theme.modes[mode].palette.bg;
@@ -20,7 +18,7 @@ const rgbOf = (hex: string) =>
         .join(", ")})`;
 
 test("should open in the default theme", async ({ page }) => {
-    await page.goto(pathFor(DEFAULT_LOCALE));
+    await page.goto(localePath(DEFAULT_LOCALE));
 
     await expect(page.locator("html")).toHaveAttribute(
         THEME_ATTRIBUTE,
@@ -35,10 +33,8 @@ test("should open in the default theme", async ({ page }) => {
 test("should switch the theme and keep the choice after a reload", async ({
     page,
 }) => {
-    await page.goto(pathFor(DEFAULT_LOCALE));
-    await page
-        .getByRole("button", { name: source.ui.theme[DEFAULT_LOCALE] })
-        .click();
+    await page.goto(localePath(DEFAULT_LOCALE));
+    await themeButton(page).click();
 
     await expect(page.locator("html")).toHaveAttribute(
         THEME_ATTRIBUTE,
@@ -69,7 +65,7 @@ test("should apply a stored theme before any bundle runs", async ({ page }) => {
         route.fulfill({ contentType: "text/javascript", body: "" }),
     );
     await storeTheme(page, OTHER_MODE);
-    await page.goto(pathFor(DEFAULT_LOCALE));
+    await page.goto(localePath(DEFAULT_LOCALE));
 
     await expect(page.locator("html")).toHaveAttribute(
         THEME_ATTRIBUTE,
@@ -85,7 +81,7 @@ test("should serve every icon the page links at its size", async ({
     page,
     request,
 }) => {
-    await page.goto(pathFor(DEFAULT_LOCALE));
+    await page.goto(localePath(DEFAULT_LOCALE));
 
     const icons = await page
         .locator('link[rel="icon"], link[rel="apple-touch-icon"]')

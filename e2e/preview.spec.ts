@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-import { LOCALES, pathFor } from "./support/site";
+import { localePath, LOCALES } from "./support/site";
 import { expect, test } from "./support/test";
 
 const CARD = { width: 1200, height: 630 };
@@ -37,7 +37,7 @@ for (const locale of LOCALES) {
         page,
         request,
     }) => {
-        await page.goto(pathFor(locale));
+        await page.goto(localePath(locale));
 
         const image = page.locator('head meta[property="og:image"]');
         const address = new URL((await image.getAttribute("content")) ?? "");

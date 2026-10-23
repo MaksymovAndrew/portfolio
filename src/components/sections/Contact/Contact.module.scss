@@ -47,23 +47,11 @@
 
 .contact__social {
     position: relative;
-    padding: 9px 18px;
-    border: 1px solid var(--line);
-    border-radius: $radius-pill;
-    color: var(--muted);
     font-family: $font-mono;
-    font-size: 13px;
     text-decoration: none;
-    transition:
-        color $dur-base,
-        border-color $dur-base,
-        transform $dur-fast;
 
-    @include hover {
-        border-color: var(--accent);
-        color: var(--accent);
-        transform: translateY(-2px);
-    }
+    @include outlined-control;
+    @include social-link;
 }
 
 .contact__hint {

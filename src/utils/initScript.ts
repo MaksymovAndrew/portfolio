@@ -1,6 +1,6 @@
 import type { ThemeMode } from "types/theme";
 
-export interface InitScriptOptions {
+interface InitScriptOptions {
     themeKey: string;
     motionKey: string;
     defaultMode: ThemeMode;

@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { ProjectCard } from "components/sections/Projects/ProjectCard";
 import { toViewerLabels } from "components/ui/Viewer";
 
-import { format } from "utils/inline";
+import { fillTemplate } from "utils/inline";
 import { placeholderLabel } from "utils/placeholderLabel";
 
 import { content } from "test/fixtures/content";
@@ -26,7 +26,7 @@ const renderCards = (items: typeof projects.items) =>
 const screenshots = projects.items.flatMap((project) => project.screenshots);
 
 const thumbnailLabel = (index: number) =>
-    format(ui.viewer.openScreenshot, { index: String(index + 1) });
+    fillTemplate(ui.viewer.openScreenshot, { index: String(index + 1) });
 
 describe("ProjectCard", () => {
     it("should show the title and the status", () => {

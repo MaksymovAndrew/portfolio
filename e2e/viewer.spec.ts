@@ -6,20 +6,20 @@ import { source } from "content";
 
 import type { Locale } from "i18n/locales";
 
-import { format } from "utils/inline";
+import { fillTemplate } from "utils/inline";
 
 import { expectAccessible } from "./support/axe";
+import { thumbnail } from "./support/controls";
 import {
     DEFAULT_LOCALE,
+    DESKTOP,
+    localePath,
     LOCALES,
-    pathFor,
+    PHONE,
     THEMES,
-    VIEWPORT_HEIGHT,
 } from "./support/site";
 import { expect, storeTheme, test } from "./support/test";
 
-const DESKTOP = { width: 1440, height: VIEWPORT_HEIGHT };
-const PHONE = { width: 375, height: VIEWPORT_HEIGHT };
 // a common laptop screen less the browser's bars: the height, not the width, limits the image
 const SHORT_LAPTOP = { width: 1366, height: 657 };
 // up to 639 pixels the dialog leaves this much of the screen free
@@ -31,17 +31,6 @@ const RATIO_TOLERANCE = 0.01;
 
 const screenshots = source.projects.items.at(0)?.screenshots ?? [];
 const certificate = source.certifications.items.at(0);
-
-const thumbnail = (
-    page: Page,
-    index: number,
-    locale: Locale = DEFAULT_LOCALE,
-) =>
-    page.getByRole("button", {
-        name: format(source.ui.viewer.openScreenshot[locale], {
-            index: String(index + 1),
-        }),
-    });
 
 // the dialog is named by the caption of the screenshot it shows
 const viewer = (page: Page, index: number, locale: Locale = DEFAULT_LOCALE) =>
@@ -63,7 +52,7 @@ test("should open a screenshot from its thumbnail and step with the arrow keys",
     page,
 }) => {
     await page.setViewportSize(DESKTOP);
-    await page.goto(pathFor(DEFAULT_LOCALE));
+    await page.goto(localePath(DEFAULT_LOCALE));
     await thumbnail(page, 0).click();
 
     await expect(viewer(page, 0)).toBeVisible();
@@ -84,12 +73,15 @@ for (const viewport of [DESKTOP, SHORT_LAPTOP]) {
         page,
     }) => {
         await page.setViewportSize(viewport);
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await page
             .getByRole("button", {
-                name: format(source.ui.viewer.openCertificate[DEFAULT_LOCALE], {
-                    title: certificate?.title ?? "",
-                }),
+                name: fillTemplate(
+                    source.ui.viewer.openCertificate[DEFAULT_LOCALE],
+                    {
+                        title: certificate?.title ?? "",
+                    },
+                ),
             })
             .click();
 
@@ -123,7 +115,7 @@ for (const shot of screenshots) {
         page,
     }) => {
         await page.setViewportSize(DESKTOP);
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await thumbnail(page, index).scrollIntoViewIfNeeded();
 
         await expect
@@ -146,7 +138,7 @@ for (const shot of screenshots) {
 
 test("should keep the page still under the open viewer", async ({ page }) => {
     await page.setViewportSize(DESKTOP);
-    await page.goto(pathFor(DEFAULT_LOCALE));
+    await page.goto(localePath(DEFAULT_LOCALE));
     await thumbnail(page, 0).click();
     await expect(viewer(page, 0)).toBeVisible();
 
@@ -180,7 +172,7 @@ test.describe("on a phone", () => {
     test.use({ viewport: PHONE, isMobile: true, hasTouch: true });
 
     test("should leave a narrow margin around the viewer", async ({ page }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await thumbnail(page, 0).click();
         await expect(viewer(page, 0)).toBeVisible();
 
@@ -198,7 +190,7 @@ test("should show the open viewer at once under reduced motion", async ({
 }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.setViewportSize(DESKTOP);
-    await page.goto(pathFor(DEFAULT_LOCALE));
+    await page.goto(localePath(DEFAULT_LOCALE));
     await thumbnail(page, 0).click();
 
     // no waiting: an entry animation would still be at its first, transparent frame
@@ -217,7 +209,7 @@ for (const viewport of [PHONE, DESKTOP]) {
             }) => {
                 await storeTheme(page, mode);
                 await page.setViewportSize(viewport);
-                await page.goto(pathFor(locale));
+                await page.goto(localePath(locale));
                 await thumbnail(page, 0, locale).click();
                 await expect(viewer(page, 0, locale)).toBeVisible();
 
