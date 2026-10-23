@@ -25,6 +25,7 @@ const OK = 200;
 const ADDRESSES = [
     ...LOCALES.map((locale) => ({ path: localePath(locale), status: OK })),
     { path: missingPathFor(DEFAULT_LOCALE), status: NOT_FOUND },
+    { path: "/wp-login.php", status: NOT_FOUND },
     { path: "/health", status: OK },
     { path: `/social/${DEFAULT_LOCALE}.png`, status: OK },
     { path: "/icon/32", status: OK },
