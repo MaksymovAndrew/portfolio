@@ -1,12 +1,12 @@
 // Draws the README screenshots: the first screen of the default language in both themes, from the last production build.
 import { mkdirSync } from "node:fs";
 import path from "node:path";
-import { setTimeout as delay } from "node:timers/promises";
 import { fileURLToPath } from "node:url";
 
 import { chromium } from "@playwright/test";
 
 import { STORAGE_KEYS } from "../src/constants/storage.ts";
+import { isUp, waitForServer } from "./lib/server.mjs";
 import { startServer } from "./serve.mjs";
 
 const rootDir = path.resolve(
@@ -18,30 +18,10 @@ const outDir = path.join(rootDir, "docs", "screenshots");
 // not 3000, 3100 or 3101: the development servers, the browser tests and Lighthouse take them
 const PORT = 3102;
 const BASE_URL = `http://localhost:${PORT}`;
-const SERVER_START_TIMEOUT_MS = 30_000;
-const POLL_INTERVAL_MS = 250;
 const VIEWPORT = { width: 1440, height: 900 };
 // the first screen down to the skills, before the first section begins
 const FRAME = { x: 0, y: 0, width: VIEWPORT.width, height: 515 };
 const THEMES = ["dark", "light"];
-
-const isUp = (url) =>
-    fetch(url).then(
-        (response) => response.ok,
-        () => false,
-    );
-
-const waitForServer = async () => {
-    const deadline = Date.now() + SERVER_START_TIMEOUT_MS;
-
-    while (!(await isUp(`${BASE_URL}/health`))) {
-        if (Date.now() > deadline) {
-            throw new Error(`The server did not answer on ${BASE_URL}.`);
-        }
-
-        await delay(POLL_INTERVAL_MS);
-    }
-};
 
 // the stored choices the pre-paint script applies: the theme, and paused motion so drifting parts hold still
 const storeChoices = ([themeKey, theme, motionKey]) => {
@@ -99,7 +79,7 @@ const main = async () => {
     const server = startServer({ port: PORT });
 
     try {
-        await waitForServer();
+        await waitForServer(BASE_URL);
         mkdirSync(outDir, { recursive: true });
 
         const browser = await chromium.launch();

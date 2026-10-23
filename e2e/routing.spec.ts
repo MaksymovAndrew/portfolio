@@ -1,26 +1,27 @@
 import { ui } from "content/ui";
 
+import type { Locale } from "i18n/locales";
+
 import { expectAccessible } from "./support/axe";
 import {
     DEFAULT_LOCALE,
+    localePath,
     LOCALES,
     missingPathFor,
-    pathFor,
+    OTHER_LOCALES,
     VIEWPORT_HEIGHT,
 } from "./support/site";
 import { expect, NOT_FOUND, test } from "./support/test";
 
 const PERMANENT_REDIRECT = 308;
 
-const OTHER_LOCALES = LOCALES.filter((locale) => locale !== DEFAULT_LOCALE);
-
-const NOT_FOUND_CASES = [
+const NOT_FOUND_CASES: readonly { path: string; locale: Locale }[] = [
     ...LOCALES.map((locale) => ({ path: missingPathFor(locale), locale })),
     // a language code in another case is no language at all
     { path: `/${DEFAULT_LOCALE.toUpperCase()}`, locale: DEFAULT_LOCALE },
     // an old file address under a language prefix
     ...OTHER_LOCALES.map((locale) => ({
-        path: `${pathFor(locale)}/old.pdf`,
+        path: `${localePath(locale)}/old.pdf`,
         locale,
     })),
 ];
@@ -44,12 +45,12 @@ for (const locale of OTHER_LOCALES) {
     test(`should drop the trailing slash of the ${locale} page`, async ({
         request,
     }) => {
-        const response = await request.get(`${pathFor(locale)}/`, {
+        const response = await request.get(`${localePath(locale)}/`, {
             maxRedirects: 0,
         });
 
         expect(response.status()).toBe(PERMANENT_REDIRECT);
-        expect(response.headers().location).toBe(pathFor(locale));
+        expect(response.headers().location).toBe(localePath(locale));
     });
 }
 
@@ -65,7 +66,7 @@ for (const { path, locale } of NOT_FOUND_CASES) {
         await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
         await expect(page.getByRole("main").getByRole("link")).toHaveAttribute(
             "href",
-            pathFor(locale),
+            localePath(locale),
         );
         await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
             "content",

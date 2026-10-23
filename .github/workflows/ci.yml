@@ -91,19 +91,10 @@ jobs:
               with:
                   persist-credentials: false
             - uses: ./.github/actions/setup
-            - name: Restore the Playwright browsers
-              id: browsers
-              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+            - uses: ./.github/actions/playwright
               with:
-                  path: ~/.cache/ms-playwright
-                  key: playwright-all-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-            - name: Install the Playwright browsers
-              if: ${{ steps.browsers.outputs.cache-hit != 'true' }}
-              run: npx playwright install --with-deps chromium webkit firefox
-            # the cache holds the browsers only; their system libraries still come from apt
-            - name: Install the browser system dependencies
-              if: ${{ steps.browsers.outputs.cache-hit == 'true' }}
-              run: npx playwright install-deps chromium webkit firefox
+                  browsers: chromium webkit firefox
+                  cache-name: all
             - name: Run the browser tests
               run: npm run test:e2e
             - name: Upload traces on failure
@@ -122,19 +113,11 @@ jobs:
               with:
                   persist-credentials: false
             - uses: ./.github/actions/setup
-            # its own key: this job installs Chromium only, the e2e job all three browsers
-            - name: Restore the Playwright Chromium
-              id: browsers
-              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+            # its own cache: this job installs Chromium only, the e2e job all three browsers
+            - uses: ./.github/actions/playwright
               with:
-                  path: ~/.cache/ms-playwright
-                  key: playwright-chromium-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-            - name: Install the Playwright Chromium
-              if: ${{ steps.browsers.outputs.cache-hit != 'true' }}
-              run: npx playwright install --with-deps chromium
-            - name: Install the Chromium system dependencies
-              if: ${{ steps.browsers.outputs.cache-hit == 'true' }}
-              run: npx playwright install-deps chromium
+                  browsers: chromium
+                  cache-name: chromium
             - name: Build
               env:
                   NEXT_PUBLIC_SITE_URL: http://localhost:3101
@@ -161,12 +144,15 @@ jobs:
               run: docker build --build-arg NEXT_PUBLIC_SITE_URL=http://127.0.0.1:8080 -t portfolio:ci .
             - name: Start it with the production restrictions
               run: docker run -d --name portfolio --cap-drop ALL --security-opt no-new-privileges -p 8080:8080 portfolio:ci
-            - name: Wait for the health check
+            - name: Wait for the image's own health check
               run: |
                   for _ in $(seq 30); do
-                      curl -fsS http://127.0.0.1:8080/health | grep -q ok && exit 0
+                      status="$(docker inspect -f '{{.State.Health.Status}}' portfolio)"
+                      [ "$status" = healthy ] && exit 0
+                      [ "$status" = unhealthy ] && break
                       sleep 2
                   done
+                  docker inspect -f '{{json .State.Health}}' portfolio
                   docker logs portfolio
                   exit 1
             - name: Check the page, its headers and the user

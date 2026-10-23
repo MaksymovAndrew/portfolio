@@ -1,0 +1,33 @@
+name: Playwright browsers
+description: Restore or install the given Playwright browsers and their system dependencies
+
+inputs:
+    browsers:
+        description: The browsers to install, separated by spaces
+        required: true
+    cache-name:
+        description: Names the cache, so jobs that install different browsers keep their own
+        required: true
+
+runs:
+    using: composite
+    steps:
+        - name: Restore the Playwright browsers
+          id: browsers
+          uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+          with:
+              path: ~/.cache/ms-playwright
+              key: playwright-${{ inputs.cache-name }}-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+        - name: Install the Playwright browsers
+          if: ${{ steps.browsers.outputs.cache-hit != 'true' }}
+          run: npx playwright install --with-deps $BROWSERS
+          shell: bash
+          env:
+              BROWSERS: ${{ inputs.browsers }}
+        # the cache holds the browsers only; their system libraries still come from apt
+        - name: Install the browser system dependencies
+          if: ${{ steps.browsers.outputs.cache-hit == 'true' }}
+          run: npx playwright install-deps $BROWSERS
+          shell: bash
+          env:
+              BROWSERS: ${{ inputs.browsers }}

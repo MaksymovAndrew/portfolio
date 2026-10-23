@@ -1,6 +1,6 @@
 import { source } from "content";
 
-import { LOCALES, pathFor } from "./support/site";
+import { localePath, LOCALES } from "./support/site";
 import { expect, test } from "./support/test";
 
 const { cv } = source.profile;
@@ -16,7 +16,7 @@ for (const locale of LOCALES) {
     test(`should offer the CV as a download on the ${locale} page`, async ({
         page,
     }) => {
-        await page.goto(pathFor(locale));
+        await page.goto(localePath(locale));
 
         const links = page.locator(`a[href="${cv.href}"]`);
 

@@ -20,6 +20,15 @@ const ALIASES =
     "app|components|config|constants|content|guards|hooks|i18n|styles|test|theme|types|utils";
 
 const TEST_FILES = ["**/__tests__/**", "src/test/**"];
+const TEST_SOURCES = TEST_FILES.map((glob) => `${glob}/*.{ts,tsx}`);
+
+// the same basics for scripts and for TypeScript
+const CORE_RULES = {
+    eqeqeq: ["error", "always"],
+    "no-var": "error",
+    "prefer-const": "error",
+    "no-console": "error",
+};
 
 // files drawn to an image or moved every frame: a stylesheet cannot reach them
 const INLINE_STYLE_FILES = [
@@ -137,12 +146,7 @@ export default tseslint.config(
         extends: [js.configs.recommended],
         files: ["**/*.{js,mjs,cjs}"],
         languageOptions: { globals: globals.node },
-        rules: {
-            eqeqeq: ["error", "always"],
-            "no-var": "error",
-            "prefer-const": "error",
-            "no-console": "error",
-        },
+        rules: CORE_RULES,
     },
     {
         files: ["**/*.cjs"],
@@ -178,10 +182,7 @@ export default tseslint.config(
         rules: {
             ...reactHooks.configs.recommended.rules,
             "react-hooks/exhaustive-deps": "error",
-            eqeqeq: ["error", "always"],
-            "no-var": "error",
-            "prefer-const": "error",
-            "no-console": "error",
+            ...CORE_RULES,
             "@typescript-eslint/switch-exhaustiveness-check": "error",
             "@typescript-eslint/restrict-template-expressions": [
                 "error",
@@ -281,8 +282,7 @@ export default tseslint.config(
                 {
                     devDependencies: [
                         "**/*.test.{ts,tsx}",
-                        "**/__tests__/**",
-                        "src/test/**",
+                        ...TEST_FILES,
                         "e2e/**",
                         "**/*.config.{ts,js,cjs}",
                     ],
@@ -498,14 +498,14 @@ export default tseslint.config(
     },
     {
         // jest.fn() mocks have no `this` binding, so unbound-method is a false positive in test code
-        files: ["**/__tests__/**/*.{ts,tsx}", "src/test/**/*.{ts,tsx}"],
+        files: TEST_SOURCES,
         rules: {
             "@typescript-eslint/unbound-method": "off",
         },
     },
     {
         ...testingLibrary.configs["flat/react"],
-        files: ["**/__tests__/**/*.{ts,tsx}", "src/test/**/*.{ts,tsx}"],
+        files: TEST_SOURCES,
     },
     {
         ...playwright.configs["flat/recommended"],

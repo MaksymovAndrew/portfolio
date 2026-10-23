@@ -1,4 +1,8 @@
-import { DEFAULT_LOCALE } from "content/locales";
+import { DEFAULT_LOCALE, LOCALES } from "content/locales";
+import { theme } from "theme/theme";
+
+import type { Locale } from "i18n/locales";
+import { localePath } from "i18n/paths";
 
 export { DEFAULT_LOCALE, LOCALES } from "content/locales";
 
@@ -8,10 +12,18 @@ export const THEMES = ["dark", "light"] as const;
 
 export const VIEWPORT_HEIGHT = 900;
 
-// the default language lives at the root, every other one under its prefix
-export const pathFor = (locale: string): string =>
-    locale === DEFAULT_LOCALE ? "/" : `/${locale}`;
+export const DESKTOP = { width: 1440, height: VIEWPORT_HEIGHT };
+export const PHONE = { width: 375, height: VIEWPORT_HEIGHT };
+
+export const OTHER_LOCALES = LOCALES.filter(
+    (locale) => locale !== DEFAULT_LOCALE,
+);
+
+export const OTHER_MODE =
+    THEMES.find((mode) => mode !== theme.defaultMode) ?? theme.defaultMode;
+
+export { localePath };
 
 // an address that exists in no language: "/no-such-page", "/pl/no-such-page"
-export const missingPathFor = (locale: string): string =>
-    `${pathFor(locale).replace(/\/$/, "")}/no-such-page`;
+export const missingPathFor = (locale: Locale): string =>
+    `${localePath(locale).replace(/\/$/, "")}/no-such-page`;

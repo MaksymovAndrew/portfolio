@@ -1,14 +1,11 @@
 // Prints the notes of one version from CHANGELOG.md, the body of its GitHub Release.
 import { readFileSync } from "node:fs";
 
+import { fail } from "./lib/fail.mjs";
+
 const CHANGELOG_FILE = "CHANGELOG.md";
 const SECTION_HEADING = /^## /;
 const USAGE = "Usage: node scripts/release-notes.mjs <version>";
-
-const fail = (message) => {
-    console.error(message);
-    process.exit(1);
-};
 
 const [, , versionArgument] = process.argv;
 

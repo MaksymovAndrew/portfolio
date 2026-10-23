@@ -1,7 +1,7 @@
 import {
+    localePath,
     LOCALES,
     missingPathFor,
-    pathFor,
     THEMES,
     VIEWPORT_HEIGHT,
     WIDTHS,
@@ -15,7 +15,7 @@ for (const width of WIDTHS) {
         for (const mode of THEMES) {
             for (const locale of LOCALES) {
                 const pages = [
-                    { name: locale, path: pathFor(locale) },
+                    { name: locale, path: localePath(locale) },
                     { name: `${locale} 404`, path: missingPathFor(locale) },
                 ];
 

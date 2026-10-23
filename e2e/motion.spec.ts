@@ -4,19 +4,18 @@ import { source } from "content";
 
 import type { Locale } from "i18n/locales";
 
-import { fillTemplate } from "utils/inline";
-
 import { expectAccessible } from "./support/axe";
+import { themeButton, thumbnail } from "./support/controls";
 import {
     DEFAULT_LOCALE,
+    DESKTOP,
+    localePath,
     LOCALES,
-    pathFor,
     VIEWPORT_HEIGHT,
     WIDTHS,
 } from "./support/site";
 import { expect, test } from "./support/test";
 
-const DESKTOP = { width: 1440, height: VIEWPORT_HEIGHT };
 const MOTION_FLAG = "data-motion";
 const CURSOR_FLAG = "data-cursor";
 const TRANSITION_SEEN = "data-saw-transition";
@@ -37,17 +36,10 @@ const trackPlayState = (page: Page) =>
         .first()
         .evaluate((list) => getComputedStyle(list).animationPlayState);
 
-const thumbnail = (page: Page) =>
-    page.getByRole("button", {
-        name: fillTemplate(source.ui.viewer.openScreenshot[DEFAULT_LOCALE], {
-            index: "1",
-        }),
-    });
-
 for (const width of WIDTHS) {
     test(`should pause from the footer at ${width}px`, async ({ page }) => {
         await page.setViewportSize({ width, height: VIEWPORT_HEIGHT });
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await pauseButton(page).click();
 
         await expect(resumeButton(page)).toBeInViewport();
@@ -62,7 +54,7 @@ test.describe("on a desktop", () => {
         test(`should pause and resume the animations in ${locale}`, async ({
             page,
         }) => {
-            await page.goto(pathFor(locale));
+            await page.goto(localePath(locale));
             await pauseButton(page, locale).click();
 
             await expect(page.locator("html")).toHaveAttribute(
@@ -81,7 +73,7 @@ test.describe("on a desktop", () => {
     test("should stop the skills and show the first command while paused", async ({
         page,
     }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
 
         expect(await trackPlayState(page)).toBe("running");
 
@@ -94,7 +86,7 @@ test.describe("on a desktop", () => {
     test("should keep the pause after a reload, from the first frame", async ({
         page,
     }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await pauseButton(page).click();
         await expect(page.locator("html")).toHaveAttribute(MOTION_FLAG, "off");
 
@@ -109,9 +101,9 @@ test.describe("on a desktop", () => {
     test("should open the viewer fully visible while paused", async ({
         page,
     }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await pauseButton(page).click();
-        await thumbnail(page).click();
+        await thumbnail(page, 0).click();
 
         // no waiting: an entry animation would still be at its first, transparent frame
         expect(
@@ -123,7 +115,7 @@ test.describe("on a desktop", () => {
 
     test("should offer no pause under reduced motion", async ({ page }) => {
         await page.emulateMedia({ reducedMotion: "reduce" });
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
 
         await expect(page.getByRole("contentinfo")).toBeVisible();
         // not only hidden by the stylesheet: not in the page at all
@@ -141,9 +133,6 @@ const ringTransform = (page: Page) =>
         .locator("> *")
         .nth(1)
         .evaluate((ring) => getComputedStyle(ring).transform);
-
-const themeButton = (page: Page) =>
-    page.getByRole("button", { name: source.ui.theme[DEFAULT_LOCALE] });
 
 // the pointer layer arrives with the first move of the mouse once the page has hydrated
 const wakePointer = async (page: Page) => {
@@ -171,7 +160,7 @@ test.describe("with a mouse", () => {
     test("should follow the pointer with the custom cursor", async ({
         page,
     }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await wakePointer(page);
 
         await page.mouse.move(300, 300);
@@ -184,7 +173,7 @@ test.describe("with a mouse", () => {
     });
 
     test("should keep the cursor above the open viewer", async ({ page }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await wakePointer(page);
         // counts the layer closing and opening again; one more opening lifts it above a newer modal
         await cursorLayer(page).evaluate((layer) => {
@@ -196,7 +185,7 @@ test.describe("with a mouse", () => {
             });
         });
 
-        await thumbnail(page).click();
+        await thumbnail(page, 0).click();
 
         await expect(page.getByRole("dialog")).toBeVisible();
         await expect(cursorLayer(page)).toHaveAttribute("data-toggles", "2");
@@ -210,7 +199,7 @@ test.describe("with a mouse", () => {
     test("should pull a main button towards a pointer close to it", async ({
         page,
     }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await wakePointer(page);
         const button = page.locator("[data-magnetic]").first();
         const box = await button.boundingBox();
@@ -228,7 +217,7 @@ test.describe("with a mouse", () => {
     });
 
     test("should tilt the project card under the pointer", async ({ page }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await wakePointer(page);
         const card = page.locator("[data-tilt]").first();
 
@@ -248,7 +237,7 @@ test.describe("with a mouse", () => {
     test("should raise a block below the fold once it scrolls into view", async ({
         page,
     }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         const block = page.locator("#contact > *").last();
 
         await expect(block).toHaveAttribute("data-reveal", "");
@@ -263,7 +252,7 @@ test.describe("with a mouse", () => {
     });
 
     test("should grow the new theme in a circle", async ({ page }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await watchTransitionFlag(page);
 
         await themeButton(page).click();
@@ -284,7 +273,7 @@ test.describe("on a touch screen", () => {
     });
 
     test("should load no pointer layer", async ({ page }) => {
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await expect(page.getByRole("contentinfo")).toBeAttached();
 
         await expect(cursorLayer(page)).toHaveCount(0);
@@ -299,7 +288,7 @@ test.describe("under reduced motion", () => {
         page,
     }) => {
         await page.emulateMedia({ reducedMotion: "reduce" });
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
         await watchTransitionFlag(page);
 
         await themeButton(page).click();

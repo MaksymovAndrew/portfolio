@@ -1,4 +1,4 @@
-import { LOCALES, pathFor } from "./support/site";
+import { localePath, LOCALES } from "./support/site";
 import { expect, test } from "./support/test";
 
 // what a text shows when its markup was not parsed
@@ -6,7 +6,7 @@ const RAW_MARKUP = ["**", "]("];
 
 for (const locale of LOCALES) {
     test(`should serve the prerendered ${locale} page`, async ({ page }) => {
-        const response = await page.goto(pathFor(locale));
+        const response = await page.goto(localePath(locale));
 
         expect(response?.status()).toBe(200);
         expect(response?.headers()).toHaveProperty("x-nextjs-prerender");
@@ -16,7 +16,7 @@ for (const locale of LOCALES) {
     test(`should show no raw markup on the ${locale} page`, async ({
         page,
     }) => {
-        await page.goto(pathFor(locale));
+        await page.goto(localePath(locale));
 
         for (const marker of RAW_MARKUP) {
             await expect(page.locator("body")).not.toContainText(marker, {

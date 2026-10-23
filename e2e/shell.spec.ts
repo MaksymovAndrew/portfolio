@@ -4,11 +4,15 @@ import { source } from "content";
 import { LOCALE_META } from "content/locales";
 import { theme } from "theme/theme";
 
+import type { THEMES } from "./support/site";
 import {
     DEFAULT_LOCALE,
+    DESKTOP,
+    localePath,
     LOCALES,
-    pathFor,
-    THEMES,
+    OTHER_LOCALES,
+    OTHER_MODE,
+    PHONE,
     VIEWPORT_HEIGHT,
     WIDTHS,
 } from "./support/site";
@@ -16,8 +20,6 @@ import { expect, test } from "./support/test";
 
 // from this width the left column replaces the top bar
 const TWO_COLUMNS = 1024;
-const DESKTOP = { width: 1440, height: VIEWPORT_HEIGHT };
-const PHONE = { width: 375, height: VIEWPORT_HEIGHT };
 const LOW_WINDOW = { width: 1280, height: 700 };
 const LONG_PAGE_PX = 3000;
 // scroll offsets are whole pixels and the page height is not, so at the very bottom the column may lose a fraction of one
@@ -26,14 +28,9 @@ const ALL_BUT_A_PIXEL = (DESKTOP.height - 1) / DESKTOP.height;
 const MIN_TARGET_PX = 24;
 
 // with a single language there are no language links to follow
-const OTHER_LOCALES = LOCALES.filter((locale) => locale !== DEFAULT_LOCALE);
-
 const { ui } = source;
 const topBarName = ui.topBar[DEFAULT_LOCALE];
 const themeName = ui.theme[DEFAULT_LOCALE];
-
-const OTHER_MODE =
-    THEMES.find((mode) => mode !== theme.defaultMode) ?? theme.defaultMode;
 
 // the switch shows the icon of the theme a click leads to: the sun first, the moon second
 const ICON_INDEX = { light: 0, dark: 1 } as const;
@@ -50,7 +47,7 @@ for (const width of WIDTHS.filter((each) => each < TWO_COLUMNS)) {
         page,
     }) => {
         await page.setViewportSize({ width, height: VIEWPORT_HEIGHT });
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
 
         await expect(page.getByRole("banner")).toHaveCount(1);
         await expect(
@@ -68,7 +65,7 @@ for (const width of WIDTHS.filter((each) => each >= TWO_COLUMNS)) {
         page,
     }) => {
         await page.setViewportSize({ width, height: VIEWPORT_HEIGHT });
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
 
         await expect(page.getByRole("banner")).toHaveCount(1);
         await expect(
@@ -85,7 +82,7 @@ test("should keep the left column in view while the page scrolls", async ({
     page,
 }) => {
     await page.setViewportSize(DESKTOP);
-    await page.goto(pathFor(DEFAULT_LOCALE));
+    await page.goto(localePath(DEFAULT_LOCALE));
     // a page longer than any window, whatever the content holds
     await page.getByRole("main").evaluate((main, height) => {
         const filler = document.createElement("div");
@@ -113,7 +110,7 @@ for (const locale of LOCALES) {
         page,
     }) => {
         await page.setViewportSize(LOW_WINDOW);
-        await page.goto(pathFor(locale));
+        await page.goto(localePath(locale));
 
         const overflow = await page
             .getByRole("banner")
@@ -126,7 +123,7 @@ for (const locale of LOCALES) {
 test("should move focus to the content from the skip link", async ({
     page,
 }) => {
-    await page.goto(pathFor(DEFAULT_LOCALE));
+    await page.goto(localePath(DEFAULT_LOCALE));
     await page.keyboard.press("Tab");
 
     const skipLink = page.getByRole("link", {
@@ -149,7 +146,7 @@ test("should show a theme change made in the left column in the top bar", async 
     page,
 }) => {
     await page.setViewportSize(DESKTOP);
-    await page.goto(pathFor(DEFAULT_LOCALE));
+    await page.goto(localePath(DEFAULT_LOCALE));
     await page
         .getByRole("banner")
         .getByRole("button", { name: themeName })
@@ -165,7 +162,7 @@ for (const locale of OTHER_LOCALES) {
         page,
     }) => {
         await page.setViewportSize(DESKTOP);
-        await page.goto(pathFor(DEFAULT_LOCALE));
+        await page.goto(localePath(DEFAULT_LOCALE));
 
         const languages = page.getByRole("group", {
             name: ui.languages[DEFAULT_LOCALE],
@@ -175,7 +172,9 @@ for (const locale of OTHER_LOCALES) {
             .getByRole("link", { name: LOCALE_META[locale].name })
             .click();
 
-        await expect(page).toHaveURL((url) => url.pathname === pathFor(locale));
+        await expect(page).toHaveURL(
+            (url) => url.pathname === localePath(locale),
+        );
         await expect(page.locator("html")).toHaveAttribute("lang", locale);
         await expect(
             page
