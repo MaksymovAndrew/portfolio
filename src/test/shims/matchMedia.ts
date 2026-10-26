@@ -13,14 +13,16 @@ const listenersOf = (
     return known;
 };
 
-const mediaQueryList = (media: string): MediaQueryList => ({
+const mediaQueryList = (
+    media: string,
+): Pick<
+    MediaQueryList,
+    "media" | "matches" | "addEventListener" | "removeEventListener"
+> => ({
     media,
     get matches() {
         return matching.has(media);
     },
-    onchange: null,
-    addListener: () => undefined,
-    removeListener: () => undefined,
     addEventListener: (
         _type: string,
         listener: EventListenerOrEventListenerObject,
@@ -33,7 +35,6 @@ const mediaQueryList = (media: string): MediaQueryList => ({
     ) => {
         listenersOf(media).delete(listener);
     },
-    dispatchEvent: () => false,
 });
 
 if (typeof window !== "undefined") {
