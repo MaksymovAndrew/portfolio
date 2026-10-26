@@ -166,6 +166,8 @@ A new address needs a new image: it is written into every page at build time. Ev
 
 A release is a tag. Pushing `vX.Y.Z` - equal to the version in `package.json` - starts the Deploy workflow: it builds the image for ARM, publishes it to the GitHub Container Registry, and asks the server over SSH to roll it out. On the server, `deploy/deploy.sh` pulls the image, starts it with `deploy/docker-compose.yml`, waits until it is healthy, checks the site through the proxy (`deploy/Caddyfile`), and restores the previous release if any step fails; a failed first deploy has nothing to restore and leaves the server as it was. A successful tag also publishes a GitHub Release with the notes of that version from `CHANGELOG.md`. Running the workflow by hand with an older tag rolls back to it: an image already published under a tag is deployed as it is, never rebuilt, so a rollback brings back exactly what ran before.
 
+The proxy keeps a request log for visit counts: each client address is cut to its /24 network (/48 for IPv6) before it is written, and the log rolls at 10 MiB and keeps ten old files, none older than 90 days. The site itself runs no analytics script and sets no cookies.
+
 The workflow does nothing until the repository variable `SITE_DOMAIN` is set; it also needs the `production` environment with the secrets `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY` and `SSH_KNOWN_HOSTS`. The `portfolio` package stays private: the server pulls it with its own one-time `docker login ghcr.io`, a token limited to `read:packages`. Without a container, the site runs on any Node.js 24 host as `npm run build` and `npm start`, or on a platform that builds Next.js itself, such as Vercel.
 
 ## Accessibility

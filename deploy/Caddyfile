@@ -3,6 +3,18 @@
 # records must resolve before it, or the certificate request fails.
 
 andrii-maksymov.tech {
+	log {
+		output file /var/log/caddy/portfolio.log {
+			roll_size 10MiB
+			roll_keep 10
+			roll_keep_for 2160h
+		}
+		format filter {
+			request>remote_ip ip_mask 24 48
+			request>client_ip ip_mask 24 48
+			wrap json
+		}
+	}
 	encode zstd gzip
 	reverse_proxy portfolio-web:8080
 }
