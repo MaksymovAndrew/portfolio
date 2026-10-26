@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-10-26
+
+### Added
+
+- The server keeps a request log for visit counts, with each client address cut to its network before it is written; the site still runs no analytics script.
+
+### Changed
+
+- Next.js 16.4.2, Motion 14.5.0, an updated Node.js 24 image and newer development tools.
+
 ## [1.1.0] - 2026-10-23
 
 ### Added
