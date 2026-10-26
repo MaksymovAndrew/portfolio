@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- The server's request log drops the forwarding headers a visitor's proxy may add, so no full client address reaches it.
+
 ## [1.1.1] - 2026-10-26
 
 ### Added
