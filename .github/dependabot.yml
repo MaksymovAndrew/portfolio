@@ -1,5 +1,6 @@
 # weekly dependency updates; minor and patch bumps arrive as one grouped pull request,
-# majors stay separate
+# majors stay separate. Dependabot builds the titles itself and takes no length limit; short
+# group names and prefixes keep most within commitlint's 72, a longer one is renamed on GitHub
 version: 2
 updates:
     - package-ecosystem: npm
@@ -10,7 +11,7 @@ updates:
           prefix: chore
           include: scope
       groups:
-          minor-and-patch:
+          npm:
               update-types:
                   - minor
                   - patch
@@ -42,16 +43,14 @@ updates:
           - dependency-name: "node"
             update-types: ["version-update:semver-major"]
 
-    # actions are pinned to commit SHAs; Dependabot moves the SHA and the version comment together
+    # actions are pinned to commit SHAs; Dependabot moves the SHA and the version comment together;
+    # one pull request per action and directory, as a group adds its name to a single update's title
     - package-ecosystem: github-actions
       directories:
           - "/"
+          - "/.github/actions/playwright"
           - "/.github/actions/setup"
       schedule:
           interval: weekly
       commit-message:
-          prefix: chore
-          include: scope
-      groups:
-          actions:
-              patterns: ["*"]
+          prefix: ci

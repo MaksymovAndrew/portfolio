@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-11-17
+
+### Changed
+
+- Next.js 16.4.6 with the November security fixes, Motion 14.12.0 and newer development and deploy tools.
+
 ### Fixed
 
 - The server's request log drops the forwarding headers a visitor's proxy may add, so no full client address reaches it.
