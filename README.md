@@ -82,7 +82,7 @@ Install the browsers once with `npx playwright install chromium webkit firefox`.
 
 Git hooks are installed by `npm install`. A commit fixes and formats the staged files and runs the type check; a commit message must follow [Conventional Commits](https://www.conventionalcommits.org/) with a header of at most 72 characters; a direct push to `main` is refused.
 
-All of these checks run on GitHub Actions for every pull request and every push to `main`, together with a check that the pull request title follows Conventional Commits and a build of the container image. One check, `ci-success`, sums them up and is the required status check of `main`. Dependabot proposes dependency updates once a week: minor and patch npm updates arrive as one pull request, workflow actions as another, major versions one by one.
+All of these checks run on GitHub Actions for every pull request and every push to `main`, together with a check that the pull request title follows Conventional Commits and a build of the container image. One check, `ci-success`, sums them up and is the required status check of `main`. Dependabot proposes dependency updates once a week: minor and patch npm updates arrive as one pull request, each workflow action and each major version on its own. Its titles stay within the 72 characters; a longer one is renamed on GitHub, which runs the checks again.
 
 ## How it is built
 
