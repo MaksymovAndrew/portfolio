@@ -72,7 +72,6 @@
                 "ignore": ["blockless-at-rules", "pseudo-classes"]
             }
         ],
-        "declaration-block-single-line-max-declarations": 1,
         "font-weight-notation": "numeric",
         "media-feature-name-disallowed-list": [
             ["/^(min-|max-)?(device-)?(width|height)$/"],

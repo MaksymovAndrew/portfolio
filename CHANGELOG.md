@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.1.3] - 2026-11-25
+
+### Changed
+
+- Motion 14.14.0, Stylelint 18 and newer development and deploy tools, with no known advisory left in the dependency tree.
+
 ## [1.1.2] - 2026-11-17
 
 ### Changed
